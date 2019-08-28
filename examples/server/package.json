@@ -1,0 +1,20 @@
+{
+  "name": "nars-examples-server",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "parcel build --target node index.tsx && node dist/index.js"
+  },
+  "dependencies": {
+    "nars-examples-common": "^0.0.0",
+    "nars": "^0.0.0",
+    "ws": "^7.1.2"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.2",
+    "@types/ws": "^6.0.3",
+    "parcel-bundler": "^1.12.3",
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3"
+  }
+}

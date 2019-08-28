@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "workspaces": [
+    "packages/nars",
+    "packages/nars-common",
+    "packages/nars-client",
+    "packages/reason-react-reconciler",
+    "examples/client",
+    "examples/server",
+    "examples/common"
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "name": "nars-client",
+  "version": "0.0.0",
+  "description": "React Native components for Nars",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/nars-dev/nars",
+  "author": "Wojtek Czekalski <wojtek@nars.dev>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.60.0"
+  },
+  "dependencies": {
+    "nars-common": "0.0.0",
+    "protobufjs": "^6.8.8"
+  },
+  "devDependencies": {
+    "@types/react": "^16.9.2",
+    "@types/react-native": "^0.60.10",
+    "@types/websocket": "^0.0.40",
+    "prettier": "^1.18.2",
+    "react-native": "^0.60.5",
+    "typescript": "^3.5.3"
+  }
+}

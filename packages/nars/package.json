@@ -1,0 +1,25 @@
+{
+  "name": "nars",
+  "version": "0.0.0",
+  "description": "Server Rendered React Native",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "repository": "https://github.com/nars-dev/nars",
+  "author": "Wojtek Czekalski <wojtek@nars.dev>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "bsb -make-world && tsc && cp ./src/*.bs.js ./dist/"
+  },
+  "dependencies": {
+    "bs-platform": "6.1.0",
+    "nars-common": "0.0.0",
+    "reason-react-reconciler": "~0.21.0000"
+  },
+  "devDependencies": {
+    "@types/react-reconciler": "^0.18.0",
+    "@types/ws": "^6.0.3",
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3"
+  }
+}

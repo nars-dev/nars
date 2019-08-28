@@ -1,0 +1,3 @@
+[submodule "packages/reason-react-reconciler"]
+	path = packages/reason-react-reconciler
+	url = https://github.com/nars-dev/reason-react-reconciler

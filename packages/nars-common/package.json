@@ -1,0 +1,18 @@
+{
+  "name": "nars-common",
+  "version": "0.0.0",
+  "description": "Package for nars code shared between client and server",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": "https://github.com/nars-dev/nars",
+  "author": "Wojtek Czekalski <wojtek@nars.dev>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3"
+  }
+}

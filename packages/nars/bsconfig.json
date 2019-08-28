@@ -1,0 +1,30 @@
+{
+  "name": "nars",
+  "version": "0.0.0",
+  "reason": {
+    "react-jsx": 3
+  },
+  "sources": {
+    "dir" : "src",
+    "subdirs" : true
+  },
+  "package-specs": {
+    "module": "commonjs",
+    "in-source": true
+  },
+  "suffix": ".bs.js",
+  "bs-dependencies": ["reason-react-reconciler"],
+  "warnings": {
+    "error" : "+101"
+  },
+  "gentypeconfig": {
+    "path": "./gentype.ppx",
+    "module": "commonjs",
+    "language": "typescript",
+    "shims": {
+      "Js": "Js",
+      "ReactReconciler": "ReactReconciler"
+    }
+  },
+  "refmt": 3
+}

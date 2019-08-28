@@ -1,0 +1,13 @@
+{
+  "build": ["./node-modules/.bin/bsb", "-make-world"],
+  "dependencies": { "ocaml": "4.6.x" },
+  "devDependencies": {
+    "@opam/merlin-lsp": "ocaml/merlin:merlin-lsp.opam#bd94d34",
+    "@opam/reason": "*",
+    "@opam/genType": "cristianoc/genType:genType.opam#4_06_1",
+    "@opam/ocamlformat": "~0.11.0"
+  },
+  "resolutions": {
+    "@opam/reason": "let-def/reason:reason.opam#636324f"
+  }
+}
