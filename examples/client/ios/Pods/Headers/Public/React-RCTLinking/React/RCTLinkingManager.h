@@ -1,1 +1,1 @@
-../../../../../../node_modules/react-native/Libraries/LinkingIOS/RCTLinkingManager.h
+../../../../../../../../node_modules/react-native/Libraries/LinkingIOS/RCTLinkingManager.h

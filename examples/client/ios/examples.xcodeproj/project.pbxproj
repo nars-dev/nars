@@ -5,8 +5,10 @@
 	};
 	objectVersion = 46;
 	objects = {
+
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* examplesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* examplesTests.m */; };
+		0AC512C858B34B79BE02D607 /* FiraCode-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7AF2DEEAD9574EE598E28054 /* FiraCode-Bold.ttf */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB11A68108700A75B9A /* LaunchScreen.xib */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -15,17 +17,16 @@
 		2D02E4BD1E0B4A84006451C7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2DCD954D1E0B4F2C00145EB5 /* examplesTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* examplesTests.m */; };
+		3AC51B549DE14BEEA52029F2 /* FiraCode-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41FE42B786FE4B15B492DEC8 /* FiraCode-Light.ttf */; };
 		54C3740B3E31EC5BF7D575D3 /* libPods-examples.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 815D22A92B28FD8E54AF4220 /* libPods-examples.a */; };
+		70AC2296977E44E989C000D0 /* close_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DA2772A08A4B66A41D5887 /* close_button@3x.png */; };
 		867B0F3750F3C57AFB8AD035 /* libPods-examples-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 71FE5071D2AC96D1208E2013 /* libPods-examples-tvOS.a */; };
+		AFDC1C3AC9CC401CABE12FF4 /* FiraCode-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 06A40E32026447A4BF1F7510 /* FiraCode-Medium.ttf */; };
 		B8E73D7FB7314E8C97D2EEB2 /* libPods-examples-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1FCEB4803A1076647872DFB /* libPods-examples-tvOSTests.a */; };
 		C0E59D31C58734069DA2623E /* libPods-examplesTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F10F91166F200F2510595EDF /* libPods-examplesTests.a */; };
-		0AC512C858B34B79BE02D607 /* FiraCode-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7AF2DEEAD9574EE598E28054 /* FiraCode-Bold.ttf */; };
-		3AC51B549DE14BEEA52029F2 /* FiraCode-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 41FE42B786FE4B15B492DEC8 /* FiraCode-Light.ttf */; };
-		AFDC1C3AC9CC401CABE12FF4 /* FiraCode-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 06A40E32026447A4BF1F7510 /* FiraCode-Medium.ttf */; };
-		FB05B72B69304B6B9CB85DC9 /* FiraCode-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 10B00572CC90418EBA09737D /* FiraCode-Regular.ttf */; };
 		DF70F802B9F8409FAEB5410E /* FiraCode-Retina.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 458A5EE795584D8684825665 /* FiraCode-Retina.ttf */; };
 		F219B6B8AA764F03BF4273D3 /* close_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = EAF480052AD24237B9E33534 /* close_button@2x.png */; };
-		70AC2296977E44E989C000D0 /* close_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A4DA2772A08A4B66A41D5887 /* close_button@3x.png */; };
+		FB05B72B69304B6B9CB85DC9 /* FiraCode-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 10B00572CC90418EBA09737D /* FiraCode-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,7 +51,9 @@
 		00E356EE1AD99517003FC87E /* examplesTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = examplesTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* examplesTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = examplesTests.m; sourceTree = "<group>"; };
+		06A40E32026447A4BF1F7510 /* FiraCode-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraCode-Medium.ttf"; path = "../assets/fonts/FiraCode-Medium.ttf"; sourceTree = "<group>"; };
 		0AFC60CCA4D9F974B09050F5 /* Pods-examples-tvOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-examples-tvOS.release.xcconfig"; path = "Target Support Files/Pods-examples-tvOS/Pods-examples-tvOS.release.xcconfig"; sourceTree = "<group>"; };
+		10B00572CC90418EBA09737D /* FiraCode-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraCode-Regular.ttf"; path = "../assets/fonts/FiraCode-Regular.ttf"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* examples.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = examples.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = examples/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = examples/AppDelegate.m; sourceTree = "<group>"; };
@@ -62,24 +65,22 @@
 		2D02E47B1E0B4A5D006451C7 /* examples-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "examples-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D02E4901E0B4A5D006451C7 /* examples-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "examples-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA2D982F337B74368B91F8B /* Pods-examplesTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-examplesTests.debug.xcconfig"; path = "Target Support Files/Pods-examplesTests/Pods-examplesTests.debug.xcconfig"; sourceTree = "<group>"; };
+		41FE42B786FE4B15B492DEC8 /* FiraCode-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraCode-Light.ttf"; path = "../assets/fonts/FiraCode-Light.ttf"; sourceTree = "<group>"; };
+		458A5EE795584D8684825665 /* FiraCode-Retina.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraCode-Retina.ttf"; path = "../assets/fonts/FiraCode-Retina.ttf"; sourceTree = "<group>"; };
 		565B680C9AB5CBED8D7B943D /* Pods-examples.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-examples.debug.xcconfig"; path = "Target Support Files/Pods-examples/Pods-examples.debug.xcconfig"; sourceTree = "<group>"; };
 		5F31142B095E06C7BCC98D62 /* Pods-examples.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-examples.release.xcconfig"; path = "Target Support Files/Pods-examples/Pods-examples.release.xcconfig"; sourceTree = "<group>"; };
 		71FE5071D2AC96D1208E2013 /* libPods-examples-tvOS.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-examples-tvOS.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7AF2DEEAD9574EE598E28054 /* FiraCode-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "FiraCode-Bold.ttf"; path = "../assets/fonts/FiraCode-Bold.ttf"; sourceTree = "<group>"; };
 		815D22A92B28FD8E54AF4220 /* libPods-examples.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-examples.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B5F73E78099FDDBA0F33E46 /* Pods-examplesTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-examplesTests.release.xcconfig"; path = "Target Support Files/Pods-examplesTests/Pods-examplesTests.release.xcconfig"; sourceTree = "<group>"; };
+		A4DA2772A08A4B66A41D5887 /* close_button@3x.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "close_button@3x.png"; path = "../assets/images/close_button@3x.png"; sourceTree = "<group>"; };
 		D1FCEB4803A1076647872DFB /* libPods-examples-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-examples-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E53E1DB7A64571256E1100B0 /* Pods-examples-tvOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-examples-tvOSTests.debug.xcconfig"; path = "Target Support Files/Pods-examples-tvOSTests/Pods-examples-tvOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		EAF480052AD24237B9E33534 /* close_button@2x.png */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "close_button@2x.png"; path = "../assets/images/close_button@2x.png"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		ED2971642150620600B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = Platforms/AppleTVOS.platform/Developer/SDKs/AppleTVOS12.0.sdk/System/Library/Frameworks/JavaScriptCore.framework; sourceTree = DEVELOPER_DIR; };
 		F10F91166F200F2510595EDF /* libPods-examplesTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-examplesTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F3E97289DCC7A09EC501BE58 /* Pods-examples-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-examples-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-examples-tvOS/Pods-examples-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
-		7AF2DEEAD9574EE598E28054 /* FiraCode-Bold.ttf */ = {isa = PBXFileReference; name = "FiraCode-Bold.ttf"; path = "../assets/fonts/FiraCode-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		41FE42B786FE4B15B492DEC8 /* FiraCode-Light.ttf */ = {isa = PBXFileReference; name = "FiraCode-Light.ttf"; path = "../assets/fonts/FiraCode-Light.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		06A40E32026447A4BF1F7510 /* FiraCode-Medium.ttf */ = {isa = PBXFileReference; name = "FiraCode-Medium.ttf"; path = "../assets/fonts/FiraCode-Medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		10B00572CC90418EBA09737D /* FiraCode-Regular.ttf */ = {isa = PBXFileReference; name = "FiraCode-Regular.ttf"; path = "../assets/fonts/FiraCode-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		458A5EE795584D8684825665 /* FiraCode-Retina.ttf */ = {isa = PBXFileReference; name = "FiraCode-Retina.ttf"; path = "../assets/fonts/FiraCode-Retina.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		EAF480052AD24237B9E33534 /* close_button@2x.png */ = {isa = PBXFileReference; name = "close_button@2x.png"; path = "../assets/images/close_button@2x.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		A4DA2772A08A4B66A41D5887 /* close_button@3x.png */ = {isa = PBXFileReference; name = "close_button@3x.png"; path = "../assets/images/close_button@3x.png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +136,20 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		118B6129F7704C08ADB38631 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				7AF2DEEAD9574EE598E28054 /* FiraCode-Bold.ttf */,
+				41FE42B786FE4B15B492DEC8 /* FiraCode-Light.ttf */,
+				06A40E32026447A4BF1F7510 /* FiraCode-Medium.ttf */,
+				10B00572CC90418EBA09737D /* FiraCode-Regular.ttf */,
+				458A5EE795584D8684825665 /* FiraCode-Retina.ttf */,
+				EAF480052AD24237B9E33534 /* close_button@2x.png */,
+				A4DA2772A08A4B66A41D5887 /* close_button@3x.png */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		13B07FAE1A68108700A75B9A /* examples */ = {
 			isa = PBXGroup;
 			children = (
@@ -174,7 +189,6 @@
 				3FA2D982F337B74368B91F8B /* Pods-examplesTests.debug.xcconfig */,
 				8B5F73E78099FDDBA0F33E46 /* Pods-examplesTests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -211,21 +225,6 @@
 			);
 			name = Products;
 			sourceTree = "<group>";
-		};
-		118B6129F7704C08ADB38631 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				7AF2DEEAD9574EE598E28054 /* FiraCode-Bold.ttf */,
-				41FE42B786FE4B15B492DEC8 /* FiraCode-Light.ttf */,
-				06A40E32026447A4BF1F7510 /* FiraCode-Medium.ttf */,
-				10B00572CC90418EBA09737D /* FiraCode-Regular.ttf */,
-				458A5EE795584D8684825665 /* FiraCode-Retina.ttf */,
-				EAF480052AD24237B9E33534 /* close_button@2x.png */,
-				A4DA2772A08A4B66A41D5887 /* close_button@3x.png */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 
@@ -319,7 +318,12 @@
 				TargetAttributes = {
 					00E356ED1AD99517003FC87E = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = 2CNZH3KS7S;
+						ProvisioningStyle = Automatic;
 						TestTargetID = 13B07F861A680F5B00A75B9A;
+					};
+					13B07F861A680F5B00A75B9A = {
+						ProvisioningStyle = Automatic;
 					};
 					2D02E47A1E0B4A5D006451C7 = {
 						CreatedOnToolsVersion = 8.2.1;
@@ -337,6 +341,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -407,7 +412,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
+			shellScript = "export NODE_BINARY=node\n../../../node_modules/react-native/scripts/react-native-xcode.sh\n";
 		};
 		2D02E4CB1E0B4B27006451C7 /* Bundle React Native Code And Images */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -619,6 +624,9 @@
 			baseConfigurationReference = 3FA2D982F337B74368B91F8B /* Pods-examplesTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 2CNZH3KS7S;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -633,6 +641,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/examples.app/examples";
 			};
 			name = Debug;
@@ -642,7 +651,10 @@
 			baseConfigurationReference = 8B5F73E78099FDDBA0F33E46 /* Pods-examplesTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
+				DEVELOPMENT_TEAM = 2CNZH3KS7S;
 				INFOPLIST_FILE = examplesTests/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -653,6 +665,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/examples.app/examples";
 			};
 			name = Release;
@@ -662,8 +675,11 @@
 			baseConfigurationReference = 565B680C9AB5CBED8D7B943D /* Pods-examples.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = examples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -673,6 +689,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = examples;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -682,7 +699,10 @@
 			baseConfigurationReference = 5F31142B095E06C7BCC98D62 /* Pods-examples.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = examples/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -692,6 +712,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = examples;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;

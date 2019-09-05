@@ -1,1 +1,1 @@
-../../../../../node_modules/react-native-gesture-handler/ios/Handlers/RNPanHandler.h
+../../../../../../../node_modules/react-native-gesture-handler/ios/Handlers/RNPanHandler.h
