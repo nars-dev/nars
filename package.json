@@ -1,5 +1,11 @@
 {
   "private": true,
+  "scripts": {
+    "build-nars-common": "cd packages/nars-common && yarn && ./generate_proto.sh && yarn build",
+    "build-nars": "cd packages/nars && yarn && yarn build",
+    "build-nars-client": "cd packages/nars-client && yarn build",
+    "build": "yarn build-nars-common && yarn build-nars && yarn build-nars-client"
+  },
   "workspaces": [
     "packages/nars",
     "packages/nars-common",

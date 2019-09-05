@@ -36,13 +36,11 @@ function getChildHostContext(parentHostContext, param, param$1) {
 }
 
 function prepareForCommit(param) {
-  console.log("Prepare for commit");
   return /* () */0;
 }
 
 function resetAfterCommit(container) {
   Belt_HashMapInt.clear(container[/* callbackRegistry */2]);
-  console.log("Flush?");
   var counter = /* record */[/* contents */0];
   var registerCallback = function (callback) {
     var id = counter[0];
@@ -50,13 +48,10 @@ function resetAfterCommit(container) {
     Belt_HashMapInt.set(container[/* callbackRegistry */2], id, callback);
     return id;
   };
-  console.log("Flush?");
   var children = container[/* children */1].map((function (inst) {
           return Instance.encode(inst, registerCallback);
         }));
-  console.log("Flush?");
   Curry._1(container[/* flushUpdates */0], children);
-  console.log("RESET AFTER");
   return /* () */0;
 }
 
@@ -95,7 +90,6 @@ function prepareUpdate(param, param$1, oldProps, newProps, param$2, param$3) {
 }
 
 function createTextInstance(text, param, param$1, param$2) {
-  console.log("create text instance");
   return /* RawText */Block.__(0, [(function (param) {
                 return ComponentRegistry.createRawTextEncodedReactElement(text);
               })]);
@@ -141,7 +135,6 @@ function appendChildToContainer(container, child) {
 }
 
 function commitMount(param, param$1, param$2, param$3) {
-  console.log("Commit mount");
   return /* () */0;
 }
 
@@ -204,7 +197,6 @@ function unhideInstance(param, param$1) {
 }
 
 function commitTextUpdate(param, param$1, param$2) {
-  console.log("commit text update");
   return /* () */0;
 }
 
