@@ -4,11 +4,16 @@ This is a monorepo containing the core packages and examples of nars
 
 ### Discord
 
-I'm more than happy to answer any questions or help you if you stumble 
+I'm more than happy to answer any questions or help you if you stumble
 upon some issues when using nars. You can chat with me on [Discord.](https://discord.gg/ubsun8r).
 
-
 ## Getting started with examples
+
+Make sure you clone the repository using:
+
+```
+git clone --recurse-submodules git@github.com:wokalski/nars.git
+```
 
 In the root directory run:
 
