@@ -1,6 +1,7 @@
 export { default as View } from "./View";
 export { default as Text } from "./Text";
 export { default as FlatList } from "./FlatList";
+export { default as Image } from "./Image";
 import * as StyleSheet from "./StyleSheet";
 export { StyleSheet };
 export { default as TextInput } from "./TextInput";
