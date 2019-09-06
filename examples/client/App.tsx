@@ -10,17 +10,12 @@ import {
   View,
   Text,
   StatusBar,
-  Dimensions
+  Dimensions,
 } from "react-native";
-import { PanGestureHandler, State } from "react-native-gesture-handler";
+
 import Animated, { Easing } from "react-native-reanimated";
-import Carousel, { ParallaxImage } from "react-native-snap-carousel";
-import {
-  Header,
-  LearnMoreLinks,
-  DebugInstructions,
-  ReloadInstructions
-} from "react-native/Libraries/NewAppScreen";
+import Carousel from "react-native-snap-carousel";
+
 import * as Colors from "./Colors";
 import ExampleScreen from "./ExampleScreen";
 import Form from "./Form";
@@ -30,34 +25,34 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     backgroundColor: Colors.offWhite,
-    overflow: "visible"
+    overflow: "visible",
   },
   logo: {
     paddingLeft: 18,
     color: Colors.dark,
     fontFamily: "Fira Code",
     fontSize: 30,
-    fontWeight: "600"
+    fontWeight: "600",
   },
   appName: {
     paddingLeft: 18,
     color: Colors.dark,
     fontFamily: "Fira Code",
     fontSize: 16,
-    fontWeight: "normal"
+    fontWeight: "normal",
   },
   carouselContentContainer: {
-    alignItems: "center"
+    alignItems: "center",
   },
   carouselCustomStyle: {
-    overflow: "visible"
+    overflow: "visible",
   },
   exampleCard: {
     height: 366,
     width: 225,
     borderRadius: 3,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   bottomColorsContainer: { flexDirection: "row", width: "100%", height: 22 },
   bottomColors: { width: "20%", height: "100%" },
@@ -65,8 +60,8 @@ const styles = StyleSheet.create({
     color: Colors.offWhite,
     fontSize: 20,
     fontFamily: "Fira Code",
-    fontWeight: "600"
-  }
+    fontWeight: "600",
+  },
 });
 
 const BottomColors = () => (
@@ -76,7 +71,7 @@ const BottomColors = () => (
       Colors.green,
       Colors.lightGreen,
       Colors.yellow,
-      Colors.orange
+      Colors.orange,
     ].map(color => (
       <View
         key={color}
@@ -142,14 +137,14 @@ const {
   add,
   interpolate,
   eq,
-  call
+  call,
 } = Animated;
 
 export const createTimingState = () => ({
   finished: new Value(0),
   position: new Value(0),
   time: new Value(0),
-  frameTime: new Value(0)
+  frameTime: new Value(0),
 });
 
 const runAnimation = (
@@ -162,7 +157,7 @@ const runAnimation = (
   const config = {
     duration: 300,
     toValue: new Animated.Value(0),
-    easing: Easing.inOut(Easing.ease)
+    easing: Easing.inOut(Easing.ease),
   };
   const state = createTimingState();
   const prevSelectedExample = new Animated.Value(0);
@@ -178,7 +173,7 @@ const runAnimation = (
           [set(state.position, 0), set(config.toValue, 1)],
           [set(state.position, 1), set(config.toValue, 0)]
         ),
-        startClock(clock)
+        startClock(clock),
       ]
     ),
     timing(clock, state, config),
@@ -191,10 +186,10 @@ const runAnimation = (
       cond(eq(selectedExample, 0), [
         set(toViewMeasured, 0),
         set(fromViewMeasured, 0),
-        call([], onCloseAnimationEnd)
-      ])
+        call([], onCloseAnimationEnd),
+      ]),
     ]),
-    state.position
+    state.position,
   ]);
 };
 
@@ -202,7 +197,7 @@ const createRect = (): Rect => ({
   x: new Animated.Value(0),
   y: new Animated.Value(0),
   height: new Animated.Value(0),
-  width: new Animated.Value(0)
+  width: new Animated.Value(0),
 });
 
 const centerHorizontal = (rect: Rect) => add(rect.x, divide(rect.width, 2));
@@ -219,19 +214,19 @@ const App = () => {
       selectedExampleValue,
       clock,
       screen,
-      card
+      card,
     ],
-    _
+    _,
   ] = React.useState(() => [
     new Animated.Value(0) as Animated.Value<0 | 1>,
     new Animated.Value(0) as Animated.Value<0 | 1>,
     new Animated.Value(0) as Animated.Value<number>,
     new Animated.Clock(),
     createRect(),
-    createRect()
+    createRect(),
   ]);
   const [
-    [fromScreenAnimationProgress, toScreenAnimationProgress]
+    [fromScreenAnimationProgress, toScreenAnimationProgress],
   ] = React.useState(() => {
     const animationProgress = runAnimation(
       clock,
@@ -243,12 +238,12 @@ const App = () => {
     return [
       interpolate(animationProgress, {
         inputRange: [0, 0.7],
-        outputRange: [0, 1]
+        outputRange: [0, 1],
       }),
       interpolate(animationProgress, {
         inputRange: [0.7, 1],
-        outputRange: [0, 1]
-      })
+        outputRange: [0, 1],
+      }),
     ];
   });
 
@@ -275,9 +270,9 @@ const App = () => {
             ),
             fromScreenAnimationProgress
           )
-        )
-      }
-    ]
+        ),
+      },
+    ],
   }));
 
   React.useEffect(() => {
@@ -305,13 +300,13 @@ const App = () => {
           <Animated.View
             style={[
               {
-                backgroundColor: item.primaryColor
+                backgroundColor: item.primaryColor,
               },
               isActiveCard ? selectedCardStyle : {},
               selectedExample && !isActiveCard
                 ? { opacity: sub(1, fromScreenAnimationProgress) }
                 : {},
-              styles.exampleCard
+              styles.exampleCard,
             ]}
           >
             <Animated.Text
@@ -319,7 +314,7 @@ const App = () => {
                 isActiveCard
                   ? { opacity: sub(1, fromScreenAnimationProgress) }
                   : {},
-                styles.exampleCardText
+                styles.exampleCardText,
               ]}
             >
               {item.name}

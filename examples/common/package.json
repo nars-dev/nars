@@ -4,6 +4,9 @@
   "private": true,
   "main": "./dist/Config.js",
   "types": "./dist/Config.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
   "dependencies": {
     "nars-common": "~0.0.0"
   },

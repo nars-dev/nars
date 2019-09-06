@@ -8,7 +8,12 @@ exports.config = {
     Form: {
         props: {
             backgroundColor: nars_common_1.InputProp.string,
-            textColor: nars_common_1.InputProp.string
-        }
-    }
+            textColor: nars_common_1.InputProp.string,
+        },
+    },
+    Feed: {
+        props: {
+            name: nars_common_1.InputProp.string,
+        },
+    },
 };
