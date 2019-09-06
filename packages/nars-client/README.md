@@ -1,16 +1,9 @@
+# nars-client
+
+`nars-client` lets you communicate with a nars server and render the UI according to server's messages. nars is based on bidirectional communication using websockets.
+
+## Getting started
+
+See [here](https://github.com/nars-dev/nars#getting-started).
 
 
-# Build
-```
-npm run build
-```
-
-# Watch
-
-```
-npm run watch
-```
-
-
-# Editor
-If you use `vscode`, Press `Windows + Shift + B` it will build automatically
