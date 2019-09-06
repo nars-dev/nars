@@ -2,11 +2,42 @@ import { Server } from "ws";
 import * as protobuf from "protobufjs/minimal";
 import { Schema } from "nars-common";
 import * as NarsReconciler from "./NarsReconciler.gen";
+import Analytics from "analytics-node";
+import * as getMachineUDID from "node-machine-id";
+import uuid from "uuid/v1";
 
 export const startListening = (
   server: Server,
   render: (component: Schema.IRender) => JSX.Element
 ) => {
+  /**
+   * Feel free to remove analytics. nars doesn't depend
+   * on analytic information at all. They are only collected
+   * to understand how/if developers use it.
+   */
+  const analytics = new Analytics("RsD4jSdhauL5xheR1WDxcXApnCGh8Kts");
+  let id;
+  try {
+    id = { anonymousId: getMachineUDID.machineIdSync() };
+    analytics.identify({
+      ...id,
+      traits: {
+        idStable: "true"
+      }
+    });
+  } catch (e) {
+    id = { anonymousId: uuid() };
+    analytics.identify({
+      ...id,
+      traits: {
+        idStable: "false"
+      }
+    });
+  }
+  analytics.track({
+    ...id,
+    event: "Server Started"
+  });
   server.on("connection", socket => {
     socket.binaryType = "arraybuffer";
     const containers = new Map<number, NarsReconciler.container>();
