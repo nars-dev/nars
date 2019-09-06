@@ -12,9 +12,14 @@
     "build": "bsb -make-world && tsc && cp ./src/*.bs.js ./dist/"
   },
   "dependencies": {
+    "@types/analytics-node": "^3.1.1",
+    "@types/uuid": "^3.4.5",
+    "analytics-node": "^3.4.0-beta.1",
     "bs-platform": "6.1.0",
     "nars-common": "0.0.0",
-    "reason-react-reconciler": "~0.21.0000"
+    "node-machine-id": "^1.1.12",
+    "reason-react-reconciler": "~0.21.0000",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/react-reconciler": "^0.18.0",
