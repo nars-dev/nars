@@ -11,7 +11,7 @@ interface Props {
 const ImagePost = ({ imageSrc, caption }: Props) => (
   <View style={styles.elementContainer}>
     <View style={styles.contentContainer}>
-      <Image style={styles.image} source={{ uri: imageSrc }} />
+      <Image style={styles.image} source={imageSrc} />
       <Text style={styles.text}>{caption}</Text>
     </View>
   </View>
