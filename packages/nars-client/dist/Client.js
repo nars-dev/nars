@@ -36,7 +36,7 @@ function createEncoders(config) {
 }
 function createRemoteComponent(webSocket, config) {
     const encoders = createEncoders(config);
-    return (({ name, props, LoadingComponent, ErrorComponent }) => {
+    return (({ name, props, LoadingComponent, ErrorComponent, }) => {
         if (!(name in encoders)) {
             throw "Unknown component " + name;
         }

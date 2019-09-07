@@ -2,7 +2,7 @@ import * as React from "react";
 import {
   ComponentConfig,
   ExtractInputPropTypes,
-  ExtractLocalPropTypes
+  ExtractLocalPropTypes,
 } from "nars-common";
 import { RemoteComponent } from "./RemoteComponent";
 
@@ -68,11 +68,12 @@ export function createRemoteComponent<T extends ComponentConfig>(
   config: T
 ) {
   const encoders = createEncoders(config);
+
   return (({
     name,
     props,
     LoadingComponent,
-    ErrorComponent
+    ErrorComponent,
   }: RemoteComponentProps<T>) => {
     if (!(name in encoders)) {
       throw "Unknown component " + name;

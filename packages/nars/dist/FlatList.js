@@ -24,7 +24,7 @@ exports.default = (props) => {
             const key = props.keyExtractor(renderedItemData);
             return {
                 renderedElement: Object.assign(Object.assign({}, renderedElement), { key }),
-                key
+                key,
             };
         }
         return renderedElement;
@@ -36,28 +36,27 @@ exports.default = (props) => {
         onEndReachedThreshold: props.onEndReachedThreshold,
         style: props.style,
         onEndReached: props.onEndReached,
-        keys
+        keys,
     }, children);
 };
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => ({ registerCallback, children }) => {
+    createEncoder: (props) => ({ registerCallback, children, }) => {
         const keys = props.keys;
         const keyedChildren = Array.isArray(keys)
             ? keys.map((key, i) => ({
                 key,
-                element: children[i]
+                element: children[i],
             }))
             : [];
-        const onEndReached = props.onEndReached;
         return nars_common_1.Schema.ReactElement.create({
             flatList: {
                 style: StyleEncoding_1.encodeViewStyleInProps(props),
-                onEndReached: ProtoEncoders_1.encodeArityZeroCallback(registerCallback, onEndReached),
+                onEndReached: ProtoEncoders_1.encodeArityZeroCallback(registerCallback, props.onEndReached),
                 onEndReachedThreshold: ProtoEncoders_1.encodeInt32Value(props.onEndReachedThreshold),
                 keyedChildren,
-                localProps: ProtoEncoders_1.encodeLocalProps(props.localProps)
-            }
+                localProps: ProtoEncoders_1.encodeLocalProps(props.localProps),
+            },
         });
-    }
+    },
 });
