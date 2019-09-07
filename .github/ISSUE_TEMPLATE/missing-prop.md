@@ -1,8 +1,8 @@
 ---
 name: Missing prop
 about: Request support for a prop of a given component
-title: "[MISSING PROP] <COMPONENT>: <PROP>"
-labels: ''
+title: "<COMPONENT>: <PROP>"
+labels: Missing prop
 assignees: ''
 
 ---
