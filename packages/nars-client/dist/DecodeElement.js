@@ -60,7 +60,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (fl.localProps) {
             assignLocalProps(props, fl.localProps, getLocalProp);
         }
-        if (fl.onEndReached && fl.onEndReached.callId) {
+        if (fl.onEndReached && typeof fl.onEndReached.callId === "number") {
             const callId = fl.onEndReached.callId;
             props.onEndReached = () => {
                 rpcCall(callId);

@@ -21,7 +21,7 @@ function createEncoders(config) {
                     encodedProps.props[propKey] = encoded;
                 }
                 else {
-                    throw 'Bad prop type in ' + component;
+                    throw "Bad prop type in " + component;
                 }
             }
             if (definition.localProps) {
@@ -38,13 +38,13 @@ function createRemoteComponent(webSocket, config) {
     const encoders = createEncoders(config);
     return (({ name, props, LoadingComponent, ErrorComponent, }) => {
         if (!(name in encoders)) {
-            throw 'Unknown component ' + name;
+            throw "Unknown component " + name;
         }
         const encoded = React.useMemo(() => {
             return encoders[name](props);
         }, [name, props]);
         if (!encoded) {
-            throw 'Unknown component named ' + name;
+            throw "Unknown component named " + name;
         }
         const encodedProps = encoded.props;
         const localProps = encoded.localProps;

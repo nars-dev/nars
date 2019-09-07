@@ -7,7 +7,7 @@ import { encodeViewStyleInProps } from "./StyleEncoding";
 import {
   encodeLocalProps,
   encodeArityZeroCallback,
-  encodeInt32Value
+  encodeInt32Value,
 } from "./ProtoEncoders";
 
 export interface Props<T> {
@@ -36,9 +36,9 @@ export default <T>(props: Props<T>): React.ReactElement<unknown> => {
         return {
           renderedElement: {
             ...renderedElement,
-            key
+            key,
           },
-          key
+          key,
         };
       }
       return renderedElement;
@@ -54,7 +54,7 @@ export default <T>(props: Props<T>): React.ReactElement<unknown> => {
       onEndReachedThreshold: props.onEndReachedThreshold,
       style: props.style,
       onEndReached: props.onEndReached,
-      keys
+      keys,
     },
     children
   );
@@ -64,24 +64,26 @@ ComponentRegistry.add({
   name,
   createEncoder: (props: ComponentRegistry.opaqueProps) => ({
     registerCallback,
-    children
+    children,
   }) => {
     const keys = props.keys;
     const keyedChildren = Array.isArray(keys)
       ? keys.map((key, i) => ({
           key,
-          element: children[i]
+          element: children[i],
         }))
       : [];
-    const onEndReached = props.onEndReached;
     return Schema.ReactElement.create({
       flatList: {
         style: encodeViewStyleInProps(props),
-        onEndReached: encodeArityZeroCallback(registerCallback, onEndReached),
+        onEndReached: encodeArityZeroCallback(
+          registerCallback,
+          props.onEndReached
+        ),
         onEndReachedThreshold: encodeInt32Value(props.onEndReachedThreshold),
         keyedChildren,
-        localProps: encodeLocalProps(props.localProps as LocalProps<string>)
-      }
+        localProps: encodeLocalProps(props.localProps as LocalProps<string>),
+      },
     });
-  }
+  },
 });
