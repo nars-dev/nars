@@ -1,0 +1,39 @@
+name: Publish package
+job:
+  publish:
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+      - if: |
+          extract() {
+            # Field's key/value should be on their own line
+            echo $(cat package.json \
+              | grep "$1" \
+              | head -1 \
+              | awk -F: '{ print $2 }' \
+              | sed 's/[",]//g')
+          }
+          
+          cd "$INPUT_PATH"
+          PACKAGE_VERSION=$(extract version)
+          PACKAGE_NAME=$(extract name)
+          NPM_VERSION=$(npm view "$NAME" version)
+          
+          if [ "$NPM_VERSION" != "$PACKAGE_VERSION" ]
+          then
+            echo 1
+          else
+            exit 0
+          fi
+      # Set up the local Node environment for the NPM CLI
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      # Install dependencies in case there are any publish-related scripts
+      - run: npm install -g yarn
+      - run: yarn
+      - run: yarn build
+      - run: cd "$INPUT_PATH" && yarn publish --access public
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} 
