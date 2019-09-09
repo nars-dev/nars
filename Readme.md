@@ -183,6 +183,12 @@ If you've cloned the repository already make sure to pull the submodules:
 git submodule update --init
 ```
 
+Add [esy](https://esy.sh). We require esy for some native tools.
+
+```
+yarn global add esy
+```
+
 In the root directory run:
 
 - `yarn && yarn build`
