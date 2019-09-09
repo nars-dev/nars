@@ -18,10 +18,6 @@ jobs:
         run: |
           set -e
 
-          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-          sudo apt-get update && sudo apt-get install yarn
-          
           extract() {
             # Field's key/value should be on their own line
             echo $(cat package.json \
@@ -42,7 +38,7 @@ jobs:
             
             if [ "$NPM_VERSION" != "$PACKAGE_VERSION" ]
             then
-              yarn publish --access public
+              npm publish --access public
             fi
             cd "$ROOT"
           done
