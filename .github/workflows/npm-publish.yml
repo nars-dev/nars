@@ -1,24 +1,50 @@
 name: Publish packages to npm
 
-on:
+on: 
   push:
     branches:
       - master
 
 jobs:
-  runs-on: ubuntu-18.04
   publish:
+    runs-on: ubuntu-latest
     steps:
-      - name: Publish nars
-        uses: ./github/actions/publish
+      - uses: actions/checkout@v1
         with:
-          path: packages/nars/package.json
-      - name: Publish nars-common
-        uses: ./github/actions/publish
-        with:
-          path: packages/nars-common/package.json
-      - name: Publish nars-client
-        uses: ./github/actions/publish
-        with:
-          path: packages/nars-client/package.json
+          fetch-depth: 1
+          ref: ${{ github.ref }}
+          submodules: true
+      - name: Publish packages
+        run: |
+          set -e
 
+          curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+          echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+          sudo apt-get update && sudo apt-get install yarn
+          
+          extract() {
+            # Field's key/value should be on their own line
+            echo $(cat package.json \
+              | grep "$1" \
+              | head -1 \
+              | awk -F: '{ print $2 }' \
+              | sed 's/[",]//g')
+          }
+
+          ROOT=$(pwd)
+
+          for PACKAGE_PATH in "./packages/nars" "./packages/nars-client" "./packages/nars-common"
+          do
+            cd "$PACKAGE_PATH"
+            PACKAGE_VERSION=$(extract version)
+            PACKAGE_NAME=$(extract name)
+            NPM_VERSION=$(npm view "$PACKAGE_NAME" version)
+            
+            if [ "$NPM_VERSION" != "$PACKAGE_VERSION" ]
+            then
+              yarn publish --access public
+            fi
+            cd "$ROOT"
+          done
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }} 
