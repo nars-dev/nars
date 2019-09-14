@@ -8,6 +8,7 @@
   },
   "workspaces": [
     "packages/nars",
+    "packages/dashboard",
     "packages/nars-common",
     "packages/nars-client",
     "packages/reason-react-reconciler",

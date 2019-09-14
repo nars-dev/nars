@@ -1,0 +1,26 @@
+{
+  "name": "dashboard",
+  "version": "0.1.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "build-client": "cd ../../examples/client && yarn start",
+    "build-server": "cd ../../examples/server && yarn start",
+    "build-common": "cd ../../examples/common && yarn build",
+    "build-nars": "cd ../nars && yarn bsb -make-world -w",
+    "build-nars-client": "cd ../nars && yarn build",
+    "build-nars-common": "cd ../nars && yarn build"
+  },
+  "dependencies": {
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.6.0",
+    "blessed": "^0.1.81",
+    "react": "^16.9.0",
+    "react-blessed": "^0.6.1",
+    "react-devtools-core": "^3.6.3",
+    "ws": "^7.1.2"
+  },
+  "devDependencies": {}
+}
