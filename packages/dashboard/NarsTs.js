@@ -2,7 +2,7 @@ import React from "react";
 import { spawn } from "child_process";
 import { stylesheet } from "./app";
 
-export default class Nars extends React.Component {
+export default class NarsTs extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,7 +12,7 @@ export default class Nars extends React.Component {
   }
 
   componentDidMount() {
-    const subprocess = spawn("yarn", ["build-nars"], {
+    const subprocess = spawn("yarn", ["build-nars-ts"], {
       stdio: ["pipe", "pipe", "pipe"],
     });
 
@@ -26,10 +26,10 @@ export default class Nars extends React.Component {
   render() {
     return (
       <box
-        label="Nars"
+        label="Nars - TS"
         class={stylesheet.bordered}
         width="50%"
-        height="33%"
+        height="25%"
         right="0"
         draggable={true}
       >

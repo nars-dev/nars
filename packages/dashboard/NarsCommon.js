@@ -29,9 +29,9 @@ export default class NarsCommon extends React.Component {
         label="Nars Common"
         class={stylesheet.bordered}
         width="50%"
-        height="33%"
+        height="25%"
         right="0"
-        top="66%"
+        top="75%"
         draggable={true}
       >
         <list items={[...this.state.logs]} />

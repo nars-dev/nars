@@ -9,7 +9,9 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "bsb -make-world && tsc && cp ./src/*.bs.js ./dist/"
+    "build": "bsb -make-world && tsc && cp ./src/*.bs.js ./dist/",
+    "re:watch": "bsb -make-world -w",
+    "watch": "tsc --watch"
   },
   "dependencies": {
     "@types/analytics-node": "^3.1.1",

@@ -4,7 +4,8 @@ import { render } from "react-blessed";
 import Server from "./Server";
 import Client from "./Client";
 import Common from "./Common";
-import Nars from "./Nars";
+import NarsTs from "./NarsTs";
+import NarsRe from "./NarsRe";
 import NarsClient from "./NarsClient";
 import NarsCommon from "./NarsCommon";
 
@@ -15,7 +16,8 @@ const Dashboard = () => {
       <Server />
       <Common />
 
-      <Nars />
+      <NarsTs />
+      <NarsRe />
       <NarsClient />
       <NarsCommon />
     </element>

@@ -7,9 +7,10 @@
     "build-client": "cd ../../examples/client && yarn start",
     "build-server": "cd ../../examples/server && yarn start",
     "build-common": "cd ../../examples/common && yarn build",
-    "build-nars": "cd ../nars && yarn bsb -make-world -w",
-    "build-nars-client": "cd ../nars && yarn build",
-    "build-nars-common": "cd ../nars && yarn build"
+    "build-nars-re": "cd ../nars && yarn re:watch",
+    "build-nars-ts": "cd ../nars && yarn watch",
+    "build-nars-client": "cd ../nars-client && yarn watch",
+    "build-nars-common": "cd ../nars-common && yarn watch"
   },
   "dependencies": {
     "@babel/core": "^7.6.0",
