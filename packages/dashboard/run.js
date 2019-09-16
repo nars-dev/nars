@@ -2,4 +2,19 @@ require("@babel/register")({
   presets: [["@babel/preset-env"], ["@babel/preset-react"]],
 });
 
-require("./app");
+const argv = process.argv.slice(2);
+
+const version = argv[0];
+const versions = ["full", "examples", "core"];
+
+if (versions.indexOf(version) === -1) {
+  console.warn(
+    'Invalid example "%s" provided. Must be one of:\n  *',
+    version,
+    versions.join("\n  * ")
+  );
+
+  process.exit(0);
+}
+
+require("./" + version);

@@ -1,6 +1,6 @@
 import React from "react";
 import { spawn } from "child_process";
-import { stylesheet } from "./app";
+import stylesheet from "./stylesheet";
 
 export default class Client extends React.Component {
   constructor(props) {
@@ -24,12 +24,17 @@ export default class Client extends React.Component {
   }
 
   render() {
+    const { width, height, top, right, left } = this.props;
+
     return (
       <box
         label="Client"
         class={stylesheet.bordered}
-        width="50%"
-        height="33%"
+        top={top}
+        right={right}
+        left={left}
+        width={width}
+        height={height}
         draggable={true}
       >
         <list items={this.state.logs} />

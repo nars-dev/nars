@@ -9,32 +9,19 @@ import NarsRe from "./NarsRe";
 import NarsClient from "./NarsClient";
 import NarsCommon from "./NarsCommon";
 
-const Dashboard = () => {
+const Full = () => {
   return (
     <element>
-      <Client />
-      <Server />
-      <Common />
+      <Client height="33%" width="50%" />
+      <Server top="33%" height="33%" width="50%" />
+      <Common top="66%" height="33%" width="50%" />
 
-      <NarsTs />
-      <NarsRe />
-      <NarsClient />
-      <NarsCommon />
+      <NarsTs right="0" height="25%" width="50%" />
+      <NarsRe top="25%" right="0" height="25%" width="50%" />
+      <NarsClient top="50%" right="0" height="25%" width="50%" />
+      <NarsCommon top="75%" right="0" height="25%" width="50%" />
     </element>
   );
-};
-
-export const stylesheet = {
-  bordered: {
-    border: {
-      type: "line",
-    },
-    style: {
-      border: {
-        fg: "blue",
-      },
-    },
-  },
 };
 
 /**
@@ -43,11 +30,11 @@ export const stylesheet = {
 const screen = blessed.screen({
   autoPadding: true,
   smartCSR: true,
-  title: "react-blessed dashboard",
+  title: "Nars dashboard",
 });
 
 screen.key(["escape", "q", "C-c"], function(ch, key) {
   return process.exit(0);
 });
 
-render(<Dashboard />, screen);
+render(<Full />, screen);
