@@ -4,7 +4,7 @@ import { render } from "react-blessed";
 
 import Process from "./Process";
 
-const Examples = () => {
+const Example = () => {
   return (
     <element>
       <Process label="Client" arg="build-client" height="50%" width="100%" />
@@ -35,11 +35,11 @@ const Examples = () => {
 const screen = blessed.screen({
   autoPadding: true,
   smartCSR: true,
-  title: "Nars examples dashboard",
+  title: "Nars example dashboard",
 });
 
 screen.key(["escape", "q", "C-c"], function(ch, key) {
   return process.exit(0);
 });
 
-render(<Examples />, screen);
+render(<Example />, screen);

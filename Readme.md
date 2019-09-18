@@ -19,8 +19,24 @@ nars is currently being developed in a private repo, but it's public on npm so t
 
 ### App packages
 
-In the rest of this guide, I assume that you have three packages: `client`, `server`, and `common`. 
+In the rest of this guide, I assume that you have three packages: `client`, `server`, and `common`.
 You can rename these however you want but make sure to swap the name in all relevant places.
+
+### Dashboard
+
+You can use the project dashboard to run all necessary scripts at once.
+
+Choose the dashboard type from one of `{type}` :
+
+- `example` - run all scripts from the example directory
+- `core` - run all build scripts from code packages
+- `full` - run example and core at once
+
+To run dashboard use:
+
+```sh
+yarn dashboard {type}
+```
 
 ### Folder structure
 
@@ -53,6 +69,7 @@ package.json in root:
 ### Defining a config
 
 In the common package run:
+
 - `yarn add nars-common@latest`
 
 Next, create index.js with a config.
@@ -79,6 +96,7 @@ export const config = {
 ### Configuring the server
 
 In the server package run:
+
 - `yarn add nars <common_package_name>` where `common_package_name` is the name of the package in the `common` directory.
 
 Create `index.js` file:
@@ -121,11 +139,13 @@ Static.attatchListener(webSocketServer, router);
 **Typescript**
 
 Add `parcel` if not present:
+
 ```
 yarn add parcel
 ```
 
 Run:
+
 ```
 parcel build --target node index.tsx && node dist/index.js
 ```
@@ -139,6 +159,7 @@ node index.js
 ### Attaching a client
 
 Set up your React Native app in the client folder. Next run:
+
 - `yarn add nars-client <common_package_name>` where `common_package_name` is the name of the package in the `common` directory.
 - Go to a file where you'd like to use nars' `RemoteComponent`.
 
@@ -214,19 +235,21 @@ There's a limited set of props which are supported. You can check them out in
 
 ### Adding a prop to an existing component
 
-Go to schema protobuf file: 
+Go to schema protobuf file:
 `packages/nars-common/src/proto/schema.proto`
 
 1. Find the message that describes the component (i.e. View is described by message View)
 2. Add a field to the component's message (see [Protobuf Language Guide](https://developers.google.com/protocol-buffers/docs/proto#simple)
-for a reference.
-3. If the field is optional, wrap it in a value type. See `Int32Value` message for reference. 
-It's a wrapper around int32 type. Protobuf doesn't have the notion of optional values but
-the default value for message is 0 so it's possible to detect if it's set or not.
+   for a reference.
+3. If the field is optional, wrap it in a value type. See `Int32Value` message for reference.
+   It's a wrapper around int32 type. Protobuf doesn't have the notion of optional values but
+   the default value for message is 0 so it's possible to detect if it's set or not.
 4. If the prop is a function we use Callback message for describing it.
 
 Go to `packages/nars/src/<component-name>.ts`
+
 - Add the prop to the component and parsing code
 
 Go to `packages/nars-client/src/DecodeElement.tsx`
+
 - Implement decoding for the prop.

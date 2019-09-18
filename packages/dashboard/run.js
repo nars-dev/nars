@@ -5,7 +5,7 @@ require("@babel/register")({
 const argv = process.argv.slice(2);
 
 const version = argv[0];
-const versions = ["full", "examples", "core"];
+const versions = ["full", "example", "core"];
 
 if (versions.indexOf(version) === -1) {
   console.warn(
