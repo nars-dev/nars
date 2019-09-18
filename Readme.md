@@ -38,6 +38,10 @@ To run dashboard use:
 yarn dashboard {type}
 ```
 
+| full  | core  | examples  |
+|---|---|---|
+| ![image](https://user-images.githubusercontent.com/10349378/64976097-cc016d00-d8b0-11e9-97c2-6bc824131c96.png) | ![image](https://user-images.githubusercontent.com/10349378/64976116-d9b6f280-d8b0-11e9-8b47-43eb1a9c1f1b.png) | ![image](https://user-images.githubusercontent.com/10349378/64976136-e3405a80-d8b0-11e9-8d35-bbc9d19ff5b5.png) | 
+
 ### Folder structure
 
 We want to share the common package so we will create a yarn monorepo.
