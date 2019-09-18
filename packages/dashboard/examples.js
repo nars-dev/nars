@@ -1,16 +1,30 @@
 import React from "react";
 import blessed from "blessed";
 import { render } from "react-blessed";
-import Server from "./Server";
-import Client from "./Client";
-import Common from "./Common";
+
+import Process from "./Process";
 
 const Examples = () => {
   return (
     <element>
-      <Client height="50%" width="100%" />
-      <Server top="50%" height="50%" width="70%" />
-      <Common top="50%" height="50%" width="30%" right="0" />
+      <Process label="Client" arg="build-client" height="50%" width="100%" />
+
+      <Process
+        label="Server"
+        arg="build-server"
+        top="50%"
+        height="50%"
+        width="70%"
+      />
+
+      <Process
+        label="Common"
+        arg="build-common"
+        top="50%"
+        height="50%"
+        width="30%"
+        right="0"
+      />
     </element>
   );
 };

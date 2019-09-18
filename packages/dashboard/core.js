@@ -1,21 +1,38 @@
 import React from "react";
 import blessed from "blessed";
 import { render } from "react-blessed";
-import Server from "./Server";
-import Client from "./Client";
-import Common from "./Common";
-import NarsTs from "./NarsTs";
-import NarsRe from "./NarsRe";
-import NarsClient from "./NarsClient";
-import NarsCommon from "./NarsCommon";
 
-const Cpre = () => {
+import Process from "./Process";
+
+const Core = () => {
   return (
     <element>
-      <NarsTs height="50%" width="50%" />
-      <NarsRe top="50%" height="50%" width="50%" />
-      <NarsClient right="0" height="50%" width="50%" />
-      <NarsCommon top="50%" right="0" height="50%" width="50%" />
+      <Process label="Nars - TS" arg="build-nars-ts" height="50%" width="50%" />
+
+      <Process
+        label="Nars - RE"
+        arg="build-nars-re"
+        top="50%"
+        height="50%"
+        width="50%"
+      />
+
+      <Process
+        label="Nars Client"
+        arg="build-nars-client"
+        right="0"
+        height="50%"
+        width="50%"
+      />
+
+      <Process
+        label="Nars Common"
+        arg="build-nars-common"
+        top="50%"
+        right="0"
+        height="50%"
+        width="50%"
+      />
     </element>
   );
 };
@@ -33,4 +50,4 @@ screen.key(["escape", "q", "C-c"], function(ch, key) {
   return process.exit(0);
 });
 
-render(<Cpre />, screen);
+render(<Core />, screen);

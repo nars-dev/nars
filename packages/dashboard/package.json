@@ -22,6 +22,5 @@
     "react-blessed": "^0.6.1",
     "react-devtools-core": "^3.6.3",
     "ws": "^7.1.2"
-  },
-  "devDependencies": {}
+  }
 }

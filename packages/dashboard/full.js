@@ -1,25 +1,64 @@
 import React from "react";
 import blessed from "blessed";
 import { render } from "react-blessed";
-import Server from "./Server";
-import Client from "./Client";
-import Common from "./Common";
-import NarsTs from "./NarsTs";
-import NarsRe from "./NarsRe";
-import NarsClient from "./NarsClient";
-import NarsCommon from "./NarsCommon";
+
+import Process from "./Process";
 
 const Full = () => {
   return (
     <element>
-      <Client height="33%" width="50%" />
-      <Server top="33%" height="33%" width="50%" />
-      <Common top="66%" height="33%" width="50%" />
+      <Process label="Client" arg="build-client" height="33%" width="50%" />
 
-      <NarsTs right="0" height="25%" width="50%" />
-      <NarsRe top="25%" right="0" height="25%" width="50%" />
-      <NarsClient top="50%" right="0" height="25%" width="50%" />
-      <NarsCommon top="75%" right="0" height="25%" width="50%" />
+      <Process
+        label="Server"
+        arg="build-server"
+        top="33%"
+        height="33%"
+        width="50%"
+      />
+
+      <Process
+        label="Common"
+        arg="build-common"
+        top="66%"
+        height="33%"
+        width="50%"
+      />
+
+      <Process
+        label="Nars - TS"
+        arg="build-nars-ts"
+        right="0"
+        height="25%"
+        width="50%"
+      />
+
+      <Process
+        label="Nars - RE"
+        arg="build-nars-re"
+        top="25%"
+        right="0"
+        height="25%"
+        width="50%"
+      />
+
+      <Process
+        label="Nars Client"
+        arg="build-nars-client"
+        top="50%"
+        right="0"
+        height="25%"
+        width="50%"
+      />
+
+      <Process
+        label="Nars Common"
+        arg="build-nars-common"
+        top="75%"
+        right="0"
+        height="25%"
+        width="50%"
+      />
     </element>
   );
 };

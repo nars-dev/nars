@@ -9,7 +9,7 @@ const versions = ["full", "examples", "core"];
 
 if (versions.indexOf(version) === -1) {
   console.warn(
-    'Invalid example "%s" provided. Must be one of:\n  *',
+    "Invalid dashboard type %s selected. Must be one of:\n *",
     version,
     versions.join("\n  * ")
   );
