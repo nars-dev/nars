@@ -1,6 +1,7 @@
 {
   "private": true,
   "scripts": {
+    "dashboard": "node packages/dashboard/run",
     "build-nars-common": "cd packages/nars-common && yarn && ./generate_proto.sh && yarn build",
     "build-nars": "cd packages/nars && yarn && yarn build",
     "build-nars-client": "cd packages/nars-client && yarn build",
@@ -8,6 +9,7 @@
   },
   "workspaces": [
     "packages/nars",
+    "packages/dashboard",
     "packages/nars-common",
     "packages/nars-client",
     "packages/reason-react-reconciler",
