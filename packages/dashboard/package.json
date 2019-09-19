@@ -22,5 +22,10 @@
     "react-blessed": "^0.6.1",
     "react-devtools-core": "^3.6.3",
     "ws": "^7.1.2"
+  },
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.6.0",
+    "@types/blessed": "^0.1.12",
+    "@types/react-blessed": "^0.3.1"
   }
 }

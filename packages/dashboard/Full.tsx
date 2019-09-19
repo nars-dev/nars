@@ -6,7 +6,7 @@ import Process from "./Process";
 
 const Full = () => {
   return (
-    <element>
+    <blessed-element>
       <Process label="Client" arg="build-client" height="33%" width="50%" />
 
       <Process
@@ -59,20 +59,17 @@ const Full = () => {
         height="25%"
         width="50%"
       />
-    </element>
+    </blessed-element>
   );
 };
 
-/**
- * Rendering the screen.
- */
 const screen = blessed.screen({
   autoPadding: true,
   smartCSR: true,
   title: "Nars dashboard",
 });
 
-screen.key(["escape", "q", "C-c"], function(ch, key) {
+screen.key(["escape", "q", "C-c"], function() {
   return process.exit(0);
 });
 

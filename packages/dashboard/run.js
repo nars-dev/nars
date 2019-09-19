@@ -1,5 +1,10 @@
 require("@babel/register")({
-  presets: [["@babel/preset-env"], ["@babel/preset-react"]],
+  presets: [
+    ["@babel/preset-env"],
+    ["@babel/preset-react"],
+    "@babel/typescript",
+  ],
+  extensions: [".js", ".ts", ".tsx"],
 });
 
 const argv = process.argv.slice(2);
@@ -17,4 +22,4 @@ if (versions.indexOf(version) === -1) {
   process.exit(0);
 }
 
-require("./" + version);
+require("./" + version[0].toUpperCase() + version.slice(1) + ".tsx");

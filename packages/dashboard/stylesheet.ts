@@ -1,4 +1,4 @@
-const stylesheet = {
+export default {
   bordered: {
     border: {
       type: "line",
@@ -10,5 +10,3 @@ const stylesheet = {
     },
   },
 };
-
-export default stylesheet;

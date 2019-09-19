@@ -6,7 +6,7 @@ import Process from "./Process";
 
 const Core = () => {
   return (
-    <element>
+    <blessed-element>
       <Process label="Nars - TS" arg="build-nars-ts" height="50%" width="50%" />
 
       <Process
@@ -33,7 +33,7 @@ const Core = () => {
         height="50%"
         width="50%"
       />
-    </element>
+    </blessed-element>
   );
 };
 
@@ -46,7 +46,7 @@ const screen = blessed.screen({
   title: "Nars core dashboard",
 });
 
-screen.key(["escape", "q", "C-c"], function(ch, key) {
+screen.key(["escape", "q", "C-c"], function() {
   return process.exit(0);
 });
 

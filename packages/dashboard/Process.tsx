@@ -1,20 +1,20 @@
-import React from "react";
+import * as React from "react";
 import { spawn } from "child_process";
 
 import stylesheet from "./stylesheet";
 
-// type Props = {
-//   label: string;
-//   arg: string;
-//   width: string;
-//   height: string;
-//   top: string;
-//   right: string;
-//   left: string;
-// };
+type Props = {
+  label: string;
+  arg: string;
+  width: string;
+  height: string;
+  top?: string;
+  right?: string;
+  left?: string;
+};
 
-const Pro = ({ width, height, top, right, left, label, arg }) => {
-  const [logs, setLogs] = React.useState([]);
+const Process = ({ width, height, top, right, left, label, arg }: Props) => {
+  const [logs, setLogs] = React.useState<string[]>([]);
 
   React.useEffect(() => {
     const subprocess = spawn("yarn", [arg], {
@@ -29,7 +29,7 @@ const Pro = ({ width, height, top, right, left, label, arg }) => {
   }, []);
 
   return (
-    <box
+    <blessed-box
       label={label}
       class={stylesheet.bordered}
       top={top}
@@ -39,9 +39,9 @@ const Pro = ({ width, height, top, right, left, label, arg }) => {
       height={height}
       draggable={true}
     >
-      <list items={logs} />
-    </box>
+      <blessed-list items={logs} />
+    </blessed-box>
   );
 };
 
-export default Pro;
+export default Process;
