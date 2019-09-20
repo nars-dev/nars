@@ -270,3 +270,8 @@ let invokeCallback = (~container, ~messageId, ~args) => {
   | None => ()
   };
 };
+
+let batchedUpdates = f => ReactReconciler.batchedUpdates(reconciler, f, ());
+let flushPassiveEffects = () =>
+  ReactReconciler.flushPassiveEffects(reconciler);
+let isThisRendererActing = ReactReconciler.isThisRendererActing(reconciler);

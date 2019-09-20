@@ -40,3 +40,9 @@ export const invokeCallback: (_1:{
   const result = Curry._3(NarsReconcilerBS.invokeCallback, Arg1.container, Arg1.messageId, Arg1.args);
   return result
 };
+
+export const batchedUpdates: <a>(_1:((_1:void) => a)) => a = NarsReconcilerBS.batchedUpdates;
+
+export const flushPassiveEffects: (_1:void) => boolean = NarsReconcilerBS.flushPassiveEffects;
+
+export const isThisRendererActing: { current: boolean } = NarsReconcilerBS.isThisRendererActing;

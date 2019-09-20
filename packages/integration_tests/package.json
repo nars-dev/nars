@@ -1,0 +1,20 @@
+{
+  "name": "nars-integration-tests",
+  "version": "0.0.0",
+  "description": "Integration tests for nars",
+  "repository": "https://github.com/nars-dev/nars",
+  "author": "Wojtek Czekalski <wojtek@nars.dev>",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "nars": "~0.0.0",
+    "nars-client": "~0.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "prettier": "^1.18.2",
+    "react-native-typescript-transformer": "^1.2.13",
+    "ts-jest": "^24.1.0",
+    "typescript": "^3.5.3"
+  }
+}

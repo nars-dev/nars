@@ -23,7 +23,7 @@
     "@types/react-native": "^0.60.10",
     "@types/websocket": "^0.0.40",
     "prettier": "^1.18.2",
-    "react-native": "^0.60.5",
+    "react-native": "0.61.0-rc.3",
     "typescript": "^3.5.3"
   }
 }
