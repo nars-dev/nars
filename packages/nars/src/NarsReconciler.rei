@@ -13,3 +13,9 @@ let unbatchedUpdates: (unit => 'a) => 'a;
 [@genType]
 let invokeCallback:
   (~container: container, ~messageId: int, ~args: Instance.args) => unit;
+[@genType]
+let batchedUpdates: (unit => 'a) => 'a;
+[@genType]
+let flushPassiveEffects: unit => bool;
+[@genType]
+let isThisRendererActing: {. [@bs.set] "current": bool};

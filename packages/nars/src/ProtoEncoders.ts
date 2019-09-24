@@ -5,13 +5,12 @@ type Struct = Schema.google.protobuf.IStruct;
 export const encodeLocalProps = (
   localPropsObject: LocalProps<string> | null | undefined
 ) => {
-  let localProps = undefined;
+  const localProps = [] as Schema.ILocalProp[];
   if (localPropsObject) {
-    localProps = [] as Schema.ILocalProp[];
     for (const key in localPropsObject) {
       localProps.push({
         localKey: localPropsObject[key].key,
-        propKey: key
+        propKey: key,
       });
     }
   }
@@ -26,7 +25,7 @@ export const encodeArityZeroCallback = (
     ? {
         callId: registerCallback(() => {
           callback();
-        })
+        }),
       }
     : undefined;
 };
@@ -39,8 +38,8 @@ export const encodeArityOneCallback = <T>(
   return callback && typeof callback === "function"
     ? {
         callId: registerCallback((args: Struct) => {
-            callback(extractArg(args));
-        })
+          callback(extractArg(args));
+        }),
       }
     : undefined;
 };
@@ -48,7 +47,7 @@ export const encodeArityOneCallback = <T>(
 export const encodeInt32Value = (num: unknown) => {
   return typeof num === "number"
     ? {
-        value: num
+        value: num,
       }
     : undefined;
 };

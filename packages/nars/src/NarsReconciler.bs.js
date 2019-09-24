@@ -291,8 +291,21 @@ function invokeCallback(container, messageId, args) {
   }
 }
 
+function batchedUpdates(f) {
+  return reconciler.batchedUpdates(f, /* () */0);
+}
+
+function flushPassiveEffects(param) {
+  return reconciler.flushPassiveEffects();
+}
+
+var isThisRendererActing = reconciler.IsThisRendererActing;
+
 exports.createContainer = createContainer;
 exports.updateContainer = updateContainer;
 exports.unbatchedUpdates = unbatchedUpdates;
 exports.invokeCallback = invokeCallback;
+exports.batchedUpdates = batchedUpdates;
+exports.flushPassiveEffects = flushPassiveEffects;
+exports.isThisRendererActing = isThisRendererActing;
 /* reconciler Not a pure module */
