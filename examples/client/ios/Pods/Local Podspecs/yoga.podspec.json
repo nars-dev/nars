@@ -1,6 +1,6 @@
 {
-  "name": "yoga",
-  "version": "0.60.5.React",
+  "name": "Yoga",
+  "version": "1.14.0",
   "license": {
     "type": "MIT"
   },
@@ -11,7 +11,7 @@
   "authors": "Facebook",
   "source": {
     "git": "https://github.com/facebook/react-native.git",
-    "tag": "v0.60.5"
+    "tag": "v0.61.0-rc.3"
   },
   "module_name": "yoga",
   "requires_arc": false,
@@ -28,5 +28,5 @@
     "tvos": "9.2"
   },
   "source_files": "yoga/**/*.{cpp,h}",
-  "public_header_files": "yoga/{Yoga,YGEnums,YGMacros,YGValue,YGStyle,CompactValue,YGFloatOptional,Yoga-internal,YGNode,YGConfig,YGLayout,YGMarker}.h"
+  "public_header_files": "yoga/{Yoga,YGEnums,YGMacros,YGValue}.h"
 }
