@@ -12,19 +12,20 @@ import { setupReconciler, Ref } from "./TestCommons";
 import { ofEncodedReactElement } from "nars-client/src/DecodeElement";
 import { Schema } from "nars-common";
 
-const expectLocalProp = ({
-  localProps,
-  container,
-  rendered,
-  element,
-  doExpectation,
-}: {
-  localProps: { [k: string]: unknown };
-  container: Ref<NarsReconciler.container>;
-  rendered: Ref<Schema.ReactElement[] | undefined>;
-  element: React.ReactElement;
-  doExpectation: (props: { [k: string]: unknown }) => void;
-}) => {
+const expectLocalProp = (
+  {
+    localProps,
+    container,
+    rendered,
+    element,
+  }: {
+    localProps: { [k: string]: unknown };
+    container: Ref<NarsReconciler.container>;
+    rendered: Ref<Schema.ReactElement[] | undefined>;
+    element: React.ReactElement;
+  },
+  extract: (props: { [k: string]: object }) => unknown
+) => {
   act(() => {
     NarsReconciler.updateContainer({
       element,
@@ -43,9 +44,12 @@ const expectLocalProp = ({
     );
     expect(decoded).toBeTruthy();
     expect(typeof decoded).toEqual("object");
-    if (decoded && typeof decoded === "object") {
-      doExpectation(decoded.props);
+    if (decoded && typeof decoded === "object" && decoded.props) {
+      return expect(extract(decoded.props));
     }
+    return expect(false);
+  } else {
+    return expect(false);
   }
 };
 
@@ -53,37 +57,39 @@ describe("LocalProps", () => {
   const { container, rendered } = setupReconciler();
   it("encodes FlatList", () => {
     const onEnd = () => null;
-    expectLocalProp({
-      localProps: {
-        onEnd,
+    expectLocalProp(
+      {
+        container,
+        rendered,
+        localProps: {
+          onEnd,
+        },
+        element: (
+          <FlatList
+            data={[]}
+            keyExtractor={() => ""}
+            renderItem={() => null}
+            localProps={{ onEndReached: { key: "onEnd" } }}
+          />
+        ),
       },
-      container,
-      rendered,
-      element: (
-        <FlatList
-          data={[]}
-          keyExtractor={() => ""}
-          renderItem={() => null}
-          localProps={{ onEndReached: { key: "onEnd" } }}
-        />
-      ),
-      doExpectation: props => expect(props.onEndReached).toBe(onEnd),
-    });
+      props => props.onEndReached
+    ).toBe(onEnd);
   });
   it("encodes TouchableOpacity", () => {
     const submit = () => null;
-    expectLocalProp({
-      localProps: {
-        submit,
+    expectLocalProp(
+      {
+        container,
+        rendered,
+        localProps: {
+          submit,
+        },
+        element: (
+          <TouchableOpacity localProps={{ onPress: { key: "submit" } }} />
+        ),
       },
-      container,
-      rendered,
-      element: (
-        <TouchableOpacity
-          localProps={{ onPress: { key: "submit" } }}
-        />
-      ),
-      doExpectation: props => expect(props.onPress).toBe(submit),
-    });
+      props => props.onPress
+    ).toBe(submit);
   });
 });
