@@ -33,17 +33,11 @@ message View {
   repeated ReactElement children = 2;
 };
 
-message KeyedChild {
-  string key = 1;
-  ReactElement element = 2;
-};
-
-
 message FlatList {
   Struct style = 1;
   Callback onEndReached = 2;
   Int32Value onEndReachedThreshold = 3;
-  repeated KeyedChild keyedChildren = 4;
+  repeated ReactElement keyedChildren = 4;
   repeated LocalProp localProps = 5;
 };
 
@@ -83,6 +77,7 @@ message Image {
 }
 
 message ReactElement {
+  string key = 0;
   oneof value {
     CustomComponent custom = 1;
     View view = 2;

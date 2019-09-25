@@ -62,7 +62,7 @@ export default <T>(props: Props<T>): React.ReactElement<unknown> => {
 
 ComponentRegistry.add({
   name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({
+  createEncoder: (key, props: ComponentRegistry.opaqueProps) => ({
     registerCallback,
     children,
   }) => {
@@ -84,6 +84,7 @@ ComponentRegistry.add({
         keyedChildren,
         localProps: encodeLocalProps(props.localProps as LocalProps<string>),
       },
+      key
     });
   },
 });

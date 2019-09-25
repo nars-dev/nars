@@ -41,7 +41,7 @@ exports.default = (props) => {
 };
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => ({ registerCallback, children, }) => {
+    createEncoder: (key, props) => ({ registerCallback, children, }) => {
         const keys = props.keys;
         const keyedChildren = Array.isArray(keys)
             ? keys.map((key, i) => ({
@@ -57,6 +57,7 @@ ComponentRegistry.add({
                 keyedChildren,
                 localProps: ProtoEncoders_1.encodeLocalProps(props.localProps),
             },
+            key
         });
     },
 });

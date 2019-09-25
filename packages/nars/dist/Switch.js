@@ -18,7 +18,7 @@ exports.default = (props) => {
 };
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => ({ registerCallback }) => {
+    createEncoder: (key, props) => ({ registerCallback }) => {
         return nars_common_1.Schema.ReactElement.create({
             switch: {
                 style: StyleEncoding_1.encodeViewStyleInProps(props),
@@ -28,7 +28,8 @@ ComponentRegistry.add({
                         args.fields.value &&
                         args.fields.value.boolValue);
                 }, registerCallback, props.onValueChange)
-            }
+            },
+            key
         });
     }
 });

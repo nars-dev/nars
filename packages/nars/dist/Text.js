@@ -15,17 +15,18 @@ const name = "Nars_Text";
 exports.default = (props) => React.createElement(name, props, props.children);
 ComponentRegistry.registerRawTextEncodedReactElementInitializer(text => nars_common_1.Schema.ReactElement.create({
     rawText: {
-        text
-    }
+        text,
+    },
 }));
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => ({ children }) => {
+    createEncoder: (key, props) => ({ children, }) => {
         return nars_common_1.Schema.ReactElement.create({
             text: {
                 style: StyleEncoding_1.encodeTextStyleInProps(props),
-                children
-            }
+                children,
+            },
+            key,
         });
-    }
+    },
 });

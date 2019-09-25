@@ -1,6 +1,17 @@
 module CallbackRegistry = Belt.HashMap.Int;
 
 type instance = Instance.t;
+type context = {generateId: unit => string};
+
+let createContext = () => {
+  let counter = ref(0);
+  {
+    generateId: () => {
+      incr(counter);
+      string_of_int(counter^);
+    },
+  };
+};
 
 type containerInfo = {
   flushUpdates: array(Instance.encodedReactElement) => unit,
@@ -9,23 +20,30 @@ type containerInfo = {
 };
 
 let createInstance =
-    (instance_type, props, _rootContainer, _context, _internalInstanceHandle) => {
+    (instance_type, props, _rootContainer, context, _opaqueFiber) => {
   switch (ComponentRegistry.get(~name=instance_type)) {
   | Some(createEncoder) =>
-    Instance.Component({encode: createEncoder(props), children: [||]})
+    let key = context.generateId();
+    Instance.Component({
+      key,
+      encode: createEncoder(key, props),
+      children: [||],
+    });
   | None => invalid_arg("Unknown component type " ++ instance_type)
   };
 };
 
-let defaultRootHostContext = ();
+let defaultRootHostContext = createContext();
 
 let getPublicInstance = x => x;
 
-let getRootHostContext = _ => {
+let getRootHostContext = _s => {
   defaultRootHostContext;
 };
 
-let getChildHostContext = (~parentHostContext, ~parentType as _, _) => parentHostContext;
+let getChildHostContext = (~parentHostContext as _, ~parentType, _) => {
+  createContext();
+}
 
 let prepareForCommit = (~containerInfo as _) => {
   ();
@@ -110,7 +128,24 @@ let getChildHostContextForEventTarget = (~parentHostContext as _) =>
 let getEventTargetChildElement = (_, _) => eventComponentsNotImplemented();
 
 let appendChild = (~parent, ~child) => {
-  appendInitialChild(~parentInstance=parent, ~child);
+  assertComponentInstance(
+    parent,
+    parentInstance => {
+      let index =
+        Js.Array.findIndex(x => child === x, parentInstance.children);
+      if (index >= 0) {
+        Js.Array.spliceInPlace(
+          ~pos=index,
+          ~remove=1,
+          ~add=[|child|],
+          parentInstance.children,
+        )
+        |> ignore;
+      } else {
+        appendInitialChild(~parentInstance=parent, ~child);
+      };
+    },
+  );
 };
 
 let appendChildToContainer = (container: containerInfo, child: Instance.t) => {
@@ -125,7 +160,7 @@ let commitUpdate =
     (instance, _, instance_type, ~oldProps as _, ~newProps as props, _) => {
   switch (ComponentRegistry.get(~name=instance_type), instance) {
   | (Some(createEncoder), Instance.Component(instance)) =>
-    instance.encode = createEncoder(props)
+    instance.encode = createEncoder(instance.key, props)
   | _ => invalid_arg("Cannot update component type " ++ instance_type)
   };
 };

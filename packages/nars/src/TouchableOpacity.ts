@@ -18,16 +18,17 @@ export default (props: Props): React.ReactElement<Props> => {
 
 ComponentRegistry.add({
   name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({
+  createEncoder: (key, props: ComponentRegistry.opaqueProps) => ({
     registerCallback,
-    children
+    children,
   }) => {
     return Schema.ReactElement.create({
       touchableOpacity: {
         onPress: encodeArityZeroCallback(registerCallback, props.onPress),
         localProps: encodeLocalProps(props.localProps as LocalProps<string>),
-        children
-      }
+        children,
+      },
+      key,
     });
-  }
+  },
 });

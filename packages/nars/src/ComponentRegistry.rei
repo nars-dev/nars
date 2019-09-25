@@ -4,7 +4,7 @@ type opaqueProp;
 type opaqueProps = Js.Dict.t(opaqueProp);
 
 [@genType]
-type createEncoder = opaqueProps => Instance.encoder;
+type createEncoder = (string, opaqueProps) => Instance.encoder;
 
 let get: (~name: string) => option(createEncoder);
 

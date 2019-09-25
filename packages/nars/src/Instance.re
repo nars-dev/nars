@@ -17,6 +17,7 @@ type encoder =
 
 type componentInstance = {
   mutable encode: encoder,
+  key: string,
   children: array(t),
 }
 and t =

@@ -16,12 +16,13 @@ export default (props: Props): React.ReactElement<Props> =>
 
 ComponentRegistry.add({
   name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => () => {
+  createEncoder: (key, props: ComponentRegistry.opaqueProps) => () => {
     return Schema.ReactElement.create({
       image: {
         style: encodeViewStyleInProps(props),
         sourceURLString: String(props.source)
-      }
+      },
+      key
     });
   }
 });

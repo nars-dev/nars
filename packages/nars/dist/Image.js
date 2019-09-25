@@ -15,12 +15,13 @@ const name = "Nars_Image";
 exports.default = (props) => React.createElement(name, props);
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => () => {
+    createEncoder: (key, props) => () => {
         return nars_common_1.Schema.ReactElement.create({
             image: {
                 style: StyleEncoding_1.encodeViewStyleInProps(props),
                 sourceURLString: String(props.source)
-            }
+            },
+            key
         });
     }
 });

@@ -19,7 +19,7 @@ export default (props: Props): React.ReactElement<Props> => {
 
 ComponentRegistry.add({
   name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({
+  createEncoder: (key, props: ComponentRegistry.opaqueProps) => ({
     registerCallback
   }) => {
     return Schema.ReactElement.create({
@@ -37,7 +37,8 @@ ComponentRegistry.add({
           registerCallback,
           props.onValueChange
         )
-      }
+      },
+      key
     });
   }
 });

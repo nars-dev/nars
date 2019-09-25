@@ -22,6 +22,7 @@ function assignLocalProps(props, localProps, getLocalProp) {
  * TODO: Reduce boilerplate
  */
 exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
+    const key = element.key ? element.key : "";
     if (element.custom) {
         return null;
     }
@@ -33,7 +34,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (element.view.children) {
             props.children = element.view.children.map(elem => exports.ofEncodedReactElement(rpcCall, getLocalProp, elem));
         }
-        return React.createElement(react_native_1.View, Object.assign({}, props));
+        return React.createElement(react_native_1.View, Object.assign({ key: key }, props));
     }
     else if (element.text) {
         const props = {};
@@ -43,7 +44,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (element.text.children) {
             props.children = element.text.children.map(elem => exports.ofEncodedReactElement(rpcCall, getLocalProp, elem));
         }
-        return React.createElement(react_native_1.Text, Object.assign({}, props));
+        return React.createElement(react_native_1.Text, Object.assign({ key: key }, props));
     }
     else if (element.rawText) {
         return String(element.rawText.text);
@@ -68,17 +69,14 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         }
         props.data = fl.keyedChildren ? fl.keyedChildren : [];
         props.renderItem = ({ item }) => {
-            if (item.element) {
-                const rendered = exports.ofEncodedReactElement(rpcCall, getLocalProp, item.element);
-                /* Make sure it's a react element */
-                return typeof rendered === "object" ? rendered : null;
-            }
-            return null;
+            const rendered = exports.ofEncodedReactElement(rpcCall, getLocalProp, item);
+            /* Make sure it's a react element */
+            return typeof rendered === "object" ? rendered : null;
         };
         props.keyExtractor = item => {
             return String(item.key);
         };
-        return React.createElement(react_native_1.FlatList, Object.assign({}, props));
+        return React.createElement(react_native_1.FlatList, Object.assign({ key: key }, props));
     }
     else if (element.touchableOpacity) {
         const to = element.touchableOpacity;
@@ -95,7 +93,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
                 rpcCall(callId);
             };
         }
-        return React.createElement(react_native_1.TouchableOpacity, Object.assign({}, props));
+        return React.createElement(react_native_1.TouchableOpacity, Object.assign({ key: key }, props));
     }
     else if (element.textInput) {
         const props = {};
@@ -119,7 +117,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (ti.placeholder && ti.placeholder.value) {
             props.placeholder = ti.placeholder.value;
         }
-        return React.createElement(react_native_1.TextInput, Object.assign({}, props));
+        return React.createElement(react_native_1.TextInput, Object.assign({ key: key }, props));
     }
     else if (element.switch) {
         const props = {};
@@ -134,7 +132,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
                 rpcCall(callId, nars_common_1.toStruct({ value }));
             };
         }
-        return React.createElement(react_native_1.Switch, Object.assign({}, props));
+        return React.createElement(react_native_1.Switch, Object.assign({ key: key }, props));
     }
     else if (element.image) {
         const props = {};
@@ -145,7 +143,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (im.sourceURLString) {
             props.source = { uri: im.sourceURLString };
         }
-        return React.createElement(react_native_1.Image, Object.assign({}, props));
+        return React.createElement(react_native_1.Image, Object.assign({ key: key }, props));
     }
     return null;
 };

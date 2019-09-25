@@ -5,7 +5,7 @@ type opaqueProp;
 
 type opaqueProps = Js.Dict.t(opaqueProp);
 
-type createEncoder = opaqueProps => Instance.encoder;
+type createEncoder = (string, opaqueProps) => Instance.encoder;
 
 type t = HashMap.t(createEncoder);
 

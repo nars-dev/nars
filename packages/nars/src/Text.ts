@@ -17,19 +17,22 @@ export default (props: Props): React.ReactElement<Props> =>
 ComponentRegistry.registerRawTextEncodedReactElementInitializer(text =>
   Schema.ReactElement.create({
     rawText: {
-      text
-    }
+      text,
+    },
   })
 );
 
 ComponentRegistry.add({
   name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({ children }) => {
+  createEncoder: (key, props: ComponentRegistry.opaqueProps) => ({
+    children,
+  }) => {
     return Schema.ReactElement.create({
       text: {
         style: encodeTextStyleInProps(props),
-        children
-      }
+        children,
+      },
+      key,
     });
-  }
+  },
 });

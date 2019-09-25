@@ -1235,221 +1235,6 @@ $root.View = (function() {
     return View;
 })();
 
-$root.KeyedChild = (function() {
-
-    /**
-     * Properties of a KeyedChild.
-     * @exports IKeyedChild
-     * @interface IKeyedChild
-     * @property {string|null} [key] KeyedChild key
-     * @property {IReactElement|null} [element] KeyedChild element
-     */
-
-    /**
-     * Constructs a new KeyedChild.
-     * @exports KeyedChild
-     * @classdesc Represents a KeyedChild.
-     * @implements IKeyedChild
-     * @constructor
-     * @param {IKeyedChild=} [properties] Properties to set
-     */
-    function KeyedChild(properties) {
-        if (properties)
-            for (var keys = Object.keys(properties), i = 0; i < keys.length; ++i)
-                if (properties[keys[i]] != null)
-                    this[keys[i]] = properties[keys[i]];
-    }
-
-    /**
-     * KeyedChild key.
-     * @member {string} key
-     * @memberof KeyedChild
-     * @instance
-     */
-    KeyedChild.prototype.key = "";
-
-    /**
-     * KeyedChild element.
-     * @member {IReactElement|null|undefined} element
-     * @memberof KeyedChild
-     * @instance
-     */
-    KeyedChild.prototype.element = null;
-
-    /**
-     * Creates a new KeyedChild instance using the specified properties.
-     * @function create
-     * @memberof KeyedChild
-     * @static
-     * @param {IKeyedChild=} [properties] Properties to set
-     * @returns {KeyedChild} KeyedChild instance
-     */
-    KeyedChild.create = function create(properties) {
-        return new KeyedChild(properties);
-    };
-
-    /**
-     * Encodes the specified KeyedChild message. Does not implicitly {@link KeyedChild.verify|verify} messages.
-     * @function encode
-     * @memberof KeyedChild
-     * @static
-     * @param {IKeyedChild} message KeyedChild message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    KeyedChild.encode = function encode(message, writer) {
-        if (!writer)
-            writer = $Writer.create();
-        if (message.key != null && message.hasOwnProperty("key"))
-            writer.uint32(/* id 1, wireType 2 =*/10).string(message.key);
-        if (message.element != null && message.hasOwnProperty("element"))
-            $root.ReactElement.encode(message.element, writer.uint32(/* id 2, wireType 2 =*/18).fork()).ldelim();
-        return writer;
-    };
-
-    /**
-     * Encodes the specified KeyedChild message, length delimited. Does not implicitly {@link KeyedChild.verify|verify} messages.
-     * @function encodeDelimited
-     * @memberof KeyedChild
-     * @static
-     * @param {IKeyedChild} message KeyedChild message or plain object to encode
-     * @param {$protobuf.Writer} [writer] Writer to encode to
-     * @returns {$protobuf.Writer} Writer
-     */
-    KeyedChild.encodeDelimited = function encodeDelimited(message, writer) {
-        return this.encode(message, writer).ldelim();
-    };
-
-    /**
-     * Decodes a KeyedChild message from the specified reader or buffer.
-     * @function decode
-     * @memberof KeyedChild
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @param {number} [length] Message length if known beforehand
-     * @returns {KeyedChild} KeyedChild
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    KeyedChild.decode = function decode(reader, length) {
-        if (!(reader instanceof $Reader))
-            reader = $Reader.create(reader);
-        var end = length === undefined ? reader.len : reader.pos + length, message = new $root.KeyedChild();
-        while (reader.pos < end) {
-            var tag = reader.uint32();
-            switch (tag >>> 3) {
-            case 1:
-                message.key = reader.string();
-                break;
-            case 2:
-                message.element = $root.ReactElement.decode(reader, reader.uint32());
-                break;
-            default:
-                reader.skipType(tag & 7);
-                break;
-            }
-        }
-        return message;
-    };
-
-    /**
-     * Decodes a KeyedChild message from the specified reader or buffer, length delimited.
-     * @function decodeDelimited
-     * @memberof KeyedChild
-     * @static
-     * @param {$protobuf.Reader|Uint8Array} reader Reader or buffer to decode from
-     * @returns {KeyedChild} KeyedChild
-     * @throws {Error} If the payload is not a reader or valid buffer
-     * @throws {$protobuf.util.ProtocolError} If required fields are missing
-     */
-    KeyedChild.decodeDelimited = function decodeDelimited(reader) {
-        if (!(reader instanceof $Reader))
-            reader = new $Reader(reader);
-        return this.decode(reader, reader.uint32());
-    };
-
-    /**
-     * Verifies a KeyedChild message.
-     * @function verify
-     * @memberof KeyedChild
-     * @static
-     * @param {Object.<string,*>} message Plain object to verify
-     * @returns {string|null} `null` if valid, otherwise the reason why it is not
-     */
-    KeyedChild.verify = function verify(message) {
-        if (typeof message !== "object" || message === null)
-            return "object expected";
-        if (message.key != null && message.hasOwnProperty("key"))
-            if (!$util.isString(message.key))
-                return "key: string expected";
-        if (message.element != null && message.hasOwnProperty("element")) {
-            var error = $root.ReactElement.verify(message.element);
-            if (error)
-                return "element." + error;
-        }
-        return null;
-    };
-
-    /**
-     * Creates a KeyedChild message from a plain object. Also converts values to their respective internal types.
-     * @function fromObject
-     * @memberof KeyedChild
-     * @static
-     * @param {Object.<string,*>} object Plain object
-     * @returns {KeyedChild} KeyedChild
-     */
-    KeyedChild.fromObject = function fromObject(object) {
-        if (object instanceof $root.KeyedChild)
-            return object;
-        var message = new $root.KeyedChild();
-        if (object.key != null)
-            message.key = String(object.key);
-        if (object.element != null) {
-            if (typeof object.element !== "object")
-                throw TypeError(".KeyedChild.element: object expected");
-            message.element = $root.ReactElement.fromObject(object.element);
-        }
-        return message;
-    };
-
-    /**
-     * Creates a plain object from a KeyedChild message. Also converts values to other types if specified.
-     * @function toObject
-     * @memberof KeyedChild
-     * @static
-     * @param {KeyedChild} message KeyedChild
-     * @param {$protobuf.IConversionOptions} [options] Conversion options
-     * @returns {Object.<string,*>} Plain object
-     */
-    KeyedChild.toObject = function toObject(message, options) {
-        if (!options)
-            options = {};
-        var object = {};
-        if (options.defaults) {
-            object.key = "";
-            object.element = null;
-        }
-        if (message.key != null && message.hasOwnProperty("key"))
-            object.key = message.key;
-        if (message.element != null && message.hasOwnProperty("element"))
-            object.element = $root.ReactElement.toObject(message.element, options);
-        return object;
-    };
-
-    /**
-     * Converts this KeyedChild to JSON.
-     * @function toJSON
-     * @memberof KeyedChild
-     * @instance
-     * @returns {Object.<string,*>} JSON object
-     */
-    KeyedChild.prototype.toJSON = function toJSON() {
-        return this.constructor.toObject(this, $protobuf.util.toJSONOptions);
-    };
-
-    return KeyedChild;
-})();
-
 $root.FlatList = (function() {
 
     /**
@@ -1459,7 +1244,7 @@ $root.FlatList = (function() {
      * @property {google.protobuf.IStruct|null} [style] FlatList style
      * @property {ICallback|null} [onEndReached] FlatList onEndReached
      * @property {IInt32Value|null} [onEndReachedThreshold] FlatList onEndReachedThreshold
-     * @property {Array.<IKeyedChild>|null} [keyedChildren] FlatList keyedChildren
+     * @property {Array.<IReactElement>|null} [keyedChildren] FlatList keyedChildren
      * @property {Array.<ILocalProp>|null} [localProps] FlatList localProps
      */
 
@@ -1506,7 +1291,7 @@ $root.FlatList = (function() {
 
     /**
      * FlatList keyedChildren.
-     * @member {Array.<IKeyedChild>} keyedChildren
+     * @member {Array.<IReactElement>} keyedChildren
      * @memberof FlatList
      * @instance
      */
@@ -1552,7 +1337,7 @@ $root.FlatList = (function() {
             $root.Int32Value.encode(message.onEndReachedThreshold, writer.uint32(/* id 3, wireType 2 =*/26).fork()).ldelim();
         if (message.keyedChildren != null && message.keyedChildren.length)
             for (var i = 0; i < message.keyedChildren.length; ++i)
-                $root.KeyedChild.encode(message.keyedChildren[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
+                $root.ReactElement.encode(message.keyedChildren[i], writer.uint32(/* id 4, wireType 2 =*/34).fork()).ldelim();
         if (message.localProps != null && message.localProps.length)
             for (var i = 0; i < message.localProps.length; ++i)
                 $root.LocalProp.encode(message.localProps[i], writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
@@ -1602,7 +1387,7 @@ $root.FlatList = (function() {
             case 4:
                 if (!(message.keyedChildren && message.keyedChildren.length))
                     message.keyedChildren = [];
-                message.keyedChildren.push($root.KeyedChild.decode(reader, reader.uint32()));
+                message.keyedChildren.push($root.ReactElement.decode(reader, reader.uint32()));
                 break;
             case 5:
                 if (!(message.localProps && message.localProps.length))
@@ -1663,7 +1448,7 @@ $root.FlatList = (function() {
             if (!Array.isArray(message.keyedChildren))
                 return "keyedChildren: array expected";
             for (var i = 0; i < message.keyedChildren.length; ++i) {
-                var error = $root.KeyedChild.verify(message.keyedChildren[i]);
+                var error = $root.ReactElement.verify(message.keyedChildren[i]);
                 if (error)
                     return "keyedChildren." + error;
             }
@@ -1714,7 +1499,7 @@ $root.FlatList = (function() {
             for (var i = 0; i < object.keyedChildren.length; ++i) {
                 if (typeof object.keyedChildren[i] !== "object")
                     throw TypeError(".FlatList.keyedChildren: object expected");
-                message.keyedChildren[i] = $root.KeyedChild.fromObject(object.keyedChildren[i]);
+                message.keyedChildren[i] = $root.ReactElement.fromObject(object.keyedChildren[i]);
             }
         }
         if (object.localProps) {
@@ -1761,7 +1546,7 @@ $root.FlatList = (function() {
         if (message.keyedChildren && message.keyedChildren.length) {
             object.keyedChildren = [];
             for (var j = 0; j < message.keyedChildren.length; ++j)
-                object.keyedChildren[j] = $root.KeyedChild.toObject(message.keyedChildren[j], options);
+                object.keyedChildren[j] = $root.ReactElement.toObject(message.keyedChildren[j], options);
         }
         if (message.localProps && message.localProps.length) {
             object.localProps = [];
@@ -3291,6 +3076,7 @@ $root.ReactElement = (function() {
      * Properties of a ReactElement.
      * @exports IReactElement
      * @interface IReactElement
+     * @property {string|null} [key] ReactElement key
      * @property {ICustomComponent|null} [custom] ReactElement custom
      * @property {IView|null} [view] ReactElement view
      * @property {IFlatList|null} [flatList] ReactElement flatList
@@ -3316,6 +3102,14 @@ $root.ReactElement = (function() {
                 if (properties[keys[i]] != null)
                     this[keys[i]] = properties[keys[i]];
     }
+
+    /**
+     * ReactElement key.
+     * @member {string} key
+     * @memberof ReactElement
+     * @instance
+     */
+    ReactElement.prototype.key = "";
 
     /**
      * ReactElement custom.
@@ -3427,6 +3221,8 @@ $root.ReactElement = (function() {
     ReactElement.encode = function encode(message, writer) {
         if (!writer)
             writer = $Writer.create();
+        if (message.key != null && message.hasOwnProperty("key"))
+            writer.uint32(/* id 0, wireType 2 =*/2).string(message.key);
         if (message.custom != null && message.hasOwnProperty("custom"))
             $root.CustomComponent.encode(message.custom, writer.uint32(/* id 1, wireType 2 =*/10).fork()).ldelim();
         if (message.view != null && message.hasOwnProperty("view"))
@@ -3479,6 +3275,9 @@ $root.ReactElement = (function() {
         while (reader.pos < end) {
             var tag = reader.uint32();
             switch (tag >>> 3) {
+            case 0:
+                message.key = reader.string();
+                break;
             case 1:
                 message.custom = $root.CustomComponent.decode(reader, reader.uint32());
                 break;
@@ -3542,6 +3341,9 @@ $root.ReactElement = (function() {
         if (typeof message !== "object" || message === null)
             return "object expected";
         var properties = {};
+        if (message.key != null && message.hasOwnProperty("key"))
+            if (!$util.isString(message.key))
+                return "key: string expected";
         if (message.custom != null && message.hasOwnProperty("custom")) {
             properties.value = 1;
             {
@@ -3645,6 +3447,8 @@ $root.ReactElement = (function() {
         if (object instanceof $root.ReactElement)
             return object;
         var message = new $root.ReactElement();
+        if (object.key != null)
+            message.key = String(object.key);
         if (object.custom != null) {
             if (typeof object.custom !== "object")
                 throw TypeError(".ReactElement.custom: object expected");
@@ -3706,6 +3510,10 @@ $root.ReactElement = (function() {
         if (!options)
             options = {};
         var object = {};
+        if (options.defaults)
+            object.key = "";
+        if (message.key != null && message.hasOwnProperty("key"))
+            object.key = message.key;
         if (message.custom != null && message.hasOwnProperty("custom")) {
             object.custom = $root.CustomComponent.toObject(message.custom, options);
             if (options.oneofs)

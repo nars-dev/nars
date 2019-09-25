@@ -23,11 +23,11 @@ export type opaqueProp = opaqueProp;
 export type opaqueProps = Js_Dict_t<opaqueProp>;
 
 // tslint:disable-next-line:interface-over-type-literal
-export type createEncoder = (_1:opaqueProps) => Instance_encoder;
+export type createEncoder = (_1:string, _2:opaqueProps) => Instance_encoder;
 
 export const add: (_1:{ readonly name: string; readonly createEncoder: createEncoder }) => void = function (Arg1: any) {
-  const result = Curry._2(ComponentRegistryBS.add, Arg1.name, function (Arg11: any) {
-      const result1 = Arg1.createEncoder(Arg11);
+  const result = Curry._2(ComponentRegistryBS.add, Arg1.name, function (Arg11: any, Arg2: any) {
+      const result1 = Arg1.createEncoder(Arg11, Arg2);
       return function (ArgregisterCallback: any, Argchildren: any) {
           const result2 = result1({registerCallback:ArgregisterCallback, children:Argchildren});
           return result2

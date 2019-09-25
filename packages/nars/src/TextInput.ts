@@ -20,8 +20,8 @@ export default (props: Props): React.ReactElement<Props> =>
 
 ComponentRegistry.add({
   name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({
-    registerCallback
+  createEncoder: (key, props: ComponentRegistry.opaqueProps) => ({
+    registerCallback,
   }) => {
     return Schema.ReactElement.create({
       textInput: {
@@ -33,15 +33,16 @@ ComponentRegistry.add({
         value: props.value ? String(props.value) : "",
         placeholder: props.placeholder
           ? {
-              value: String(props.placeholder)
+              value: String(props.placeholder),
             }
           : undefined,
         placeholderTextColor: props.placeholderTextColor
           ? {
-              value: String(props.placeholderTextColor)
+              value: String(props.placeholderTextColor),
             }
-          : undefined
-      }
+          : undefined,
+      },
+      key,
     });
-  }
+  },
 });

@@ -15,12 +15,13 @@ const name = "Nars_View";
 exports.default = (props) => React.createElement(name, props, props.children);
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => ({ children }) => {
+    createEncoder: (key, props) => ({ children, }) => {
         return nars_common_1.Schema.ReactElement.create({
             view: {
                 style: StyleEncoding_1.encodeViewStyleInProps(props),
-                children
-            }
+                children,
+            },
+            key,
         });
-    }
+    },
 });

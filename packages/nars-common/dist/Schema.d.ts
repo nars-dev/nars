@@ -113,31 +113,11 @@ export class View implements IView {
     public toJSON(): { [k: string]: any };
 }
 
-export interface IKeyedChild {
-    key?: (string|null);
-    element?: (IReactElement|null);
-}
-
-export class KeyedChild implements IKeyedChild {
-    constructor(properties?: IKeyedChild);
-    public key: string;
-    public element?: (IReactElement|null);
-    public static create(properties?: IKeyedChild): KeyedChild;
-    public static encode(message: IKeyedChild, writer?: $protobuf.Writer): $protobuf.Writer;
-    public static encodeDelimited(message: IKeyedChild, writer?: $protobuf.Writer): $protobuf.Writer;
-    public static decode(reader: ($protobuf.Reader|Uint8Array), length?: number): KeyedChild;
-    public static decodeDelimited(reader: ($protobuf.Reader|Uint8Array)): KeyedChild;
-    public static verify(message: { [k: string]: any }): (string|null);
-    public static fromObject(object: { [k: string]: any }): KeyedChild;
-    public static toObject(message: KeyedChild, options?: $protobuf.IConversionOptions): { [k: string]: any };
-    public toJSON(): { [k: string]: any };
-}
-
 export interface IFlatList {
     style?: (google.protobuf.IStruct|null);
     onEndReached?: (ICallback|null);
     onEndReachedThreshold?: (IInt32Value|null);
-    keyedChildren?: (IKeyedChild[]|null);
+    keyedChildren?: (IReactElement[]|null);
     localProps?: (ILocalProp[]|null);
 }
 
@@ -146,7 +126,7 @@ export class FlatList implements IFlatList {
     public style?: (google.protobuf.IStruct|null);
     public onEndReached?: (ICallback|null);
     public onEndReachedThreshold?: (IInt32Value|null);
-    public keyedChildren: IKeyedChild[];
+    public keyedChildren: IReactElement[];
     public localProps: ILocalProp[];
     public static create(properties?: IFlatList): FlatList;
     public static encode(message: IFlatList, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -290,6 +270,7 @@ export class Image implements IImage {
 }
 
 export interface IReactElement {
+    key?: (string|null);
     custom?: (ICustomComponent|null);
     view?: (IView|null);
     flatList?: (IFlatList|null);
@@ -303,6 +284,7 @@ export interface IReactElement {
 
 export class ReactElement implements IReactElement {
     constructor(properties?: IReactElement);
+    public key: string;
     public custom?: (ICustomComponent|null);
     public view?: (IView|null);
     public flatList?: (IFlatList|null);

@@ -35,6 +35,7 @@ export const ofEncodedReactElement = (
   getLocalProp: (key: string) => unknown,
   element: Schema.IReactElement
 ): React.ReactChild | null => {
+  const key = element.key ? element.key : "";
   if (element.custom) {
     return null;
   } else if (element.view) {
@@ -47,7 +48,7 @@ export const ofEncodedReactElement = (
         ofEncodedReactElement(rpcCall, getLocalProp, elem)
       );
     }
-    return <View {...props} />;
+    return <View key={key} {...props} />;
   } else if (element.text) {
     const props = {} as Writable<Text["props"]>;
     if (element.text.style) {
@@ -58,12 +59,12 @@ export const ofEncodedReactElement = (
         ofEncodedReactElement(rpcCall, getLocalProp, elem)
       );
     }
-    return <Text {...props} />;
+    return <Text key={key} {...props} />;
   } else if (element.rawText) {
     return String(element.rawText.text);
   } else if (element.flatList) {
     const fl = element.flatList;
-    const props = {} as Writable<FlatList<Schema.IKeyedChild>["props"]>;
+    const props = {} as Writable<FlatList<Schema.IReactElement>["props"]>;
     if (fl.style) {
       props.style = ofStruct(fl.style);
     }
@@ -81,21 +82,14 @@ export const ofEncodedReactElement = (
     }
     props.data = fl.keyedChildren ? fl.keyedChildren : [];
     props.renderItem = ({ item }) => {
-      if (item.element) {
-        const rendered = ofEncodedReactElement(
-          rpcCall,
-          getLocalProp,
-          item.element
-        );
-        /* Make sure it's a react element */
-        return typeof rendered === "object" ? rendered : null;
-      }
-      return null;
+      const rendered = ofEncodedReactElement(rpcCall, getLocalProp, item);
+      /* Make sure it's a react element */
+      return typeof rendered === "object" ? rendered : null;
     };
     props.keyExtractor = item => {
       return String(item.key);
     };
-    return <FlatList {...props} />;
+    return <FlatList key={key} {...props} />;
   } else if (element.touchableOpacity) {
     const to = element.touchableOpacity;
     const props = {} as Writable<TouchableOpacity["props"]>;
@@ -113,7 +107,7 @@ export const ofEncodedReactElement = (
         rpcCall(callId);
       };
     }
-    return <TouchableOpacity {...props} />;
+    return <TouchableOpacity key={key} {...props} />;
   } else if (element.textInput) {
     const props = {} as Writable<TextInput["props"]>;
     const ti = element.textInput;
@@ -136,7 +130,7 @@ export const ofEncodedReactElement = (
     if (ti.placeholder && ti.placeholder.value) {
       props.placeholder = ti.placeholder.value;
     }
-    return <TextInput {...props} />;
+    return <TextInput key={key} {...props} />;
   } else if (element.switch) {
     const props = {} as Writable<Switch["props"]>;
     const sw = element.switch;
@@ -150,7 +144,7 @@ export const ofEncodedReactElement = (
         rpcCall(callId, toStruct({ value }));
       };
     }
-    return <Switch {...props} />;
+    return <Switch key={key} {...props} />;
   } else if (element.image) {
     const props = {} as Writable<Image["props"]>;
     const im = element.image;
@@ -160,7 +154,7 @@ export const ofEncodedReactElement = (
     if (im.sourceURLString) {
       props.source = { uri: im.sourceURLString };
     }
-    return <Image {...props} />;
+    return <Image key={key} {...props} />;
   }
   return null;
 };

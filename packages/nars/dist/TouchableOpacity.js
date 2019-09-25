@@ -17,13 +17,14 @@ exports.default = (props) => {
 };
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => ({ registerCallback, children }) => {
+    createEncoder: (key, props) => ({ registerCallback, children, }) => {
         return nars_common_1.Schema.ReactElement.create({
             touchableOpacity: {
                 onPress: ProtoEncoders_1.encodeArityZeroCallback(registerCallback, props.onPress),
                 localProps: ProtoEncoders_1.encodeLocalProps(props.localProps),
-                children
-            }
+                children,
+            },
+            key,
         });
-    }
+    },
 });

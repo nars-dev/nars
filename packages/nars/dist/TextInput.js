@@ -16,7 +16,7 @@ const name = "Nars_TextInput";
 exports.default = (props) => React.createElement(name, props);
 ComponentRegistry.add({
     name,
-    createEncoder: (props) => ({ registerCallback }) => {
+    createEncoder: (key, props) => ({ registerCallback, }) => {
         return nars_common_1.Schema.ReactElement.create({
             textInput: {
                 style: StyleEncoding_1.encodeTextStyleInProps(props),
@@ -24,15 +24,16 @@ ComponentRegistry.add({
                 value: props.value ? String(props.value) : "",
                 placeholder: props.placeholder
                     ? {
-                        value: String(props.placeholder)
+                        value: String(props.placeholder),
                     }
                     : undefined,
                 placeholderTextColor: props.placeholderTextColor
                     ? {
-                        value: String(props.placeholderTextColor)
+                        value: String(props.placeholderTextColor),
                     }
-                    : undefined
-            }
+                    : undefined,
+            },
+            key,
         });
-    }
+    },
 });

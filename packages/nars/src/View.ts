@@ -16,12 +16,15 @@ export default (props: Props): React.ReactElement<Props> =>
 
 ComponentRegistry.add({
   name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({ children }) => {
+  createEncoder: (key, props: ComponentRegistry.opaqueProps) => ({
+    children,
+  }) => {
     return Schema.ReactElement.create({
       view: {
         style: encodeViewStyleInProps(props),
-        children
-      }
+        children,
+      },
+      key,
     });
-  }
+  },
 });

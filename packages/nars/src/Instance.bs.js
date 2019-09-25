@@ -6,7 +6,7 @@ var Curry = require("bs-platform/lib/js/curry.js");
 function encode(instance, registerCallback) {
   if (instance.tag) {
     var inst = instance[0];
-    return Curry._2(inst[/* encode */0], registerCallback, inst[/* children */1].map((function (param) {
+    return Curry._2(inst[/* encode */0], registerCallback, inst[/* children */2].map((function (param) {
                       return encode(param, registerCallback);
                     })));
   } else {

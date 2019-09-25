@@ -11,11 +11,14 @@ var Belt_HashMapInt = require("bs-platform/lib/js/belt_HashMapInt.js");
 var ReactReconciler = require("react-reconciler");
 var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
-function createInstance(instance_type, props, _rootContainer, _context, _internalInstanceHandle) {
+function createInstance(instance_type, props, _rootContainer, context, _opaqueFiber) {
+  console.log("createInstance");
   var match = ComponentRegistry.get(instance_type);
   if (match !== undefined) {
+    var key = Curry._1(context[/* generateId */0], /* () */0);
     return /* Component */Block.__(1, [/* record */[
-                /* encode */Curry._1(match, props),
+                /* encode */Curry._2(match, key, props),
+                /* key */key,
                 /* children : array */[]
               ]]);
   } else {
@@ -23,16 +26,28 @@ function createInstance(instance_type, props, _rootContainer, _context, _interna
   }
 }
 
+var counter = /* record */[/* contents */0];
+
+var defaultRootHostContext = /* record */[/* generateId */(function (param) {
+      counter[0] = counter[0] + 1 | 0;
+      return String(counter[0]);
+    })];
+
 function getPublicInstance(x) {
   return x;
 }
 
 function getRootHostContext(param) {
-  return /* () */0;
+  return defaultRootHostContext;
 }
 
-function getChildHostContext(parentHostContext, param, param$1) {
-  return parentHostContext;
+function getChildHostContext(param, parentType, param$1) {
+  console.log("Get child context of " + parentType);
+  var counter = /* record */[/* contents */0];
+  return /* record */[/* generateId */(function (param) {
+              counter[0] = counter[0] + 1 | 0;
+              return String(counter[0]);
+            })];
 }
 
 function prepareForCommit(param) {
@@ -65,7 +80,7 @@ function assertComponentInstance(instance, f) {
 
 function appendInitialChild(parentInstance, child) {
   assertComponentInstance(parentInstance, (function (parentInstance) {
-          return parentInstance[/* children */1].push(child);
+          return parentInstance[/* children */2].push(child);
         }));
   return /* () */0;
 }
@@ -127,9 +142,22 @@ function getEventTargetChildElement(param, param$1) {
   return Pervasives.failwith("Event components are not implemented");
 }
 
-var appendChild = appendInitialChild;
+function appendChild(parent, child) {
+  return assertComponentInstance(parent, (function (parentInstance) {
+                var index = parentInstance[/* children */2].findIndex((function (x) {
+                        return child === x;
+                      }));
+                if (index >= 0) {
+                  parentInstance[/* children */2].splice(index, 1, child);
+                  return /* () */0;
+                } else {
+                  return appendInitialChild(parent, child);
+                }
+              }));
+}
 
 function appendChildToContainer(container, child) {
+  console.log("APPEND to container");
   container[/* children */1].push(child);
   return /* () */0;
 }
@@ -142,7 +170,8 @@ function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
   var match = ComponentRegistry.get(instance_type);
   if (match !== undefined) {
     if (instance.tag) {
-      instance[0][/* encode */0] = Curry._1(match, props);
+      var instance$1 = instance[0];
+      instance$1[/* encode */0] = Curry._2(match, instance$1[/* key */1], props);
       return /* () */0;
     } else {
       return Pervasives.invalid_arg("Cannot update component type " + instance_type);
@@ -153,16 +182,18 @@ function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
 }
 
 function insertBefore(parent, child, beforeChild) {
+  console.log("Insert");
   return assertComponentInstance(parent, (function (parentInstance) {
-                var index = parentInstance[/* children */1].findIndex((function (x) {
+                var index = parentInstance[/* children */2].findIndex((function (x) {
                         return beforeChild === x;
                       }));
-                parentInstance[/* children */1].splice(index, 0, child);
+                parentInstance[/* children */2].splice(index, 0, child);
                 return /* () */0;
               }));
 }
 
 function insertInContainerBefore(container, child, beforeChild) {
+  console.log("Insert in container before");
   var index = container[/* children */1].findIndex((function (x) {
           return beforeChild === x;
         }));
@@ -171,16 +202,18 @@ function insertInContainerBefore(container, child, beforeChild) {
 }
 
 function removeChild(parent, child) {
+  console.log("Remove");
   return assertComponentInstance(parent, (function (parent) {
-                var pos = parent[/* children */1].findIndex((function (x) {
+                var pos = parent[/* children */2].findIndex((function (x) {
                         return child === x;
                       }));
-                parent[/* children */1].splice(pos, 1);
+                parent[/* children */2].splice(pos, 1);
                 return /* () */0;
               }));
 }
 
 function removeChildFromContainer(parent, child) {
+  console.log("Remove from container");
   var pos = parent[/* children */1].findIndex((function (x) {
           return child === x;
         }));
