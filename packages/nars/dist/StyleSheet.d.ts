@@ -48,6 +48,7 @@ export declare type StyleProp<T> = Array<T> | T;
 declare type NamedStyles<T> = {
     [P in keyof T]: ViewStyle | TextStyle;
 };
+export declare type AnyStyleProp = StyleProp<ViewStyle | TextStyle>;
 export declare const create: <T extends NamedStyles<T>>(obj: T) => T;
 export {};
 //# sourceMappingURL=StyleSheet.d.ts.map

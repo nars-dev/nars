@@ -13,7 +13,7 @@
     "in-source": true
   },
   "suffix": ".bs.js",
-  "bs-dependencies": ["reason-react-reconciler"],
+  "bs-dependencies": ["reason-react-reconciler", "ocaml-protoc-plugin-runtime-bs"],
   "warnings": {
     "error" : "+101"
   },

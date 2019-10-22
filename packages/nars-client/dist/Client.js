@@ -16,7 +16,7 @@ function createEncoders(config) {
         res[component] = (propsIn) => {
             let encodedProps = { props: {}, localProps: {} };
             for (const propKey in definition.props) {
-                const encoded = definition.props[propKey].encode(propsIn[propKey]);
+                const encoded = definition.props[propKey].encode(propsIn.props[propKey]);
                 if (encoded) {
                     encodedProps.props[propKey] = encoded;
                 }
@@ -26,7 +26,7 @@ function createEncoders(config) {
             }
             if (definition.localProps) {
                 for (const propKey in definition.localProps) {
-                    encodedProps.localProps[propKey] = propsIn[propKey];
+                    encodedProps.localProps[propKey] = propsIn.localProps[propKey];
                 }
             }
             return encodedProps;

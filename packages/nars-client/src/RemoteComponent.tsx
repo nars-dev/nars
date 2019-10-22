@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Schema, toStruct } from "nars-common";
+import Schema from "./Schema";
+import { toStruct } from "./StructCoders";
 import { ofEncodedReactElement } from "./DecodeElement";
 
 export type State =
@@ -7,8 +8,44 @@ export type State =
   | "Error"
   | { type: "Rendered"; element: (React.ReactChild | null)[] };
 
+export interface SocketLike {
+  binaryType: "arraybuffer" | "blob";
+  readyState: number;
+  send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
+  addEventListener<K extends keyof WebSocketEventMap>(
+    type: K,
+    listener: (this: SocketLike, ev: WebSocketEventMap[K]) => any,
+    options?: boolean | AddEventListenerOptions
+  ): void;
+  removeEventListener<K extends keyof WebSocketEventMap>(
+    type: K,
+    listener: (this: SocketLike, ev: WebSocketEventMap[K]) => any,
+    options?: boolean | EventListenerOptions
+  ): void;
+}
+
+class InstanceCounter {
+  private freed: Array<number> = [];
+  private current: number = 1;
+  next(): number {
+    const value = this.freed.pop();
+    if (value) {
+      return value;
+    } else {
+      const id = this.current;
+      this.current += 1;
+      return id;
+    }
+  }
+  free(id: number) {
+    this.freed.push(id);
+  }
+}
+
+const instanceCounter = new InstanceCounter();
+
 export const useNars = (
-  wsOrAddress: WebSocket | string,
+  wsOrAddress: SocketLike | string,
   name: string,
   props: object,
   localPropsOptional?: { [k: string]: unknown }
@@ -17,8 +54,8 @@ export const useNars = (
     "Loading"
   );
   const localProps = localPropsOptional ? localPropsOptional : {};
-  const [instanceId] = React.useState(() => new Date().getUTCMilliseconds());
-  const ws = React.useRef<WebSocket | null>(null);
+  const [instanceId] = React.useState(() => instanceCounter.next());
+  const ws = React.useRef<SocketLike | null>(null);
   const websocket = () => {
     if (ws.current) {
       return ws.current;
@@ -32,35 +69,19 @@ export const useNars = (
   };
   React.useEffect(() => {
     const ws = websocket();
-    const renderMessage = Schema.ClientToServer.encode(
-      Schema.ClientToServer.create({
-        render: {
-          name,
-          props: toStruct(props),
-          localProps: Object.keys(localProps)
-        },
-        rootId: instanceId
-      })
-    ).finish();
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(renderMessage);
-    } else {
-      ws.onopen = () => {
-        ws.send(renderMessage);
-        ws.onopen = null;
-      };
-    }
-  }, [name, props, localProps]);
-  React.useEffect(() => {
-    websocket().onmessage = bytes => {
-      const message = Schema.ServerToClient.decode(new Uint8Array(bytes.data));
+    ws.addEventListener("message", event => {
+      if (typeof event.data !== "string") {
+        throw "Bad binary format";
+      }
+      const message = Schema.ServerToClient.decode(
+        Uint8Array.from(event.data, x => x.charCodeAt(0))
+      );
       if (message.rootId === instanceId) {
         if (message.error) {
           setRenderedElement(currentValue => {
             if (currentValue === "Loading") {
               return "Error";
             } else {
-             
               return currentValue;
             }
           });
@@ -70,14 +91,14 @@ export const useNars = (
             element: message.update.element.map(elem =>
               ofEncodedReactElement(
                 (messageId, args) => {
-                  websocket().send(
+                  ws.send(
                     Schema.ClientToServer.encode(
                       Schema.ClientToServer.create({
                         call: {
                           messageId,
-                          args
+                          args,
                         },
-                        rootId: instanceId
+                        rootId: instanceId,
                       })
                     ).finish()
                   );
@@ -87,27 +108,51 @@ export const useNars = (
                 },
                 elem
               )
-            )
+            ),
           });
         }
       }
-    };
+    });
     return () => {
-      websocket().send(
+      instanceCounter.free(instanceId);
+      ws.send(
         Schema.ClientToServer.encode(
           Schema.ClientToServer.create({
             unmount: {},
-            rootId: instanceId
+            rootId: instanceId,
           })
         ).finish()
       );
     };
   }, []);
+  React.useEffect(() => {
+    const ws = websocket();
+    const renderMessage = Schema.ClientToServer.encode(
+      Schema.ClientToServer.create({
+        render: {
+          name,
+          props: toStruct(props),
+          localProps: Object.keys(localProps),
+        },
+        rootId: instanceId,
+      })
+    ).finish();
+    if (ws.readyState === WebSocket.OPEN) {
+      ws.send(renderMessage);
+    } else {
+      const handler = () => {
+        ws.send(renderMessage);
+        ws.removeEventListener("open", handler);
+      };
+      ws.addEventListener("open", handler);
+    }
+  }, [name, props, localProps]);
+
   return renderedElement;
 };
 
 type Props = {
-  webSocket: WebSocket | string;
+  webSocket: SocketLike | string;
   name: string;
   props: { [k: string]: unknown };
   localProps?: { [k: string]: unknown };
@@ -128,7 +173,7 @@ export const RemoteComponent = (props: Props) => {
     typeof renderedElement === "object" &&
     renderedElement.type === "Rendered"
   ) {
-    return <React.Fragment>{renderedElement.element}</React.Fragment>;
+    return React.createElement(React.Fragment, {}, ...renderedElement.element);
   } else if (props.renderLoading) {
     return props.renderLoading();
   }

@@ -3,18 +3,14 @@ module CallbackRegistry = Belt.HashMap.Int;
 type instance = Instance.t;
 
 type containerInfo = {
-  flushUpdates: array(Instance.encodedReactElement) => unit,
+  flushUpdates: array(Instance.encoded) => unit,
   children: array(instance),
   callbackRegistry: CallbackRegistry.t(Instance.args => unit),
 };
 
-let createInstance =
-    (instance_type, props, _rootContainer, _context, _internalInstanceHandle) => {
-  switch (ComponentRegistry.get(~name=instance_type)) {
-  | Some(createEncoder) =>
-    Instance.Component({encode: createEncoder(props), children: [||]})
-  | None => invalid_arg("Unknown component type " ++ instance_type)
-  };
+let createInstance = (instance_type, props, _rootContainer, _context, fiber) => {
+  let key = ReactReconciler.OpaqueFiber.key(fiber) |> Js.Null.toOption;
+  ComponentRegistry.createInstance(~name=instance_type, ~key, ~props);
 };
 
 let defaultRootHostContext = ();
@@ -65,7 +61,12 @@ let appendInitialChild = (~parentInstance, ~child) => {
 
 let finalizeInitialChildren = (_, _, _, _, _hostContext) => false;
 
-let prepareUpdate = (_, ~type_ as _, ~oldProps, ~newProps, _, _) => {
+type jsValue;
+external object_unsafe_cast: Js.t('a) => Js.Dict.t(jsValue) = "%identity";
+
+let unsafeDiffProps = (~oldProps, ~newProps) => {
+  let oldProps = object_unsafe_cast(oldProps);
+  let newProps = object_unsafe_cast(newProps);
   let changedProps = [||];
   let newSet = Js.Dict.keys(newProps) |> Belt.Set.String.fromArray;
   let oldSet = Js.Dict.keys(oldProps) |> Belt.Set.String.fromArray;
@@ -80,10 +81,12 @@ let prepareUpdate = (_, ~type_ as _, ~oldProps, ~newProps, _, _) => {
   Js.Nullable.return(changedProps);
 };
 
+let prepareUpdate = (_, ~type_ as _, ~oldProps, ~newProps, _, _) => {
+  unsafeDiffProps(~oldProps, ~newProps);
+};
+
 let createTextInstance = (text, _, _, _) => {
-  Instance.RawText(
-    () => ComponentRegistry.createRawTextEncodedReactElement(text),
-  );
+  Instance.RawText(text);
 };
 
 let shouldSetTextContent = (~type_ as _, _props) => false;
@@ -123,9 +126,8 @@ let commitMount = (_, _, _, _) => {
 
 let commitUpdate =
     (instance, _, instance_type, ~oldProps as _, ~newProps as props, _) => {
-  switch (ComponentRegistry.get(~name=instance_type), instance) {
-  | (Some(createEncoder), Instance.Component(instance)) =>
-    instance.encode = createEncoder(props)
+  switch (instance) {
+  | Instance.Component(inst) => inst.props = Props(props)
   | _ => invalid_arg("Cannot update component type " ++ instance_type)
   };
 };
@@ -275,3 +277,7 @@ let batchedUpdates = f => ReactReconciler.batchedUpdates(reconciler, f, ());
 let flushPassiveEffects = () =>
   ReactReconciler.flushPassiveEffects(reconciler);
 let isThisRendererActing = ReactReconciler.isThisRendererActing(reconciler);
+
+external null_to_element: Js.null(unit) => ReactReconciler.reactElement =
+  "%identity";
+let nullElement = null_to_element(Js.null);

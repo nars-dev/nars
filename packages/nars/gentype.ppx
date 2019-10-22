@@ -1,1 +1,1 @@
-esy gentype.exe "$@"
+esy gentype.native.exe "$@"

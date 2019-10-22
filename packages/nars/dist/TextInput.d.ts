@@ -1,12 +1,13 @@
-import { TextStyle, StyleProp, ColorValue } from "./StyleSheet";
 import * as React from "react";
-export interface Props {
+import { TextStyle, StyleProp, ColorValue } from "./StyleSheet";
+import { props } from "./TextInput.gen";
+export interface Props extends props {
     style?: StyleProp<TextStyle>;
-    placeholderTextColor: ColorValue;
-    placeholder: string;
-    value: string | undefined;
+    placeholderTextColor?: ColorValue;
+    placeholder?: string;
+    value: string;
     onValueChange?: (newValue: string) => void;
 }
-declare const _default: (props: Props) => React.ReactElement<Props, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>;
+declare const _default: React.ComponentType<Props>;
 export default _default;
 //# sourceMappingURL=TextInput.d.ts.map

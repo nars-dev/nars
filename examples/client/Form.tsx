@@ -22,7 +22,10 @@ const Component = ({ animationProgress }) => {
     <Animated.View style={[{ opacity: animationProgress }, styles.container]}>
       <RemoteComponent
         name="Form"
-        props={{ backgroundColor: "yellow", textColor: "blue" }}
+        props={{
+          props: { },
+          localProps: {},
+        }}
       />
     </Animated.View>
   );

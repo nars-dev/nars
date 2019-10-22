@@ -1,16 +1,12 @@
 [@genType]
 type container;
 
-[@genType]
 let createContainer:
-  (~flushUpdates: array(Instance.encodedReactElement) => unit) => container;
-[@genType]
+  (~flushUpdates: array(Instance.encoded) => unit) => container;
 let updateContainer:
   (~element: ReactReconciler.reactElement, ~container: container) =>
   ReactReconciler.expirationTime;
-[@genType]
 let unbatchedUpdates: (unit => 'a) => 'a;
-[@genType]
 let invokeCallback:
   (~container: container, ~messageId: int, ~args: Instance.args) => unit;
 [@genType]
@@ -19,3 +15,5 @@ let batchedUpdates: (unit => 'a) => 'a;
 let flushPassiveEffects: unit => bool;
 [@genType]
 let isThisRendererActing: {. [@bs.set] "current": bool};
+
+let nullElement: ReactReconciler.reactElement;

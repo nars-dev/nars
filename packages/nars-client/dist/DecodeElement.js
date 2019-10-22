@@ -6,9 +6,13 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
-const nars_common_1 = require("nars-common");
+const StructCoders_1 = require("./StructCoders");
+const Schema_1 = __importDefault(require("./Schema"));
 const react_native_1 = require("react-native");
 function assignLocalProps(props, localProps, getLocalProp) {
     const unsafeProps = props;
@@ -18,6 +22,14 @@ function assignLocalProps(props, localProps, getLocalProp) {
         }
     });
 }
+const isCallbackValid = (callback) => {
+    return (callback instanceof Schema_1.default.Callback && typeof callback.callId === "number");
+};
+const getChildren = (rpcCall, getLocalProp, element) => {
+    return element.children
+        ? element.children.map(elem => exports.ofEncodedReactElement(rpcCall, getLocalProp, elem))
+        : [];
+};
 /**
  * TODO: Reduce boilerplate
  */
@@ -28,22 +40,20 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
     else if (element.view) {
         const props = {};
         if (element.view.style) {
-            props.style = nars_common_1.ofStruct(element.view.style);
+            props.style = StructCoders_1.ofStruct(element.view.style);
         }
-        if (element.view.children) {
-            props.children = element.view.children.map(elem => exports.ofEncodedReactElement(rpcCall, getLocalProp, elem));
-        }
-        return React.createElement(react_native_1.View, Object.assign({}, props));
+        const children = getChildren(rpcCall, getLocalProp, element.view);
+        props.children = children;
+        return React.createElement(react_native_1.View, props, ...children);
     }
     else if (element.text) {
         const props = {};
         if (element.text.style) {
-            props.style = nars_common_1.ofStruct(element.text.style);
+            props.style = StructCoders_1.ofStruct(element.text.style);
         }
-        if (element.text.children) {
-            props.children = element.text.children.map(elem => exports.ofEncodedReactElement(rpcCall, getLocalProp, elem));
-        }
-        return React.createElement(react_native_1.Text, Object.assign({}, props));
+        const children = getChildren(rpcCall, getLocalProp, element.text);
+        props.children = children;
+        return React.createElement(react_native_1.Text, props, ...children);
     }
     else if (element.rawText) {
         return String(element.rawText.text);
@@ -52,7 +62,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         const fl = element.flatList;
         const props = {};
         if (fl.style) {
-            props.style = nars_common_1.ofStruct(fl.style);
+            props.style = StructCoders_1.ofStruct(fl.style);
         }
         if (fl.onEndReachedThreshold) {
             props.onEndReachedThreshold = fl.onEndReachedThreshold.value;
@@ -60,54 +70,49 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (fl.localProps) {
             assignLocalProps(props, fl.localProps, getLocalProp);
         }
-        if (fl.onEndReached && typeof fl.onEndReached.callId === "number") {
+        if (isCallbackValid(fl.onEndReached)) {
             const callId = fl.onEndReached.callId;
             props.onEndReached = () => {
                 rpcCall(callId);
             };
         }
-        props.data = fl.keyedChildren ? fl.keyedChildren : [];
+        props.data = fl.children ? fl.children : [];
         props.renderItem = ({ item }) => {
-            if (item.element) {
-                const rendered = exports.ofEncodedReactElement(rpcCall, getLocalProp, item.element);
-                /* Make sure it's a react element */
-                return typeof rendered === "object" ? rendered : null;
-            }
-            return null;
+            const rendered = exports.ofEncodedReactElement(rpcCall, getLocalProp, item);
+            /* Make sure it's a react element */
+            return typeof rendered === "object" ? rendered : null;
         };
         props.keyExtractor = item => {
-            return String(item.key);
+            return String(item.key ? item.key.value : undefined);
         };
         return React.createElement(react_native_1.FlatList, Object.assign({}, props));
     }
     else if (element.touchableOpacity) {
         const to = element.touchableOpacity;
         const props = {};
-        if (to.children) {
-            props.children = to.children.map(elem => exports.ofEncodedReactElement(rpcCall, getLocalProp, elem));
-        }
+        const children = getChildren(rpcCall, getLocalProp, to);
         if (to.localProps) {
             assignLocalProps(props, to.localProps, getLocalProp);
         }
-        if (to.onPress && to.onPress.callId) {
+        if (isCallbackValid(to.onPress)) {
             const callId = to.onPress.callId;
             props.onPress = () => {
                 rpcCall(callId);
             };
         }
-        return React.createElement(react_native_1.TouchableOpacity, Object.assign({}, props));
+        return React.createElement(react_native_1.TouchableOpacity, props, ...children);
     }
     else if (element.textInput) {
         const props = {};
         const ti = element.textInput;
         if (ti.style) {
-            props.style = nars_common_1.ofStruct(ti.style);
+            props.style = StructCoders_1.ofStruct(ti.style);
         }
         props.value = ti.value ? ti.value : undefined;
-        if (ti.onValueChange && ti.onValueChange.callId) {
+        if (isCallbackValid(ti.onValueChange)) {
             const callId = ti.onValueChange.callId;
             props.onChangeText = value => {
-                rpcCall(callId, nars_common_1.toStruct({ value }));
+                rpcCall(callId, StructCoders_1.toStruct({ value }));
             };
         }
         if (ti.localProps) {
@@ -125,13 +130,13 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         const props = {};
         const sw = element.switch;
         if (sw.style) {
-            props.style = nars_common_1.ofStruct(sw.style);
+            props.style = StructCoders_1.ofStruct(sw.style);
         }
         props.value = sw.value ? sw.value : undefined;
-        if (sw.onValueChange && typeof sw.onValueChange.callId === "number") {
+        if (isCallbackValid(sw.onValueChange)) {
             const callId = sw.onValueChange.callId;
             props.onValueChange = value => {
-                rpcCall(callId, nars_common_1.toStruct({ value }));
+                rpcCall(callId, StructCoders_1.toStruct({ value }));
             };
         }
         return React.createElement(react_native_1.Switch, Object.assign({}, props));
@@ -140,7 +145,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         const props = {};
         const im = element.image;
         if (im.style) {
-            props.style = nars_common_1.ofStruct(im.style);
+            props.style = StructCoders_1.ofStruct(im.style);
         }
         if (im.sourceURLString) {
             props.source = { uri: im.sourceURLString };

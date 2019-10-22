@@ -1,27 +1,10 @@
-import { ViewStyle, StyleProp } from "./StyleSheet";
 import * as React from "react";
-import * as ComponentRegistry from "./ComponentRegistry.gen";
-import { Schema } from "nars-common";
-import { encodeViewStyleInProps } from "./StyleEncoding";
+import { ViewStyle, StyleProp } from "./StyleSheet";
+import { props, name } from "./Image.gen";
 
-export interface Props {
+export interface Props extends props {
   style?: StyleProp<ViewStyle>;
-  source?: string;
 }
 
-const name = "Nars_Image";
-
-export default (props: Props): React.ReactElement<Props> =>
-  React.createElement(name, props);
-
-ComponentRegistry.add({
-  name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => () => {
-    return Schema.ReactElement.create({
-      image: {
-        style: encodeViewStyleInProps(props),
-        sourceURLString: String(props.source)
-      }
-    });
-  }
-});
+// @ts-ignore: Primitive component
+export default name as React.ComponentType<Props>;

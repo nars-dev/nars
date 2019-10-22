@@ -1,18 +1,24 @@
 import * as React from "react";
-import {
-  ComponentConfig,
-  ExtractInputPropTypes,
-  ExtractLocalPropTypes,
-} from "nars-common";
+import { ComponentConfig, ExtractInputPropTypes, LocalProp } from "nars-common";
 import { RemoteComponent } from "./RemoteComponent";
+import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 
-type RawPropTypes<
-  T extends ComponentConfig,
-  P extends keyof T
-> = ExtractInputPropTypes<T[P]["props"]> &
-  ExtractLocalPropTypes<T[P]["localProps"]>;
+export type ExtractLocalPropTypes<T> = {
+  [K in keyof T]: T[K] extends LocalProp<infer Component, infer Key>
+    ? Component extends keyof LocalPropTypes
+      ? Key extends keyof LocalPropTypes[Component]
+        ? LocalPropTypes[Component][Key]
+        : never
+      : never
+    : never;
+};
 
-interface RemoteComponentProps<
+export type RawPropTypes<T extends ComponentConfig, P extends keyof T> = {
+  props: ExtractInputPropTypes<T[P]["props"]>;
+  localProps: ExtractLocalPropTypes<T[P]["localProps"]>;
+};
+
+export interface RemoteComponentProps<
   T extends ComponentConfig,
   P extends keyof T = keyof T
 > {
@@ -22,7 +28,7 @@ interface RemoteComponentProps<
   ErrorComponent?: React.ComponentType;
 }
 
-type Client<T extends ComponentConfig> = React.ComponentType<
+export type Client<T extends ComponentConfig> = React.ComponentType<
   RemoteComponentProps<T, keyof T>
 >;
 
@@ -45,7 +51,7 @@ function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
     res[component] = (propsIn: RawPropTypes<any, any>) => {
       let encodedProps = { props: {}, localProps: {} } as EncodedProps;
       for (const propKey in definition.props) {
-        const encoded = definition.props[propKey].encode(propsIn[propKey]);
+        const encoded = definition.props[propKey].encode(propsIn.props[propKey]);
         if (encoded) {
           encodedProps.props[propKey] = encoded;
         } else {
@@ -54,7 +60,7 @@ function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
       }
       if (definition.localProps) {
         for (const propKey in definition.localProps) {
-          encodedProps.localProps[propKey] = propsIn[propKey];
+          encodedProps.localProps[propKey] = propsIn.localProps[propKey];
         }
       }
       return encodedProps;

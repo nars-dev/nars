@@ -2,22 +2,24 @@ export declare const config: {
     Form: {
         props: {
             backgroundColor: {
-                decode: (obj: import("nars-common/dist/Schema").google.protobuf.IValue) => string | null | undefined;
-                encode: (obj: string) => import("nars-common/dist/Schema").google.protobuf.Value;
+                decode: (obj: unknown) => string;
+                encode: (obj: string) => string;
             };
             textColor: {
-                decode: (obj: import("nars-common/dist/Schema").google.protobuf.IValue) => string | null | undefined;
-                encode: (obj: string) => import("nars-common/dist/Schema").google.protobuf.Value;
+                decode: (obj: unknown) => string;
+                encode: (obj: string) => string;
             };
         };
+        localProps: {};
     };
     Feed: {
         props: {
             name: {
-                decode: (obj: import("nars-common/dist/Schema").google.protobuf.IValue) => string | null | undefined;
-                encode: (obj: string) => import("nars-common/dist/Schema").google.protobuf.Value;
+                decode: (obj: unknown) => string;
+                encode: (obj: string) => string;
             };
         };
+        localProps: {};
     };
 };
 //# sourceMappingURL=Config.d.ts.map

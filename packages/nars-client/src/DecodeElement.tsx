@@ -1,5 +1,6 @@
 import * as React from "react";
-import { ofStruct, toStruct, Schema } from "nars-common";
+import { ofStruct, toStruct } from "./StructCoders";
+import Schema from "./Schema";
 import {
   View,
   Text,
@@ -27,11 +28,35 @@ function assignLocalProps<T extends object>(
   });
 }
 
+const isCallbackValid = (callback: unknown): callback is Schema.Callback => {
+  return (
+    callback instanceof Schema.Callback && typeof callback.callId === "number"
+  );
+};
+
+const getChildren = (
+  rpcCall: (
+    callId: number,
+    args?: Schema.google_mirror.protobuf.IStruct
+  ) => void,
+  getLocalProp: (key: string) => unknown,
+  element: { children?: Schema.IReactElement[] | null }
+) => {
+  return element.children
+    ? element.children.map(elem =>
+        ofEncodedReactElement(rpcCall, getLocalProp, elem)
+      )
+    : [];
+};
+
 /**
  * TODO: Reduce boilerplate
  */
 export const ofEncodedReactElement = (
-  rpcCall: (callId: number, args?: Schema.google.protobuf.IStruct) => void,
+  rpcCall: (
+    callId: number,
+    args?: Schema.google_mirror.protobuf.IStruct
+  ) => void,
   getLocalProp: (key: string) => unknown,
   element: Schema.IReactElement
 ): React.ReactChild | null => {
@@ -42,28 +67,22 @@ export const ofEncodedReactElement = (
     if (element.view.style) {
       props.style = ofStruct(element.view.style);
     }
-    if (element.view.children) {
-      props.children = element.view.children.map(elem =>
-        ofEncodedReactElement(rpcCall, getLocalProp, elem)
-      );
-    }
-    return <View {...props} />;
+    const children = getChildren(rpcCall, getLocalProp, element.view);
+    props.children = children;
+    return React.createElement(View, props, ...children);
   } else if (element.text) {
     const props = {} as Writable<Text["props"]>;
     if (element.text.style) {
       props.style = ofStruct(element.text.style);
     }
-    if (element.text.children) {
-      props.children = element.text.children.map(elem =>
-        ofEncodedReactElement(rpcCall, getLocalProp, elem)
-      );
-    }
-    return <Text {...props} />;
+    const children = getChildren(rpcCall, getLocalProp, element.text);
+    props.children = children;
+    return React.createElement(Text, props, ...children);
   } else if (element.rawText) {
     return String(element.rawText.text);
   } else if (element.flatList) {
     const fl = element.flatList;
-    const props = {} as Writable<FlatList<Schema.IKeyedChild>["props"]>;
+    const props = {} as Writable<FlatList<Schema.IReactElement>["props"]>;
     if (fl.style) {
       props.style = ofStruct(fl.style);
     }
@@ -73,47 +92,36 @@ export const ofEncodedReactElement = (
     if (fl.localProps) {
       assignLocalProps(props, fl.localProps, getLocalProp);
     }
-    if (fl.onEndReached && typeof fl.onEndReached.callId === "number") {
+    if (isCallbackValid(fl.onEndReached)) {
       const callId = fl.onEndReached.callId;
       props.onEndReached = () => {
         rpcCall(callId);
       };
     }
-    props.data = fl.keyedChildren ? fl.keyedChildren : [];
+    props.data = fl.children ? fl.children : [];
     props.renderItem = ({ item }) => {
-      if (item.element) {
-        const rendered = ofEncodedReactElement(
-          rpcCall,
-          getLocalProp,
-          item.element
-        );
-        /* Make sure it's a react element */
-        return typeof rendered === "object" ? rendered : null;
-      }
-      return null;
+      const rendered = ofEncodedReactElement(rpcCall, getLocalProp, item);
+      /* Make sure it's a react element */
+      return typeof rendered === "object" ? rendered : null;
     };
     props.keyExtractor = item => {
-      return String(item.key);
+      return String(item.key ? item.key.value : undefined);
     };
     return <FlatList {...props} />;
   } else if (element.touchableOpacity) {
     const to = element.touchableOpacity;
     const props = {} as Writable<TouchableOpacity["props"]>;
-    if (to.children) {
-      props.children = to.children.map(elem =>
-        ofEncodedReactElement(rpcCall, getLocalProp, elem)
-      );
-    }
+    const children = getChildren(rpcCall, getLocalProp, to);
     if (to.localProps) {
       assignLocalProps(props, to.localProps, getLocalProp);
     }
-    if (to.onPress && to.onPress.callId) {
+    if (isCallbackValid(to.onPress)) {
       const callId = to.onPress.callId;
       props.onPress = () => {
         rpcCall(callId);
       };
     }
-    return <TouchableOpacity {...props} />;
+    return React.createElement(TouchableOpacity, props, ...children);
   } else if (element.textInput) {
     const props = {} as Writable<TextInput["props"]>;
     const ti = element.textInput;
@@ -121,7 +129,7 @@ export const ofEncodedReactElement = (
       props.style = ofStruct(ti.style);
     }
     props.value = ti.value ? ti.value : undefined;
-    if (ti.onValueChange && ti.onValueChange.callId) {
+    if (isCallbackValid(ti.onValueChange)) {
       const callId = ti.onValueChange.callId;
       props.onChangeText = value => {
         rpcCall(callId, toStruct({ value }));
@@ -144,7 +152,7 @@ export const ofEncodedReactElement = (
       props.style = ofStruct(sw.style);
     }
     props.value = sw.value ? sw.value : undefined;
-    if (sw.onValueChange && typeof sw.onValueChange.callId === "number") {
+    if (isCallbackValid(sw.onValueChange)) {
       const callId = sw.onValueChange.callId;
       props.onValueChange = value => {
         rpcCall(callId, toStruct({ value }));

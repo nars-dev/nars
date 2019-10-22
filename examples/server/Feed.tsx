@@ -17,7 +17,7 @@ const renderItem = ({ item }: { item: Post }) => {
   }
 };
 
-function Feed(_props: { name: string }) {
+function Feed(_: {}) {
   const [posts, setPosts] = React.useState(generatePosts);
   const loadMore = () => {
     setPosts([...posts, ...generatePosts()]);

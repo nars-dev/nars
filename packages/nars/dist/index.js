@@ -28,6 +28,6 @@ var TouchableOpacity_1 = require("./TouchableOpacity");
 exports.TouchableOpacity = TouchableOpacity_1.default;
 const Static = __importStar(require("./Static"));
 exports.Static = Static;
-const Server = __importStar(require("./NarsServer"));
+const Server = __importStar(require("./NarsServer.gen"));
 exports.Server = Server;
 __export(require("nars-common"));

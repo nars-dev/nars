@@ -3,93 +3,85 @@ jest.mock("react-native", () => ({
   TouchableOpacity: "TouchableOpacity",
 }));
 
-import FlatList from "nars/src/FlatList";
-import TouchableOpacity from "nars/src/TouchableOpacity";
-import * as NarsReconciler from "nars/src/NarsReconciler.gen";
-import act from "nars/src/NarsReconcilerAct";
 import * as React from "react";
-import { setupReconciler, Ref } from "./TestCommons";
-import { ofEncodedReactElement } from "nars-client/src/DecodeElement";
-import { Schema } from "nars-common";
+import { ReactTestInstance, ReactTestRenderer } from "react-test-renderer";
+import { TouchableOpacity, FlatList, LocalProp } from "nars";
+import { localProp } from "nars-common";
+import { createRemoteComponent, render } from "./TestRenderer";
 
-const expectLocalProp = (
-  {
-    localProps,
-    container,
-    rendered,
-    element,
-  }: {
-    localProps: { [k: string]: unknown };
-    container: Ref<NarsReconciler.container>;
-    rendered: Ref<Schema.ReactElement[] | undefined>;
-    element: React.ReactElement;
+export const config = {
+  TouchableOpacityTest: {
+    props: { },
+    localProps: {
+      submit: localProp("TouchableOpacity", "onPress"),
+    },
   },
-  extract: (props: { [k: string]: object }) => unknown
-) => {
-  act(() => {
-    NarsReconciler.updateContainer({
-      element,
-      container: container.current,
-    });
-    return undefined;
-  });
-  expect(rendered.current).toBeTruthy();
-  if (rendered.current) {
-    const decoded = ofEncodedReactElement(
-      () => undefined,
-      (key: string) => {
-        return localProps[key];
-      },
-      rendered.current[0]
-    );
-    expect(decoded).toBeTruthy();
-    expect(typeof decoded).toEqual("object");
-    if (decoded && typeof decoded === "object" && decoded.props) {
-      return expect(extract(decoded.props));
-    }
-    return expect(false);
-  } else {
-    return expect(false);
-  }
+  FlatListTest: {
+    props: {},
+    localProps: {
+      reload: localProp("FlatList", "onEndReached"),
+    },
+  },
 };
 
-describe("LocalProps", () => {
-  const { container, rendered } = setupReconciler();
-  it("encodes FlatList", () => {
-    const onEnd = () => null;
-    expectLocalProp(
-      {
-        container,
-        rendered,
-        localProps: {
-          onEnd,
-        },
-        element: (
-          <FlatList
-            data={[]}
-            keyExtractor={() => ""}
-            renderItem={() => null}
-            localProps={{ onEndReached: { key: "onEnd" } }}
-          />
-        ),
-      },
-      props => props.onEndReached
-    ).toBe(onEnd);
-  });
-  it("encodes TouchableOpacity", () => {
+const components = {
+  TouchableOpacityTest: (props: {
+    props: { };
+    localProps: { submit: LocalProp };
+  }) => {
+    return (
+      <TouchableOpacity localProps={{ onPress: props.localProps.submit }} />
+    );
+  },
+  FlatListTest: (props: { props: {}; localProps: { reload: LocalProp } }) => {
+    return (
+      <FlatList
+        data={[]}
+        keyExtractor={k => String(k)}
+        renderItem={() => <TouchableOpacity />}
+        localProps={{ onEndReached: props.localProps.reload }}
+      />
+    );
+  },
+};
+
+const RemoteComponent = createRemoteComponent(config, components);
+
+const getChildren = (rendered: ReactTestRenderer) => {
+  return (rendered.root.children[0] as ReactTestInstance).children;
+};
+
+describe("Components", () => {
+  it("TouhcableOpacity has onPress set to submit", async () => {
     const submit = () => null;
-    expectLocalProp(
-      {
-        container,
-        rendered,
-        localProps: {
-          submit,
-        },
-        element: (
-          <TouchableOpacity localProps={{ onPress: { key: "submit" } }} />
-        ),
-      },
-      props => props.onPress
-    ).toBe(submit);
+    const rendered = await render(
+      <RemoteComponent
+        name="TouchableOpacityTest"
+        props={{
+          props: { backgroundColor: "aa" },
+          localProps: { submit },
+        }}
+      />
+    );
+
+    expect((getChildren(rendered)[0] as ReactTestInstance).props.onPress).toBe(
+      submit
+    );
+  });
+  it("FlatList has onEndReached set to reload", async () => {
+    const reload = () => null;
+    const rendered = await render(
+      <RemoteComponent
+        name="FlatListTest"
+        props={{
+          props: {},
+          localProps: { reload },
+        }}
+      />
+    );
+
+    expect(
+      (getChildren(rendered)[0] as ReactTestInstance).props.onEndReached
+    ).toBe(reload);
   });
 });
