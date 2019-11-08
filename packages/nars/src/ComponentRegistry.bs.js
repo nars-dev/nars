@@ -22,12 +22,12 @@ function add(name, encoder) {
 function createInstance(name, key, props) {
   var match = Belt_HashMapString.get(registry, name);
   if (match !== undefined) {
-    return /* Component */Block.__(1, [{
-                props: /* Props */[props],
-                encode: match,
-                children: /* array */[],
-                key: key
-              }]);
+    return /* Component */Block.__(1, [/* record */[
+                /* props : Props */[props],
+                /* encode */match,
+                /* children : array */[],
+                /* key */key
+              ]]);
   } else {
     return Pervasives.invalid_arg("Unknown primitive component with name " + name);
   }

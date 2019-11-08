@@ -1,4 +1,3 @@
 
 # Set eol to LF so files aren't converted to CRLF-eol on Windows.
-opam/** binary eol=lf linguist-generated=true
-overrides/** binary eol=lf linguist-generated=true
+* text eol=lf

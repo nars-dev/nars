@@ -19,7 +19,7 @@ exports.default = (props) => {
         if (renderedElement) {
             const key = props.keyExtractor(renderedItemData);
             return {
-                renderedElement: Object.assign(Object.assign({}, renderedElement), { key }),
+                renderedElement: Object.assign({}, renderedElement, { key }),
                 key,
             };
         }

@@ -32,7 +32,9 @@ let encodeOptionalLocalProps = dict => {
 };
 
 let encodeStyleOptional = props => {
-  encodeOptional(props##style, JsonToStruct.convertExn);
+  encodeOptional(props##style, x =>
+    x |> Style.tToJSONDict |> JsonToStruct.convertExn
+  );
 };
 
 let encodeNullable = (value, decoder) => {

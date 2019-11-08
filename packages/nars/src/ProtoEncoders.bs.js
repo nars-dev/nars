@@ -34,19 +34,19 @@ function encodeCallback(registerCallback, callback) {
 }
 
 function encodeLocalProp(localKey, propKey) {
-  return {
-          localKey: localKey,
-          propKey: propKey
-        };
+  return /* record */[
+          /* localKey */localKey,
+          /* propKey */propKey
+        ];
 }
 
 function encodeOptionalLocalProps(dict) {
   if (dict !== undefined) {
     return $$Array.to_list(Js_dict.entries(Caml_option.valFromOption(dict)).map((function (param) {
-                      return {
-                              localKey: param[1].key,
-                              propKey: param[0]
-                            };
+                      return /* record */[
+                              /* localKey */param[1].key,
+                              /* propKey */param[0]
+                            ];
                     })));
   } else {
     return /* [] */0;
@@ -55,7 +55,10 @@ function encodeOptionalLocalProps(dict) {
 
 function encodeStyleOptional(props) {
   var value = props.style;
-  return Js_option.map(JsonToStruct.convertExn, value);
+  return Js_option.map((function (value) {
+                var x = value;
+                return JsonToStruct.convertExn(x);
+              }), value);
 }
 
 function encodeNullable(value, decoder) {

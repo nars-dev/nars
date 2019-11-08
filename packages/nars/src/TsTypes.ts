@@ -1,1 +1,1 @@
-export type tsunknown = unknown;
+export type TypeScriptUnknown = unknown;

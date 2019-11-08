@@ -10,8 +10,6 @@ const NarsServerBS = require('./NarsServer.bs');
 
 import {Dict_t as Js_Dict_t} from '../src/shims/Js.shim';
 
-import {Internal_meth as Js_Internal_meth} from '../src/shims/Js.shim';
-
 import {Json_t as Js_Json_t} from '../src/shims/Js.shim';
 
 import {reactElement as ReactReconciler_reactElement} from '../src/shims/ReactReconciler.shim';
@@ -21,25 +19,16 @@ export abstract class Socket_data { protected opaque!: any }; /* simulate opaque
 
 // tslint:disable-next-line:interface-over-type-literal
 export type Socket_t = {
-  readonly on: Js_Internal_meth<
-  | {
-    tag: "Arity_2"; 
-    value: [string, (_1:Socket_data) => void]
-  },void>; 
+  readonly on: (_1:string, _2:((_1:Socket_data) => void)) => void; 
   binaryType: string; 
-  readonly send: Js_Internal_meth<
-  | {
-    tag: "Arity_1"; 
-    value: Socket_data
-  },void>
+  readonly send: (_1:Socket_data) => void
 };
 
 // tslint:disable-next-line:interface-over-type-literal
 export type socket = Socket_t;
 
 // tslint:disable-next-line:interface-over-type-literal
-export type Server_t = { readonly on: Js_Internal_meth<
-  | { tag: "Arity_2"; value: [string, (_1:socket) => void] },void> };
+export type Server_t = { readonly on: (_1:string, _2:((_1:socket) => void)) => void };
 
 // tslint:disable-next-line:interface-over-type-literal
 export type server = Server_t;

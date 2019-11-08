@@ -10,17 +10,17 @@ var name = "TouchableOpacity";
 function encoder(key, param, registerCallback, children) {
   var props = param[0];
   var onPress = ProtoEncoders.encodeArityZeroCallbackOptional(registerCallback, props.onPress);
-  return {
-          key: key,
-          value: /* `TouchableOpacity */[
+  return /* record */[
+          /* key */key,
+          /* value : `TouchableOpacity */[
             -711832046,
-            {
-              onPress: onPress,
-              children: $$Array.to_list(children),
-              localProps: ProtoEncoders.encodeOptionalLocalProps(props.localProps)
-            }
+            /* record */[
+              /* onPress */onPress,
+              /* children */$$Array.to_list(children),
+              /* localProps */ProtoEncoders.encodeOptionalLocalProps(props.localProps)
+            ]
           ]
-        };
+        ];
 }
 
 ComponentRegistry.add(name, encoder);

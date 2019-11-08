@@ -18,7 +18,6 @@
     "error" : "+101"
   },
   "gentypeconfig": {
-    "path": "./gentype.ppx",
     "module": "commonjs",
     "language": "typescript",
     "shims": {

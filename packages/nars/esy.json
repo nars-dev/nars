@@ -6,7 +6,6 @@
   "devDependencies": {
     "@opam/merlin-lsp": "ocaml/merlin:merlin-lsp.opam#bd94d34",
     "@opam/reason": "*",
-    "@opam/genType": "cristianoc/genType#f2d74d5",
     "@opam/ocamlformat": "~0.11.0",
     "@opam/ocaml-protoc-plugin": "2.0.0"
   },

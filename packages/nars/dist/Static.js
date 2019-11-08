@@ -29,7 +29,7 @@ function createDecoders(config) {
                 }
                 return {
                     props: parsedProps,
-                    localProps: localPropKeys.reduce((acc, key) => (Object.assign(Object.assign({}, acc), { [key]: { key: key } })), {}),
+                    localProps: localPropKeys.reduce((acc, key) => (Object.assign({}, acc, { [key]: { key: key } })), {}),
                 };
             }
             else {

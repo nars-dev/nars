@@ -1,6 +1,6 @@
 {
   "name": "nars",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Server Rendered React Native",
   "main": "dist/index.js",
   "source": "src/index.ts",
@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "analytics-node": "^3.4.0-beta.1",
-    "bs-platform": "6.2.2-flambda-uniform-array.1",
+    "bs-platform": "6.2.1",
     "nars-common": "0.0.0",
     "node-machine-id": "^1.1.12",
     "ocaml-protoc-plugin-runtime-bs": "issuu/ocaml-protoc-plugin#v2.0.0",
@@ -27,7 +27,8 @@
     "@types/scheduler": "^0.12.1",
     "@types/uuid": "^3.4.5",
     "@types/ws": "^6.0.3",
+    "gentype": "^3.2.0",
     "prettier": "^1.18.2",
-    "typescript": "^3.5.3"
+    "typescript": "~3.5.0"
   }
 }

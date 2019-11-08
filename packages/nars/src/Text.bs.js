@@ -8,16 +8,16 @@ var ComponentRegistry = require("./ComponentRegistry.bs.js");
 var name = "Text";
 
 function encoder(key, param, param$1, children) {
-  return {
-          key: key,
-          value: /* `Text */[
+  return /* record */[
+          /* key */key,
+          /* value : `Text */[
             936573133,
-            {
-              style: ProtoEncoders.encodeStyleOptional(param[0]),
-              children: $$Array.to_list(children)
-            }
+            /* record */[
+              /* style */ProtoEncoders.encodeStyleOptional(param[0]),
+              /* children */$$Array.to_list(children)
+            ]
           ]
-        };
+        ];
 }
 
 ComponentRegistry.add(name, encoder);

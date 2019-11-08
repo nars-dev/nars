@@ -13,26 +13,26 @@ function encoder(key, param, registerCallback, children) {
   var props = param[0];
   var children$1 = $$Array.to_list(props.keys.map((function (key, i) {
               var init = Caml_array.caml_array_get(children, i);
-              return {
-                      key: key,
-                      value: init.value
-                    };
+              return /* record */[
+                      /* key */key,
+                      /* value */init[/* value */1]
+                    ];
             })));
-  return {
-          key: key,
-          value: /* `FlatList */[
+  return /* record */[
+          /* key */key,
+          /* value : `FlatList */[
             -193011497,
-            {
-              style: ProtoEncoders.encodeStyleOptional(props),
-              onEndReached: ProtoEncoders.encodeArityZeroCallbackOptional(registerCallback, props.onEndReached),
-              onEndReachedThreshold: Js_option.map((function (threshold) {
+            /* record */[
+              /* style */ProtoEncoders.encodeStyleOptional(props),
+              /* onEndReached */ProtoEncoders.encodeArityZeroCallbackOptional(registerCallback, props.onEndReached),
+              /* onEndReachedThreshold */Js_option.map((function (threshold) {
                       return threshold | 0;
                     }), props.onEndReachedThreshold),
-              children: children$1,
-              localProps: ProtoEncoders.encodeOptionalLocalProps(props.localProps)
-            }
+              /* children */children$1,
+              /* localProps */ProtoEncoders.encodeOptionalLocalProps(props.localProps)
+            ]
           ]
-        };
+        ];
 }
 
 ComponentRegistry.add(name, encoder);
