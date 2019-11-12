@@ -11,10 +11,10 @@ import { createRemoteComponent, render, getChildren } from "./TestRenderer";
 
 const config = {
   TouchableOpacityTest: {
-    submit: localProp("TouchableOpacity", "onPress"),
+    submit: localProp("optional", "TouchableOpacity", "onPress"),
   },
   FlatListTest: {
-    reload: localProp("FlatList", "onEndReached"),
+    reload: localProp("required", "FlatList", "onEndReached"),
   },
 };
 
@@ -36,10 +36,10 @@ const components = {
 
 const RemoteComponent = createRemoteComponent(config, components);
 
-describe("Components", () => {
-  it("TouhcableOpacity has onPress set to submit", async () => {
+describe("RemoteComponent Local Props", () => {
+  it("TouhcableOpacity has onPress set to submit", () => {
     const submit = () => null;
-    const rendered = await render(
+    const rendered = render(
       <RemoteComponent
         name="TouchableOpacityTest"
         props={{
@@ -52,9 +52,9 @@ describe("Components", () => {
       submit
     );
   });
-  it("FlatList has onEndReached set to reload", async () => {
+  it("FlatList has onEndReached set to reload", () => {
     const reload = () => null;
-    const rendered = await render(
+    const rendered = render(
       <RemoteComponent
         name="FlatListTest"
         props={{
@@ -66,5 +66,27 @@ describe("Components", () => {
     expect(
       (getChildren(rendered)[0] as ReactTestInstance).props.onEndReached
     ).toBe(reload);
+  });
+  it("throws when a required local prop is not passed in", () => {
+    console.error = jest.fn();
+    expect(() =>
+      render(
+        <RemoteComponent
+          name="FlatListTest"
+          // @ts-ignore
+          props={{}}
+        />
+      )
+    ).toThrow("Local Prop 'reload' has not been passed to <FlatListTest />");
+  });
+  it("works if an optional local prop is not passed in", () => {
+    expect(
+      render(
+        <RemoteComponent
+          name="TouchableOpacityTest"
+          props={{ submit: undefined }}
+        />
+      ).toJSON()
+    ).toMatchSnapshot();
   });
 });

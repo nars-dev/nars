@@ -4,7 +4,7 @@ import { server as Server } from "./NarsServer.gen";
 import { t as LocalProp } from "./LocalProp.gen";
 import { Dict_t, Json_t } from "./shims/Js.shim";
 export declare type ExtractPropTypes<T> = {
-    [K in keyof T]: K extends string ? T[K] extends LocalPropKey<any, any> ? LocalProp : ExtractInputPropType<T[K]> : never;
+    [K in keyof T]: K extends string ? T[K] extends LocalPropKey<any, any, any> ? LocalProp : ExtractInputPropType<T[K]> : never;
 };
 export declare type ComponentDefinitions<T extends ComponentConfig> = {
     readonly [P in keyof T]: React.ComponentType<ExtractPropTypes<T[P]>>;

@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`RemoteComponent Local Props works if an optional local prop is not passed in 1`] = `<TouchableOpacity />`;

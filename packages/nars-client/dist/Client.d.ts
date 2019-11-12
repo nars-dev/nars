@@ -1,13 +1,13 @@
 import * as React from "react";
-import { ComponentConfig, ExtractInputPropType, LocalPropKey, PropTypes } from "nars-common";
+import { ComponentConfig, ExtractInputPropType, LocalPropKey, PropTypes, LocalPropRequired } from "nars-common";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
-declare type ExtractLocalProp<Component, Key> = Component extends keyof LocalPropTypes ? Key extends keyof LocalPropTypes[Component] ? LocalPropTypes[Component][Key] : never : never;
+declare type ExtractLocalProp<Component, Key, IsRequired extends LocalPropRequired> = Component extends keyof LocalPropTypes ? Key extends keyof LocalPropTypes[Component] ? IsRequired extends "optional" ? LocalPropTypes[Component][Key] | undefined : LocalPropTypes[Component][Key] : never : never;
 export declare type ExtractLocalPropKeys<T extends PropTypes> = {
-    [K in keyof T]: T[K] extends LocalPropKey<infer Component, infer Key> ? ExtractLocalProp<Component, Key> : never;
+    [K in keyof T]: T[K] extends LocalPropKey<infer Component, infer Key, LocalPropRequired> ? ExtractLocalProp<Component, Key, any> : never;
 }[keyof T];
 export declare type ExtractLocalPropTypes<T extends PropTypes> = Pick<T, ExtractLocalPropKeys<T>>;
 export declare type ExtractPropTypes<T extends PropTypes> = {
-    [K in keyof T]: K extends string ? T[K] extends LocalPropKey<infer Component, infer Key> ? ExtractLocalProp<Component, Key> : ExtractInputPropType<T[K]> : never;
+    [K in keyof T]: K extends string ? T[K] extends LocalPropKey<infer Component, infer Key, infer IsRequired> ? ExtractLocalProp<Component, Key, IsRequired> : ExtractInputPropType<T[K]> : never;
 };
 export interface RemoteComponentProps<T extends ComponentConfig, P extends keyof T = keyof T> {
     name: P extends string ? P : never;

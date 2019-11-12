@@ -11,7 +11,7 @@ import { Dict_t, Json_t } from "./shims/Js.shim";
 
 export type ExtractPropTypes<T> = {
   [K in keyof T]: K extends string
-    ? T[K] extends LocalPropKey<any, any>
+    ? T[K] extends LocalPropKey<any, any, any>
       ? LocalProp
       : ExtractInputPropType<T[K]>
     : never;
@@ -41,31 +41,27 @@ function createDecoders<T extends ComponentConfig>(config: T): Decoder<T> {
     ) => {
       type Props = ExtractPropTypes<T[keyof T]>;
       const parsedProps = {} as Props;
-      if (propsIn || localPropKeys.length > 0) {
-        for (const propKey in definition) {
-          const prop = propsIn[propKey];
-          const decoder: PropType = definition[propKey];
-          if (!("local" in decoder)) {
-            if (prop) {
-              parsedProps[propKey as keyof Props] = decoder.decode(prop);
-            } else if (!decoder.optional) {
-              throw `Required prop: ${propKey} has not been passed in`;
-            }
+      for (const propKey in definition) {
+        const prop = propsIn[propKey];
+        const decoder: PropType = definition[propKey];
+        if (!("local" in decoder)) {
+          if (prop) {
+            parsedProps[propKey as keyof Props] = decoder.decode(prop);
+          } else if (!decoder.optional) {
+            throw `Required prop: ${propKey} has not been passed to component ${component}`;
+          }
+        } else {
+          const index = localPropKeys.indexOf(propKey);
+          if (index === -1) {
+            throw "Local Prop is not found";
           } else {
-            const index = localPropKeys.indexOf(propKey);
-            if (index === -1) {
-              throw "Local Prop is not found";
-            } else {
-              parsedProps[propKey as keyof Props] = {
-                key: propKey,
-              } as Props[keyof Props];
-            }
+            parsedProps[propKey as keyof Props] = {
+              key: propKey,
+            } as Props[keyof Props];
           }
         }
-        return parsedProps;
-      } else {
-        throw "TODO: Handle";
       }
+      return parsedProps;
     };
   }
   return res as Decoder<T>;
@@ -91,7 +87,10 @@ export function createRouter<T extends ComponentConfig>(
       const Component: ComponentDefinitions<T>[K] = definitions[name];
       const parsedProps = parsers[name](props, localProps);
       if (parsedProps) {
-        return React.createElement(Component as React.ComponentType<any>, parsedProps);
+        return React.createElement(
+          Component as React.ComponentType<any>,
+          parsedProps
+        );
       }
     }
     return undefined;

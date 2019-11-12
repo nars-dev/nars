@@ -16,35 +16,30 @@ function createDecoders(config) {
         const component = config_component;
         res[component] = (propsIn = {}, localPropKeys) => {
             const parsedProps = {};
-            if (propsIn || localPropKeys.length > 0) {
-                for (const propKey in definition) {
-                    const prop = propsIn[propKey];
-                    const decoder = definition[propKey];
-                    if (!("local" in decoder)) {
-                        if (prop) {
-                            parsedProps[propKey] = decoder.decode(prop);
-                        }
-                        else if (!decoder.optional) {
-                            throw `Required prop: ${propKey} has not been passed in`;
-                        }
+            for (const propKey in definition) {
+                const prop = propsIn[propKey];
+                const decoder = definition[propKey];
+                if (!("local" in decoder)) {
+                    if (prop) {
+                        parsedProps[propKey] = decoder.decode(prop);
                     }
-                    else {
-                        const index = localPropKeys.indexOf(propKey);
-                        if (index === -1) {
-                            throw "Local Prop is not found";
-                        }
-                        else {
-                            parsedProps[propKey] = {
-                                key: propKey,
-                            };
-                        }
+                    else if (!decoder.optional) {
+                        throw `Required prop: ${propKey} has not been passed to component ${component}`;
                     }
                 }
-                return parsedProps;
+                else {
+                    const index = localPropKeys.indexOf(propKey);
+                    if (index === -1) {
+                        throw "Local Prop is not found";
+                    }
+                    else {
+                        parsedProps[propKey] = {
+                            key: propKey,
+                        };
+                    }
+                }
             }
-            else {
-                throw " CHUJ ";
-            }
+            return parsedProps;
         };
     }
     return res;

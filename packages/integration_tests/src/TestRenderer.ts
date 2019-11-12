@@ -70,16 +70,12 @@ export const createRemoteComponent = <T extends ComponentConfig>(
   return Client.createRemoteComponent(socket, config);
 };
 
-export const render = (
-  element: React.ReactElement
-): Promise<ReactTestRenderer> => {
-  return new Promise(async resolve => {
-    let component;
-    act(() => {
-      component = create(element);
-    });
-    resolve(component);
+export const render = (element: React.ReactElement): ReactTestRenderer => {
+  let component: ReactTestRenderer;
+  act(() => {
+    component = create(element);
   });
+  return component;
 };
 
 export const getChildren = (rendered: ReactTestRenderer) => {

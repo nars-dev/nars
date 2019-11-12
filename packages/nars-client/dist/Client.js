@@ -17,13 +17,22 @@ function createEncoders(config) {
             let encodedProps = { props: {}, localProps: {} };
             for (const propKey in definition) {
                 const propDefinition = definition[propKey];
+                const prop = propsIn[propKey];
                 if (!("local" in propDefinition)) {
-                    const encoded = propDefinition.encode(propsIn[propKey]);
-                    encodedProps.props[propKey] = encoded;
+                    if (!prop && !propDefinition.optional) {
+                        throw `Prop '${propKey}' has not been passed to <${component} />`;
+                    }
+                    encodedProps.props[propKey] = propDefinition.encode(prop);
                 }
                 else {
-                    const localPropKey = propKey;
-                    encodedProps.localProps[localPropKey] = propsIn[propKey];
+                    if (propDefinition.isRequired !== "optional" &&
+                        typeof prop === "undefined") {
+                        throw `Local Prop '${propKey}' has not been passed to <${component} />`;
+                    }
+                    else {
+                        const localPropKey = propKey;
+                        encodedProps.localProps[localPropKey] = prop;
+                    }
                 }
             }
             return encodedProps;
@@ -35,14 +44,11 @@ function createRemoteComponent(webSocket, config) {
     const encoders = createEncoders(config);
     return ({ name, props, LoadingComponent, ErrorComponent, }) => {
         if (!(name in encoders)) {
-            throw "Unknown component " + name;
+            throw `Unknown component <${name} />`;
         }
         const encoded = React.useMemo(() => {
             return encoders[name](props);
         }, [name, props]);
-        if (!encoded) {
-            throw "Unknown component named " + name;
-        }
         const encodedProps = encoded.props;
         const localProps = encoded.localProps;
         return (React.createElement(RemoteComponent_1.RemoteComponent, { webSocket: webSocket, name: name, props: encodedProps, localProps: localProps, renderLoading: LoadingComponent ? () => React.createElement(LoadingComponent, null) : undefined, renderError: ErrorComponent ? () => React.createElement(ErrorComponent, null) : undefined }));

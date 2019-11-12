@@ -4,19 +4,30 @@ import {
   ExtractInputPropType,
   LocalPropKey,
   PropTypes,
+  LocalPropRequired,
 } from "nars-common";
 import { RemoteComponent } from "./RemoteComponent";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 
-type ExtractLocalProp<Component, Key> = Component extends keyof LocalPropTypes
+type ExtractLocalProp<
+  Component,
+  Key,
+  IsRequired extends LocalPropRequired
+> = Component extends keyof LocalPropTypes
   ? Key extends keyof LocalPropTypes[Component]
-    ? LocalPropTypes[Component][Key]
+    ? IsRequired extends "optional"
+      ? LocalPropTypes[Component][Key] | undefined
+      : LocalPropTypes[Component][Key]
     : never
   : never;
 
 export type ExtractLocalPropKeys<T extends PropTypes> = {
-  [K in keyof T]: T[K] extends LocalPropKey<infer Component, infer Key>
-    ? ExtractLocalProp<Component, Key>
+  [K in keyof T]: T[K] extends LocalPropKey<
+    infer Component,
+    infer Key,
+    LocalPropRequired
+  >
+    ? ExtractLocalProp<Component, Key, any>
     : never;
 }[keyof T];
 
@@ -27,8 +38,8 @@ export type ExtractLocalPropTypes<T extends PropTypes> = Pick<
 
 export type ExtractPropTypes<T extends PropTypes> = {
   [K in keyof T]: K extends string
-    ? T[K] extends LocalPropKey<infer Component, infer Key>
-      ? ExtractLocalProp<Component, Key>
+    ? T[K] extends LocalPropKey<infer Component, infer Key, infer IsRequired>
+      ? ExtractLocalProp<Component, Key, IsRequired>
       : ExtractInputPropType<T[K]>
     : never;
 };
@@ -73,14 +84,26 @@ function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
       >;
       for (const propKey in definition) {
         const propDefinition = definition[propKey];
+        const prop = propsIn[propKey];
         if (!("local" in propDefinition)) {
-          const encoded = propDefinition.encode(propsIn[propKey]);
-          encodedProps.props[propKey] = encoded;
+          if (!prop && !propDefinition.optional) {
+            throw `Prop '${propKey}' has not been passed to <${component} />`;
+          }
+          encodedProps.props[propKey] = propDefinition.encode(prop);
         } else {
-          const localPropKey = propKey as keyof EncodedProps<
-            ComponentProps
-          >["localProps"];
-          encodedProps.localProps[localPropKey] = propsIn[propKey];
+          if (
+            propDefinition.isRequired !== "optional" &&
+            typeof prop === "undefined"
+          ) {
+            throw `Local Prop '${propKey}' has not been passed to <${component} />`;
+          } else {
+            const localPropKey = propKey as keyof EncodedProps<
+              ComponentProps
+            >["localProps"];
+            encodedProps.localProps[
+              localPropKey
+            ] = (prop as unknown) as NonNullable<typeof prop>;
+          }
         }
       }
       return encodedProps;
@@ -102,15 +125,12 @@ export function createRemoteComponent<T extends ComponentConfig>(
     ErrorComponent,
   }: RemoteComponentProps<T>) => {
     if (!(name in encoders)) {
-      throw "Unknown component " + name;
+      throw `Unknown component <${name} />`;
     }
     const encoded = React.useMemo(() => {
       return encoders[name](props);
     }, [name, props]);
 
-    if (!encoded) {
-      throw "Unknown component named " + name;
-    }
     const encodedProps = encoded.props;
     const localProps = encoded.localProps;
 

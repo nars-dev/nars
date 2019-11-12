@@ -2,15 +2,24 @@ export interface InputPropType<T> {
   decode: (obj: unknown) => T | undefined;
   encode: (obj: T) => unknown | undefined;
   optional?: boolean;
-};
+}
 
-export interface LocalPropKey<Component, Key> {
+export type LocalPropRequired = "optional" | "required";
+
+export interface LocalPropKey<
+  Component,
+  Key,
+  IsRequired extends LocalPropRequired
+> {
   component: Component;
   key: Key;
   local: true;
+  isRequired: IsRequired;
 }
 
-export type PropType = LocalPropKey<any, any> | InputPropType<any>;
+export type PropType =
+  | LocalPropKey<any, any, LocalPropRequired>
+  | InputPropType<any>;
 
 export type PropTypes = {
   [K: string]: PropType;
@@ -37,9 +46,10 @@ export const InputProp = {
   }),
 };
 
-export function localProp<A extends string, B extends string>(
-  a: A,
-  b: B
-): LocalPropKey<A, B> {
-  return { component: a, key: b, local: true };
+export function localProp<
+  IsRequired extends LocalPropRequired,
+  A extends string,
+  B extends string
+>(isRequired: IsRequired, a: A, b: B): LocalPropKey<A, B, IsRequired> {
+  return { component: a, key: b, local: true, isRequired };
 }
