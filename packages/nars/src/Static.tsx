@@ -1,28 +1,31 @@
 import * as React from "react";
-import { ComponentConfig, ExtractInputPropTypes } from "nars-common";
+import {
+  ComponentConfig,
+  ExtractInputPropType,
+  LocalPropKey,
+  PropType,
+} from "nars-common";
 import { startListening, server as Server } from "./NarsServer.gen";
 import { t as LocalProp } from "./LocalProp.gen";
 import { Dict_t, Json_t } from "./shims/Js.shim";
 
-export type MapLocalProps<T> = { [K in keyof T]: LocalProp };
+export type ExtractPropTypes<T> = {
+  [K in keyof T]: K extends string
+    ? T[K] extends LocalPropKey<any, any>
+      ? LocalProp
+      : ExtractInputPropType<T[K]>
+    : never;
+};
 
 export type ComponentDefinitions<T extends ComponentConfig> = {
-  readonly [P in keyof T]: React.ComponentType<{
-    props: ExtractInputPropTypes<T[P]["props"]>;
-    localProps: MapLocalProps<T[P]["localProps"]>;
-  }>;
+  readonly [P in keyof T]: React.ComponentType<ExtractPropTypes<T[P]>>;
 };
 
 type Decoder<T extends ComponentConfig> = {
   readonly [P in keyof T]: (
     props: Dict_t<Json_t> | undefined,
     localPropKeys: string[]
-  ) =>
-    | {
-        props: ExtractInputPropTypes<T[P]["props"]>;
-        localProps: MapLocalProps<T[P]["localProps"]>;
-      }
-    | undefined;
+  ) => ExtractPropTypes<T[P]>;
 };
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -33,45 +36,35 @@ function createDecoders<T extends ComponentConfig>(config: T): Decoder<T> {
     const definition: T[Extract<keyof T, string>] = config[config_component];
     const component: keyof Writeable<Decoder<T>> = config_component;
     res[component] = (
-      propsIn: Dict_t<Json_t> | undefined,
+      propsIn: Dict_t<Json_t> | undefined = {},
       localPropKeys: string[]
     ) => {
-      type LocalProps = MapLocalProps<T[keyof T]["localProps"]>;
-      type Props = ExtractInputPropTypes<T[keyof T]["props"]>;
-      type ParsedProps = { props: Props; localProps: LocalProps };
-      let parsedProps: Props = {} as Props;
-      if (propsIn) {
-        for (const propKey in propsIn) {
+      type Props = ExtractPropTypes<T[keyof T]>;
+      const parsedProps = {} as Props;
+      if (propsIn || localPropKeys.length > 0) {
+        for (const propKey in definition) {
           const prop = propsIn[propKey];
-          const decoder = definition.props[propKey];
-          if (decoder) {
-            parsedProps[propKey as keyof Props] = decoder.decode(prop);
+          const decoder: PropType = definition[propKey];
+          if (!("local" in decoder)) {
+            if (prop) {
+              parsedProps[propKey as keyof Props] = decoder.decode(prop);
+            } else if (!decoder.optional) {
+              throw `Required prop: ${propKey} has not been passed in`;
+            }
           } else {
-            console.warn("Unknown prop: " + propKey + " passed in");
+            const index = localPropKeys.indexOf(propKey);
+            if (index === -1) {
+              throw "Local Prop is not found";
+            } else {
+              parsedProps[propKey as keyof Props] = {
+                key: propKey,
+              } as Props[keyof Props];
+            }
           }
         }
-        return {
-          props: parsedProps,
-          localProps: localPropKeys.reduce(
-            (acc, key) => ({
-              ...acc,
-              [key]: { key: key },
-            }),
-            {} as LocalProps
-          ),
-        } as ParsedProps;
+        return parsedProps;
       } else {
-        let allPropsOptional = true;
-        for (const def in definition.props) {
-          if (!definition.props[def].optional) {
-            allPropsOptional = false;
-          }
-        }
-        if (allPropsOptional) {
-          return { props: {}, localProps: {} } as ParsedProps;
-        } else {
-          throw "Missing required props";
-        }
+        throw "TODO: Handle";
       }
     };
   }
@@ -84,21 +77,21 @@ type Router<N> = (
   localProps: string[]
 ) => React.ReactElement | undefined;
 
-export function createRouter<
-  T extends ComponentConfig,
-  MaybeKey extends keyof T
->(config: T, definitions: ComponentDefinitions<T>): Router<MaybeKey> {
+export function createRouter<T extends ComponentConfig>(
+  config: T,
+  definitions: ComponentDefinitions<T>
+): Router<keyof T & string> {
   const parsers = createDecoders(config);
-  return (
-    name: MaybeKey | string,
+  return function<K extends keyof T>(
+    name: K,
     props: Dict_t<Json_t> | undefined,
     localProps: string[]
-  ) => {
+  ): React.ReactElement | undefined {
     if (name in definitions && name in parsers) {
-      const Component = definitions[name];
+      const Component: ComponentDefinitions<T>[K] = definitions[name];
       const parsedProps = parsers[name](props, localProps);
       if (parsedProps) {
-        return React.createElement(Component, parsedProps);
+        return React.createElement(Component as React.ComponentType<any>, parsedProps);
       }
     }
     return undefined;

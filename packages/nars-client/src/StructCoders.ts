@@ -5,33 +5,33 @@ export const toValue = (value: unknown): Schema.protobuf.IValue => {
     case "object":
       if (value === null) {
         return {
-          nullValue: 0
+          nullValue: 0,
         };
       } else if (Array.isArray(value)) {
         return {
           listValue: {
-            values: value.map(toValue)
-          }
+            values: value.map(toValue),
+          },
         };
       } else {
         return {
-          structValue: toStruct(value)
+          structValue: toStruct(value),
         };
       }
     case "number":
       return {
-        numberValue: value
+        numberValue: value,
       };
     case "string":
       return {
-        stringValue: value
+        stringValue: value,
       };
     case "boolean":
       return {
-        boolValue: value
+        boolValue: value,
       };
     default:
-      return {};
+      return { nullValue: 0 };
   }
 };
 
@@ -40,10 +40,12 @@ type Fields = NonNullable<Schema.protobuf.IStruct["fields"]>;
 export const toStruct = (value: object): Schema.protobuf.IStruct => {
   const fields = {} as Fields;
   Object.entries(value).forEach(([key, value]) => {
-    fields[key] = toValue(value);
+    if (typeof value !== "undefined") {
+      fields[key] = toValue(value);
+    }
   });
   return {
-    fields: fields
+    fields: fields,
   };
 };
 

@@ -14,37 +14,36 @@ function createDecoders(config) {
     for (const config_component in config) {
         const definition = config[config_component];
         const component = config_component;
-        res[component] = (propsIn, localPropKeys) => {
-            let parsedProps = {};
-            if (propsIn) {
-                for (const propKey in propsIn) {
+        res[component] = (propsIn = {}, localPropKeys) => {
+            const parsedProps = {};
+            if (propsIn || localPropKeys.length > 0) {
+                for (const propKey in definition) {
                     const prop = propsIn[propKey];
-                    const decoder = definition.props[propKey];
-                    if (decoder) {
-                        parsedProps[propKey] = decoder.decode(prop);
+                    const decoder = definition[propKey];
+                    if (!("local" in decoder)) {
+                        if (prop) {
+                            parsedProps[propKey] = decoder.decode(prop);
+                        }
+                        else if (!decoder.optional) {
+                            throw `Required prop: ${propKey} has not been passed in`;
+                        }
                     }
                     else {
-                        console.warn("Unknown prop: " + propKey + " passed in");
+                        const index = localPropKeys.indexOf(propKey);
+                        if (index === -1) {
+                            throw "Local Prop is not found";
+                        }
+                        else {
+                            parsedProps[propKey] = {
+                                key: propKey,
+                            };
+                        }
                     }
                 }
-                return {
-                    props: parsedProps,
-                    localProps: localPropKeys.reduce((acc, key) => (Object.assign({}, acc, { [key]: { key: key } })), {}),
-                };
+                return parsedProps;
             }
             else {
-                let allPropsOptional = true;
-                for (const def in definition.props) {
-                    if (!definition.props[def].optional) {
-                        allPropsOptional = false;
-                    }
-                }
-                if (allPropsOptional) {
-                    return { props: {}, localProps: {} };
-                }
-                else {
-                    throw "Missing required props";
-                }
+                throw " CHUJ ";
             }
         };
     }
@@ -52,7 +51,7 @@ function createDecoders(config) {
 }
 function createRouter(config, definitions) {
     const parsers = createDecoders(config);
-    return (name, props, localProps) => {
+    return function (name, props, localProps) {
         if (name in definitions && name in parsers) {
             const Component = definitions[name];
             const parsedProps = parsers[name](props, localProps);

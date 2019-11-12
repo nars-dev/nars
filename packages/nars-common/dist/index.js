@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+;
 exports.InputProp = {
     string: {
         decode: (obj) => String(obj),
@@ -12,6 +13,6 @@ exports.InputProp = {
     }),
 };
 function localProp(a, b) {
-    return { component: a, key: b };
+    return { component: a, key: b, local: true };
 }
 exports.localProp = localProp;

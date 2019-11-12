@@ -5,44 +5,46 @@ exports.toValue = (value) => {
         case "object":
             if (value === null) {
                 return {
-                    nullValue: 0
+                    nullValue: 0,
                 };
             }
             else if (Array.isArray(value)) {
                 return {
                     listValue: {
-                        values: value.map(exports.toValue)
-                    }
+                        values: value.map(exports.toValue),
+                    },
                 };
             }
             else {
                 return {
-                    structValue: exports.toStruct(value)
+                    structValue: exports.toStruct(value),
                 };
             }
         case "number":
             return {
-                numberValue: value
+                numberValue: value,
             };
         case "string":
             return {
-                stringValue: value
+                stringValue: value,
             };
         case "boolean":
             return {
-                boolValue: value
+                boolValue: value,
             };
         default:
-            return {};
+            return { nullValue: 0 };
     }
 };
 exports.toStruct = (value) => {
     const fields = {};
     Object.entries(value).forEach(([key, value]) => {
-        fields[key] = exports.toValue(value);
+        if (typeof value !== "undefined") {
+            fields[key] = exports.toValue(value);
+        }
     });
     return {
-        fields: fields
+        fields: fields,
     };
 };
 exports.ofValue = (value) => {

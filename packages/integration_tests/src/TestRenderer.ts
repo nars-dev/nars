@@ -1,6 +1,11 @@
 import * as Client from "nars-client";
 import WebSocket from "ws";
-import { create, act, ReactTestRenderer } from "react-test-renderer";
+import {
+  create,
+  act,
+  ReactTestRenderer,
+  ReactTestInstance,
+} from "react-test-renderer";
 import { Static, Server, ComponentConfig } from "nars";
 
 interface MessageEvent {
@@ -75,4 +80,8 @@ export const render = (
     });
     resolve(component);
   });
+};
+
+export const getChildren = (rendered: ReactTestRenderer) => {
+  return (rendered.root.children[0] as ReactTestInstance).children;
 };

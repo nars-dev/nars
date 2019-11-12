@@ -17,7 +17,7 @@
     "bs-platform": "6.2.1",
     "nars-common": "0.0.0",
     "node-machine-id": "^1.1.12",
-    "ocaml-protoc-plugin-runtime-bs": "issuu/ocaml-protoc-plugin#v2.0.0",
+    "ocaml-protoc-plugin-runtime-bs": "git://github.com/issuu/ocaml-protoc-plugin#1252fb0ab444e6b7d75a4a02f1756704eb0114e8",
     "reason-react-reconciler": "~0.21.0000",
     "uuid": "^3.3.3"
   },

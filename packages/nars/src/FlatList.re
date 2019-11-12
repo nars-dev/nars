@@ -13,7 +13,7 @@ type props = {
 
 external toProps: Js.t('a) => props = "%identity";
 external localPropsToDict:
-  option(Js.t('a)) => option(Js.Dict.t(LocalProp.t)) =
+  option(Js.t('a)) => option(Js.Dict.t(option(LocalProp.t))) =
   "%identity";
 
 module FL = Schema.FlatList;

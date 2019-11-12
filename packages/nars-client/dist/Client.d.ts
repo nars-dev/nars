@@ -1,19 +1,21 @@
 import * as React from "react";
-import { ComponentConfig, ExtractInputPropTypes, LocalProp } from "nars-common";
+import { ComponentConfig, ExtractInputPropType, LocalPropKey, PropTypes } from "nars-common";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
-export declare type ExtractLocalPropTypes<T> = {
-    [K in keyof T]: T[K] extends LocalProp<infer Component, infer Key> ? Component extends keyof LocalPropTypes ? Key extends keyof LocalPropTypes[Component] ? LocalPropTypes[Component][Key] : never : never : never;
-};
-export declare type RawPropTypes<T extends ComponentConfig, P extends keyof T> = {
-    props: ExtractInputPropTypes<T[P]["props"]>;
-    localProps: ExtractLocalPropTypes<T[P]["localProps"]>;
+declare type ExtractLocalProp<Component, Key> = Component extends keyof LocalPropTypes ? Key extends keyof LocalPropTypes[Component] ? LocalPropTypes[Component][Key] : never : never;
+export declare type ExtractLocalPropKeys<T extends PropTypes> = {
+    [K in keyof T]: T[K] extends LocalPropKey<infer Component, infer Key> ? ExtractLocalProp<Component, Key> : never;
+}[keyof T];
+export declare type ExtractLocalPropTypes<T extends PropTypes> = Pick<T, ExtractLocalPropKeys<T>>;
+export declare type ExtractPropTypes<T extends PropTypes> = {
+    [K in keyof T]: K extends string ? T[K] extends LocalPropKey<infer Component, infer Key> ? ExtractLocalProp<Component, Key> : ExtractInputPropType<T[K]> : never;
 };
 export interface RemoteComponentProps<T extends ComponentConfig, P extends keyof T = keyof T> {
     name: P extends string ? P : never;
-    props: RawPropTypes<T, P>;
+    props: ExtractPropTypes<T[P extends string ? string & P : never]>;
     LoadingComponent?: React.ComponentType;
     ErrorComponent?: React.ComponentType;
 }
 export declare type Client<T extends ComponentConfig> = React.ComponentType<RemoteComponentProps<T, keyof T>>;
-export declare function createRemoteComponent<T extends ComponentConfig>(webSocket: WebSocket | string, config: T): React.ComponentType<RemoteComponentProps<T, keyof T>>;
+export declare function createRemoteComponent<T extends ComponentConfig>(webSocket: WebSocket | string, config: T): ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>) => JSX.Element;
+export {};
 //# sourceMappingURL=Client.d.ts.map

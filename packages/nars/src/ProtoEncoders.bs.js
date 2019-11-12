@@ -5,6 +5,7 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var Js_option = require("bs-platform/lib/js/js_option.js");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var JsonToStruct = require("./JsonToStruct.bs.js");
 
@@ -42,9 +43,11 @@ function encodeLocalProp(localKey, propKey) {
 
 function encodeOptionalLocalProps(dict) {
   if (dict !== undefined) {
-    return $$Array.to_list(Js_dict.entries(Caml_option.valFromOption(dict)).map((function (param) {
+    return $$Array.to_list(Js_dict.entries(Caml_option.valFromOption(dict)).filter((function (param) {
+                        return Belt_Option.isSome(param[1]);
+                      })).map((function (param) {
                       return /* record */[
-                              /* localKey */param[1].key,
+                              /* localKey */Belt_Option.getExn(param[1]).key,
                               /* propKey */param[0]
                             ];
                     })));

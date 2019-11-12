@@ -13,20 +13,17 @@ function createEncoders(config) {
     let res = {};
     for (const component in config) {
         const definition = config[component];
-        res[component] = (propsIn) => {
+        res[component] = propsIn => {
             let encodedProps = { props: {}, localProps: {} };
-            for (const propKey in definition.props) {
-                const encoded = definition.props[propKey].encode(propsIn.props[propKey]);
-                if (encoded) {
+            for (const propKey in definition) {
+                const propDefinition = definition[propKey];
+                if (!("local" in propDefinition)) {
+                    const encoded = propDefinition.encode(propsIn[propKey]);
                     encodedProps.props[propKey] = encoded;
                 }
                 else {
-                    throw "Bad prop type in " + component;
-                }
-            }
-            if (definition.localProps) {
-                for (const propKey in definition.localProps) {
-                    encodedProps.localProps[propKey] = propsIn.localProps[propKey];
+                    const localPropKey = propKey;
+                    encodedProps.localProps[localPropKey] = propsIn[propKey];
                 }
             }
             return encodedProps;
@@ -36,7 +33,7 @@ function createEncoders(config) {
 }
 function createRemoteComponent(webSocket, config) {
     const encoders = createEncoders(config);
-    return (({ name, props, LoadingComponent, ErrorComponent, }) => {
+    return ({ name, props, LoadingComponent, ErrorComponent, }) => {
         if (!(name in encoders)) {
             throw "Unknown component " + name;
         }
@@ -49,6 +46,6 @@ function createRemoteComponent(webSocket, config) {
         const encodedProps = encoded.props;
         const localProps = encoded.localProps;
         return (React.createElement(RemoteComponent_1.RemoteComponent, { webSocket: webSocket, name: name, props: encodedProps, localProps: localProps, renderLoading: LoadingComponent ? () => React.createElement(LoadingComponent, null) : undefined, renderError: ErrorComponent ? () => React.createElement(ErrorComponent, null) : undefined }));
-    });
+    };
 }
 exports.createRemoteComponent = createRemoteComponent;

@@ -24,8 +24,9 @@ let encodeOptionalLocalProps = dict => {
   | Some(dict) =>
     dict
     |> Js.Dict.entries
+    |> Js.Array.filter(((_, value)) => Belt.Option.isSome(value))
     |> Js.Array.map(((key, value)) =>
-         encodeLocalProp(~localKey=value##key, ~propKey=key)
+         encodeLocalProp(~localKey=Belt.Option.getExn(value)##key, ~propKey=key)
        )
     |> Array.to_list
   };

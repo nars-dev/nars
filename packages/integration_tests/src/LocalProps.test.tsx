@@ -4,52 +4,37 @@ jest.mock("react-native", () => ({
 }));
 
 import * as React from "react";
-import { ReactTestInstance, ReactTestRenderer } from "react-test-renderer";
+import { ReactTestInstance } from "react-test-renderer";
 import { TouchableOpacity, FlatList, LocalProp } from "nars";
 import { localProp } from "nars-common";
-import { createRemoteComponent, render } from "./TestRenderer";
+import { createRemoteComponent, render, getChildren } from "./TestRenderer";
 
-export const config = {
+const config = {
   TouchableOpacityTest: {
-    props: { },
-    localProps: {
-      submit: localProp("TouchableOpacity", "onPress"),
-    },
+    submit: localProp("TouchableOpacity", "onPress"),
   },
   FlatListTest: {
-    props: {},
-    localProps: {
-      reload: localProp("FlatList", "onEndReached"),
-    },
+    reload: localProp("FlatList", "onEndReached"),
   },
 };
 
 const components = {
-  TouchableOpacityTest: (props: {
-    props: { };
-    localProps: { submit: LocalProp };
-  }) => {
-    return (
-      <TouchableOpacity localProps={{ onPress: props.localProps.submit }} />
-    );
+  TouchableOpacityTest: (props: { submit: LocalProp }) => {
+    return <TouchableOpacity localProps={{ onPress: props.submit }} />;
   },
-  FlatListTest: (props: { props: {}; localProps: { reload: LocalProp } }) => {
+  FlatListTest: (props: { reload: LocalProp }) => {
     return (
       <FlatList
         data={[]}
         keyExtractor={k => String(k)}
-        renderItem={() => <TouchableOpacity />}
-        localProps={{ onEndReached: props.localProps.reload }}
+        renderItem={() => null}
+        localProps={{ onEndReached: props.reload }}
       />
     );
   },
 };
 
 const RemoteComponent = createRemoteComponent(config, components);
-
-const getChildren = (rendered: ReactTestRenderer) => {
-  return (rendered.root.children[0] as ReactTestInstance).children;
-};
 
 describe("Components", () => {
   it("TouhcableOpacity has onPress set to submit", async () => {
@@ -58,8 +43,7 @@ describe("Components", () => {
       <RemoteComponent
         name="TouchableOpacityTest"
         props={{
-          props: { backgroundColor: "aa" },
-          localProps: { submit },
+          submit,
         }}
       />
     );
@@ -74,8 +58,7 @@ describe("Components", () => {
       <RemoteComponent
         name="FlatListTest"
         props={{
-          props: {},
-          localProps: { reload },
+          reload,
         }}
       />
     );
