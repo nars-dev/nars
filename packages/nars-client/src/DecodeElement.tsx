@@ -34,21 +34,6 @@ const isCallbackValid = (callback: unknown): callback is Schema.Callback => {
   );
 };
 
-const getChildren = (
-  rpcCall: (
-    callId: number,
-    args?: Schema.google_mirror.protobuf.IStruct
-  ) => void,
-  getLocalProp: (key: string) => unknown,
-  element: { children?: Schema.IReactElement[] | null }
-) => {
-  return element.children
-    ? element.children.map(elem =>
-        ofEncodedReactElement(rpcCall, getLocalProp, elem)
-      )
-    : [];
-};
-
 /**
  * TODO: Reduce boilerplate
  */
@@ -60,6 +45,11 @@ export const ofEncodedReactElement = (
   getLocalProp: (key: string) => unknown,
   element: Schema.IReactElement
 ): React.ReactChild | null => {
+  const getChildren = (elem: { children?: Schema.IReactElement[] | null }) => {
+    return elem.children
+      ? elem.children.map(e => ofEncodedReactElement(rpcCall, getLocalProp, e))
+      : [];
+  };
   if (element.custom) {
     return null;
   } else if (element.view) {
@@ -67,7 +57,7 @@ export const ofEncodedReactElement = (
     if (element.view.style) {
       props.style = ofStruct(element.view.style);
     }
-    const children = getChildren(rpcCall, getLocalProp, element.view);
+    const children = getChildren(element.view);
     props.children = children;
     return React.createElement(View, props, ...children);
   } else if (element.text) {
@@ -75,7 +65,7 @@ export const ofEncodedReactElement = (
     if (element.text.style) {
       props.style = ofStruct(element.text.style);
     }
-    const children = getChildren(rpcCall, getLocalProp, element.text);
+    const children = getChildren(element.text);
     props.children = children;
     return React.createElement(Text, props, ...children);
   } else if (element.rawText) {
@@ -111,7 +101,7 @@ export const ofEncodedReactElement = (
   } else if (element.touchableOpacity) {
     const to = element.touchableOpacity;
     const props = {} as Writable<TouchableOpacity["props"]>;
-    const children = getChildren(rpcCall, getLocalProp, to);
+    const children = getChildren(to);
     if (to.localProps) {
       assignLocalProps(props, to.localProps, getLocalProp);
     }
