@@ -7,7 +7,8 @@ import {
 } from "nars-common";
 import { startListening, server as Server } from "./NarsServer.gen";
 import { t as LocalProp } from "./LocalProp.gen";
-import { Dict_t, Json_t } from "./shims/Js.shim";
+import { Dict_t } from "./shims/Js.shim";
+import { t as JsValue_t } from "./JsValue.gen";
 
 export type ExtractPropTypes<T> = {
   [K in keyof T]: K extends string
@@ -23,7 +24,7 @@ export type ComponentDefinitions<T extends ComponentConfig> = {
 
 type Decoder<T extends ComponentConfig> = {
   readonly [P in keyof T]: (
-    props: Dict_t<Json_t> | undefined,
+    props: Dict_t<JsValue_t> | undefined,
     localPropKeys: string[]
   ) => ExtractPropTypes<T[P]>;
 };
@@ -36,7 +37,7 @@ function createDecoders<T extends ComponentConfig>(config: T): Decoder<T> {
     const definition: T[Extract<keyof T, string>] = config[config_component];
     const component: keyof Writeable<Decoder<T>> = config_component;
     res[component] = (
-      propsIn: Dict_t<Json_t> | undefined = {},
+      propsIn: Dict_t<JsValue_t> | undefined = {},
       localPropKeys: string[]
     ) => {
       type Props = ExtractPropTypes<T[keyof T]>;
@@ -69,7 +70,7 @@ function createDecoders<T extends ComponentConfig>(config: T): Decoder<T> {
 
 type Router<N> = (
   name: N | string,
-  props: Dict_t<Json_t>,
+  props: Dict_t<JsValue_t>,
   localProps: string[]
 ) => React.ReactElement | undefined;
 
@@ -80,7 +81,7 @@ export function createRouter<T extends ComponentConfig>(
   const parsers = createDecoders(config);
   return function<K extends keyof T>(
     name: K,
-    props: Dict_t<Json_t> | undefined,
+    props: Dict_t<JsValue_t> | undefined,
     localProps: string[]
   ): React.ReactElement | undefined {
     if (name in definitions && name in parsers) {
