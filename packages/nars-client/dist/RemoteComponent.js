@@ -6,14 +6,39 @@ var __importStar = (this && this.__importStar) || function (mod) {
     result["default"] = mod;
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
-const nars_common_1 = require("nars-common");
+const Schema_1 = __importDefault(require("./Schema"));
+const StructCoders_1 = require("./StructCoders");
 const DecodeElement_1 = require("./DecodeElement");
+class InstanceCounter {
+    constructor() {
+        this.freed = [];
+        this.current = 1;
+    }
+    next() {
+        const value = this.freed.pop();
+        if (value) {
+            return value;
+        }
+        else {
+            const id = this.current;
+            this.current += 1;
+            return id;
+        }
+    }
+    free(id) {
+        this.freed.push(id);
+    }
+}
+const instanceCounter = new InstanceCounter();
 exports.useNars = (wsOrAddress, name, props, localPropsOptional) => {
     const [renderedElement, setRenderedElement] = React.useState("Loading");
     const localProps = localPropsOptional ? localPropsOptional : {};
-    const [instanceId] = React.useState(() => new Date().getUTCMilliseconds());
+    const [instanceId] = React.useState(() => instanceCounter.next());
     const ws = React.useRef(null);
     const websocket = () => {
         if (ws.current) {
@@ -30,27 +55,11 @@ exports.useNars = (wsOrAddress, name, props, localPropsOptional) => {
     };
     React.useEffect(() => {
         const ws = websocket();
-        const renderMessage = nars_common_1.Schema.ClientToServer.encode(nars_common_1.Schema.ClientToServer.create({
-            render: {
-                name,
-                props: nars_common_1.toStruct(props),
-                localProps: Object.keys(localProps)
-            },
-            rootId: instanceId
-        })).finish();
-        if (ws.readyState === WebSocket.OPEN) {
-            ws.send(renderMessage);
-        }
-        else {
-            ws.onopen = () => {
-                ws.send(renderMessage);
-                ws.onopen = null;
-            };
-        }
-    }, [name, props, localProps]);
-    React.useEffect(() => {
-        websocket().onmessage = bytes => {
-            const message = nars_common_1.Schema.ServerToClient.decode(new Uint8Array(bytes.data));
+        ws.addEventListener("message", event => {
+            if (typeof event.data !== "string") {
+                throw "Bad binary format";
+            }
+            const message = Schema_1.default.ServerToClient.decode(Uint8Array.from(event.data, x => x.charCodeAt(0)));
             if (message.rootId === instanceId) {
                 if (message.error) {
                     setRenderedElement(currentValue => {
@@ -66,27 +75,49 @@ exports.useNars = (wsOrAddress, name, props, localPropsOptional) => {
                     setRenderedElement({
                         type: "Rendered",
                         element: message.update.element.map(elem => DecodeElement_1.ofEncodedReactElement((messageId, args) => {
-                            websocket().send(nars_common_1.Schema.ClientToServer.encode(nars_common_1.Schema.ClientToServer.create({
+                            ws.send(Schema_1.default.ClientToServer.encode(Schema_1.default.ClientToServer.create({
                                 call: {
                                     messageId,
-                                    args
+                                    args,
                                 },
-                                rootId: instanceId
+                                rootId: instanceId,
                             })).finish());
                         }, key => {
                             return localProps[key];
-                        }, elem))
+                        }, elem)),
                     });
                 }
             }
-        };
+        });
         return () => {
-            websocket().send(nars_common_1.Schema.ClientToServer.encode(nars_common_1.Schema.ClientToServer.create({
+            instanceCounter.free(instanceId);
+            ws.send(Schema_1.default.ClientToServer.encode(Schema_1.default.ClientToServer.create({
                 unmount: {},
-                rootId: instanceId
+                rootId: instanceId,
             })).finish());
         };
     }, []);
+    React.useEffect(() => {
+        const ws = websocket();
+        const renderMessage = Schema_1.default.ClientToServer.encode(Schema_1.default.ClientToServer.create({
+            render: {
+                name,
+                props: StructCoders_1.toStruct(props),
+                localProps: Object.keys(localProps),
+            },
+            rootId: instanceId,
+        })).finish();
+        if (ws.readyState === WebSocket.OPEN) {
+            ws.send(renderMessage);
+        }
+        else {
+            const handler = () => {
+                ws.send(renderMessage);
+                ws.removeEventListener("open", handler);
+            };
+            ws.addEventListener("open", handler);
+        }
+    }, [name, props, localProps]);
     return renderedElement;
 };
 exports.RemoteComponent = (props) => {
@@ -96,7 +127,7 @@ exports.RemoteComponent = (props) => {
     }
     else if (typeof renderedElement === "object" &&
         renderedElement.type === "Rendered") {
-        return React.createElement(React.Fragment, null, renderedElement.element);
+        return React.createElement(React.Fragment, {}, ...renderedElement.element);
     }
     else if (props.renderLoading) {
         return props.renderLoading();

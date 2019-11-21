@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "nars-common": "0.0.0",
-    "protobufjs": "^6.8.8"
+    "protobufjs": "protobufjs/protobuf.js#4d490eb"
   },
   "devDependencies": {
     "@types/react": "^16.9.2",

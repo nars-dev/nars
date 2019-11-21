@@ -1,9 +1,10 @@
-import { ViewStyle, StyleProp } from "./StyleSheet";
 import * as React from "react";
-export interface Props {
+import { ViewStyle, StyleProp } from "./StyleSheet";
+import { props } from "./View.gen";
+export interface Props extends props {
     style?: StyleProp<ViewStyle>;
     children?: React.ReactNode;
 }
-declare const _default: (props: Props) => React.ReactElement<Props, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>;
+declare const _default: React.ComponentType<Props>;
 export default _default;
 //# sourceMappingURL=View.d.ts.map

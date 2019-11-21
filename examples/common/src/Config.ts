@@ -5,14 +5,9 @@ import { InputProp } from "nars-common";
  */
 export const config = {
   Form: {
-    props: {
-      backgroundColor: InputProp.string,
-      textColor: InputProp.string,
-    },
+    isCompany: InputProp.optional(InputProp.boolean)
   },
   Feed: {
-    props: {
-      name: InputProp.string,
-    },
+    backgroundColor: InputProp.string
   },
 };

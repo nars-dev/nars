@@ -3,15 +3,15 @@
 /* eslint-disable import/first */
 Object.defineProperty(exports, "__esModule", { value: true });
 // tslint:disable-next-line:no-var-requires
-const Curry = require('bs-platform/lib/es6/curry.js');
+const Curry = require('bs-platform/lib/js/curry.js');
 // tslint:disable-next-line:no-var-requires
 const NarsServerBS = require('./NarsServer.bs');
+// tslint:disable-next-line:max-classes-per-file 
+class Socket_data {
+}
+exports.Socket_data = Socket_data;
+; /* simulate opaque types */
 exports.startListening = function (Arg1, Arg2) {
-    const result = Curry._2(
-    /* WARNING: circular type Ws_Server_t. Only shallow converter applied. */
-    NarsServerBS.startListening, Arg1, function (ArgcomponentDescription) {
-        const result1 = Arg2.render({ componentDescription: ArgcomponentDescription });
-        return result1;
-    });
+    const result = Curry._2(NarsServerBS.startListening, Arg1, Arg2);
     return result;
 };

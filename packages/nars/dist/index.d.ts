@@ -8,7 +8,8 @@ export { default as TextInput } from "./TextInput";
 export { default as Switch } from "./Switch";
 export { default as TouchableOpacity } from "./TouchableOpacity";
 import * as Static from "./Static";
-import * as Server from "./NarsServer";
+import * as Server from "./NarsServer.gen";
 export { Static, Server };
+export { t as LocalProp } from "./LocalProp.gen";
 export * from "nars-common";
 //# sourceMappingURL=index.d.ts.map

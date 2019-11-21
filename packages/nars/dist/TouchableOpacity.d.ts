@@ -1,10 +1,13 @@
 import * as React from "react";
-import { LocalProps } from "nars-common";
-export interface Props {
+import { t as LocalProp } from "./LocalProp.gen";
+import { props } from "./TouchableOpacity.gen";
+export interface Props extends props {
     onPress?: () => void;
-    localProps?: LocalProps<"onPress">;
+    localProps?: {
+        onPress?: LocalProp;
+    };
     children?: React.ReactNode;
 }
-declare const _default: (props: Props) => React.ReactElement<Props, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>;
+declare const _default: React.ComponentType<Props>;
 export default _default;
 //# sourceMappingURL=TouchableOpacity.d.ts.map

@@ -13,12 +13,11 @@
     "in-source": true
   },
   "suffix": ".bs.js",
-  "bs-dependencies": ["reason-react-reconciler"],
+  "bs-dependencies": ["reason-react-reconciler", "ocaml-protoc-plugin-runtime-bs"],
   "warnings": {
     "error" : "+101"
   },
   "gentypeconfig": {
-    "path": "./gentype.ppx",
     "module": "commonjs",
     "language": "typescript",
     "shims": {

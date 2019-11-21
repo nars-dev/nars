@@ -1,47 +1,13 @@
-import { TextStyle, StyleProp, ColorValue } from "./StyleSheet";
 import * as React from "react";
-import * as ComponentRegistry from "./ComponentRegistry.gen";
-import { Schema } from "nars-common";
-import { encodeTextStyleInProps } from "./StyleEncoding";
-import { encodeArityZeroCallback } from "./ProtoEncoders";
+import { TextStyle, StyleProp, ColorValue } from "./StyleSheet";
+import { name, props } from "./TextInput.gen";
 
-export interface Props {
+export interface Props extends props {
   style?: StyleProp<TextStyle>;
-  placeholderTextColor: ColorValue;
-  placeholder: string;
-  value: string | undefined;
+  placeholderTextColor?: ColorValue;
+  placeholder?: string;
+  value: string;
   onValueChange?: (newValue: string) => void;
 }
 
-const name = "Nars_TextInput";
-
-export default (props: Props): React.ReactElement<Props> =>
-  React.createElement(name, props);
-
-ComponentRegistry.add({
-  name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({
-    registerCallback
-  }) => {
-    return Schema.ReactElement.create({
-      textInput: {
-        style: encodeTextStyleInProps(props),
-        onValueChange: encodeArityZeroCallback(
-          registerCallback,
-          props.onValueChange
-        ),
-        value: props.value ? String(props.value) : "",
-        placeholder: props.placeholder
-          ? {
-              value: String(props.placeholder)
-            }
-          : undefined,
-        placeholderTextColor: props.placeholderTextColor
-          ? {
-              value: String(props.placeholderTextColor)
-            }
-          : undefined
-      }
-    });
-  }
-});
+export default (name as unknown) as React.ComponentType<Props>;

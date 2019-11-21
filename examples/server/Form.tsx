@@ -7,12 +7,12 @@ import {
   View,
   Switch,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
 } from "nars";
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20
+    paddingHorizontal: 20,
   },
   textInput: {
     paddingHorizontal: 15,
@@ -21,12 +21,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: "Fira Code",
     color: offWhite,
-    backgroundColor: "#369DA5"
+    backgroundColor: "#369DA5",
   },
   isCompany: {
     fontSize: 16,
     fontFamily: "Fira Code",
-    color: offWhite
+    color: offWhite,
   },
   submitText: {
     borderRadius: 3,
@@ -36,23 +36,23 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 15,
     paddingHorizontal: 28,
-    backgroundColor: yellow
+    backgroundColor: yellow,
   },
   elementContainer: {
-    paddingTop: 20
+    paddingTop: 20,
   },
   companySwitchContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center"
+    alignItems: "center",
   },
-  centeredContents: { alignItems: "center" }
+  centeredContents: { alignItems: "center" },
 });
 
 enum FieldType {
   Bool,
   String,
-  Submit
+  Submit,
 }
 
 type Field = { key: string } & (
@@ -63,14 +63,14 @@ type Field = { key: string } & (
 const toField = (field: string): Field => ({
   key: field,
   fieldType: FieldType.String,
-  name: field
+  name: field,
 });
 
 const computeFields = (isCompany: boolean) => ({
   general: ["name", "surname", "email", "role"].map(toField),
   userSpecific: isCompany
     ? ["Tax#", "Number of employees"].map(toField)
-    : ["ID number", "birthdate"].map(toField)
+    : ["ID number", "birthdate"].map(toField),
 });
 
 const renderItem = ({ item }: { item: Field }) => {
@@ -82,7 +82,7 @@ const renderItem = ({ item }: { item: Field }) => {
             placeholderTextColor={"#7AC7CC"}
             style={styles.textInput}
             placeholder={item.name}
-            value={undefined}
+            value={""}
           />
         </View>
       );
@@ -108,12 +108,11 @@ const renderItem = ({ item }: { item: Field }) => {
   }
 };
 
-function Form(props: { backgroundColor: string; textColor: string }) {
-  const [isCompany, setIsCompany] = React.useState(false);
+function Form(props: { isCompany?: boolean }) {
+  const [isCompany, setIsCompany] = React.useState(Boolean(props.isCompany));
   const fields = computeFields(isCompany);
   return (
     <FlatList
-      style={{backgroundColor: props.backgroundColor}}
       data={
         [
           ...fields.general,
@@ -121,10 +120,10 @@ function Form(props: { backgroundColor: string; textColor: string }) {
             fieldType: FieldType.Bool,
             onSet: setIsCompany,
             value: isCompany,
-            key: "Is Company"
+            key: "Is Company",
           },
           ...fields.userSpecific,
-          { fieldType: FieldType.Submit, key: "Submit" }
+          { fieldType: FieldType.Submit, key: "Submit" },
         ] as Field[]
       }
       keyExtractor={({ item: { key } }) => key}

@@ -2,18 +2,6 @@
 /* eslint-disable import/first */
 
 
-import {ArgsMap as args} from './TsTypes';
-
-import {EncodedReactElement as encodedReactElement} from './TsTypes';
-
-// tslint:disable-next-line:interface-over-type-literal
-export type args = args;
-
-// tslint:disable-next-line:interface-over-type-literal
-export type encodedReactElement = encodedReactElement;
-
-// tslint:disable-next-line:interface-over-type-literal
-export type messageId = number;
-
-// tslint:disable-next-line:interface-over-type-literal
-export type encoder = (_1:{ readonly registerCallback: ((_1:((_1:args) => void)) => messageId); readonly children: encodedReactElement[] }) => encodedReactElement;
+// tslint:disable-next-line:max-classes-per-file 
+// tslint:disable-next-line:class-name
+export abstract class encoded { protected opaque!: any }; /* simulate opaque types */

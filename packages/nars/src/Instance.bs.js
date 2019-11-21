@@ -6,13 +6,23 @@ var Curry = require("bs-platform/lib/js/curry.js");
 function encode(instance, registerCallback) {
   if (instance.tag) {
     var inst = instance[0];
-    return Curry._2(inst[/* encode */0], registerCallback, inst[/* children */1].map((function (param) {
-                      return encode(param, registerCallback);
-                    })));
+    var children = inst.children.map((function (param) {
+            return encode(param, registerCallback);
+          }));
+    return Curry._4(inst.encode, inst.key, inst.props, registerCallback, children);
   } else {
-    return Curry._1(instance[0], /* () */0);
+    return {
+            key: undefined,
+            value: /* `RawText */[
+              -687863147,
+              instance[0]
+            ]
+          };
   }
 }
 
+var Struct = 0;
+
+exports.Struct = Struct;
 exports.encode = encode;
 /* No side effect */

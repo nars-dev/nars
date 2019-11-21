@@ -1,6 +1,6 @@
 import { ViewStyle, StyleProp } from "./StyleSheet";
 import * as React from "react";
-import { LocalProps } from "nars-common";
+import { t as LocalProp } from "./LocalProp.gen";
 export interface Props<T> {
     style?: StyleProp<ViewStyle>;
     onEndReached?: () => void;
@@ -14,7 +14,9 @@ export interface Props<T> {
         item: T;
         index: number;
     }) => React.ReactElement | null;
-    localProps?: LocalProps<"onEndReached">;
+    localProps?: {
+        onEndReached?: LocalProp;
+    };
 }
 declare const _default: <T>(props: Props<T>) => React.ReactElement<unknown, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)>;
 export default _default;

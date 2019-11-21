@@ -1,31 +1,34 @@
 {
   "name": "nars",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Server Rendered React Native",
   "main": "dist/index.js",
+  "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "repository": "https://github.com/nars-dev/nars",
   "author": "Wojtek Czekalski <wojtek@nars.dev>",
   "license": "MIT",
   "private": false,
   "scripts": {
-    "build": "bsb -make-world && tsc && cp ./src/*.bs.js ./dist/"
+    "build": "bsb -make-world && tsc && cp ./src/*.bs.js ./dist/ && cp ./src/protobuf/*.bs.js ./dist/protobuf/"
   },
   "dependencies": {
-    "bs-platform": "6.1.0",
     "analytics-node": "^3.4.0-beta.1",
+    "bs-platform": "7.0.0-dev.1",
     "nars-common": "0.0.0",
     "node-machine-id": "^1.1.12",
+    "ocaml-protoc-plugin-runtime-bs": "git://github.com/issuu/ocaml-protoc-plugin#1252fb0ab444e6b7d75a4a02f1756704eb0114e8",
     "reason-react-reconciler": "~0.21.0000",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/analytics-node": "^3.1.1",
-    "@types/uuid": "^3.4.5",
     "@types/react-reconciler": "^0.18.0",
     "@types/scheduler": "^0.12.1",
+    "@types/uuid": "^3.4.5",
     "@types/ws": "^6.0.3",
+    "gentype": "^3.4.0",
     "prettier": "^1.18.2",
-    "typescript": "^3.5.3"
+    "typescript": "~3.5.0"
   }
 }

@@ -1,39 +1,74 @@
 import * as React from "react";
 import {
   ComponentConfig,
-  ExtractInputPropTypes,
-  ExtractLocalPropTypes,
+  ExtractInputPropType,
+  LocalPropKey,
+  PropTypes,
+  LocalPropRequired,
 } from "nars-common";
 import { RemoteComponent } from "./RemoteComponent";
+import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 
-type RawPropTypes<
-  T extends ComponentConfig,
-  P extends keyof T
-> = ExtractInputPropTypes<T[P]["props"]> &
-  ExtractLocalPropTypes<T[P]["localProps"]>;
+type ExtractLocalProp<
+  Component,
+  Key,
+  IsRequired extends LocalPropRequired
+> = Component extends keyof LocalPropTypes
+  ? Key extends keyof LocalPropTypes[Component]
+    ? IsRequired extends "optional"
+      ? LocalPropTypes[Component][Key] | undefined
+      : LocalPropTypes[Component][Key]
+    : never
+  : never;
 
-interface RemoteComponentProps<
+export type ExtractLocalPropKeys<T extends PropTypes> = {
+  [K in keyof T]: T[K] extends LocalPropKey<
+    infer Component,
+    infer Key,
+    LocalPropRequired
+  >
+    ? ExtractLocalProp<Component, Key, any>
+    : never;
+}[keyof T];
+
+export type ExtractLocalPropTypes<T extends PropTypes> = Pick<
+  T,
+  ExtractLocalPropKeys<T>
+>;
+
+export type ExtractPropTypes<T extends PropTypes> = {
+  [K in keyof T]: K extends string
+    ? T[K] extends LocalPropKey<infer Component, infer Key, infer IsRequired>
+      ? ExtractLocalProp<Component, Key, IsRequired>
+      : ExtractInputPropType<T[K]>
+    : never;
+};
+
+export interface RemoteComponentProps<
   T extends ComponentConfig,
   P extends keyof T = keyof T
 > {
   name: P extends string ? P : never;
-  props: RawPropTypes<T, P>;
+  props: ExtractPropTypes<T[P extends string ? string & P : never]>;
   LoadingComponent?: React.ComponentType;
   ErrorComponent?: React.ComponentType;
 }
 
-type Client<T extends ComponentConfig> = React.ComponentType<
+export type Client<T extends ComponentConfig> = React.ComponentType<
   RemoteComponentProps<T, keyof T>
 >;
 
 type UnknownObject = { [k: string]: unknown };
 
-type EncodedProps = { props: UnknownObject; localProps: UnknownObject };
+type EncodedProps<T extends PropTypes> = {
+  props: UnknownObject;
+  localProps: ExtractLocalPropTypes<T>;
+};
 
 type Encoder<T extends ComponentConfig> = {
   readonly [P in keyof T]: (
-    props: RawPropTypes<T, P>
-  ) => EncodedProps | undefined;
+    props: ExtractPropTypes<T[P]>
+  ) => EncodedProps<T[P]>;
 };
 
 type Writeable<T> = { -readonly [P in keyof T]: T[P] };
@@ -41,26 +76,40 @@ type Writeable<T> = { -readonly [P in keyof T]: T[P] };
 function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
   let res = {} as Writeable<Encoder<T>>;
   for (const component in config) {
-    const definition = config[component];
-    res[component] = (propsIn: RawPropTypes<any, any>) => {
-      let encodedProps = { props: {}, localProps: {} } as EncodedProps;
-      for (const propKey in definition.props) {
-        const encoded = definition.props[propKey].encode(propsIn[propKey]);
-        if (encoded) {
-          encodedProps.props[propKey] = encoded;
+    type ComponentProps = T[Extract<keyof T, string>] & PropTypes;
+    const definition: ComponentProps = config[component];
+    res[component] = propsIn => {
+      let encodedProps = { props: {}, localProps: {} } as EncodedProps<
+        ComponentProps
+      >;
+      for (const propKey in definition) {
+        const propDefinition = definition[propKey];
+        const prop = propsIn[propKey];
+        if (!("local" in propDefinition)) {
+          if (!prop && !propDefinition.optional) {
+            throw `Prop '${propKey}' has not been passed to <${component} />`;
+          }
+          encodedProps.props[propKey] = propDefinition.encode(prop);
         } else {
-          throw "Bad prop type in " + component;
-        }
-      }
-      if (definition.localProps) {
-        for (const propKey in definition.localProps) {
-          encodedProps.localProps[propKey] = propsIn[propKey];
+          if (
+            propDefinition.isRequired !== "optional" &&
+            typeof prop === "undefined"
+          ) {
+            throw `Local Prop '${propKey}' has not been passed to <${component} />`;
+          } else {
+            const localPropKey = propKey as keyof EncodedProps<
+              ComponentProps
+            >["localProps"];
+            encodedProps.localProps[
+              localPropKey
+            ] = (prop as unknown) as NonNullable<typeof prop>;
+          }
         }
       }
       return encodedProps;
     };
   }
-  return res as Encoder<T>;
+  return res;
 }
 
 export function createRemoteComponent<T extends ComponentConfig>(
@@ -69,22 +118,19 @@ export function createRemoteComponent<T extends ComponentConfig>(
 ) {
   const encoders = createEncoders(config);
 
-  return (({
+  return ({
     name,
     props,
     LoadingComponent,
     ErrorComponent,
   }: RemoteComponentProps<T>) => {
     if (!(name in encoders)) {
-      throw "Unknown component " + name;
+      throw `Unknown component <${name} />`;
     }
     const encoded = React.useMemo(() => {
       return encoders[name](props);
     }, [name, props]);
 
-    if (!encoded) {
-      throw "Unknown component named " + name;
-    }
     const encodedProps = encoded.props;
     const localProps = encoded.localProps;
 
@@ -100,5 +146,5 @@ export function createRemoteComponent<T extends ComponentConfig>(
         renderError={ErrorComponent ? () => <ErrorComponent /> : undefined}
       />
     );
-  }) as Client<T>;
+  };
 }

@@ -14,7 +14,10 @@ const RemoteComponent = Nars.createRemoteComponent(
 const Component = ({ animationProgress }) => {
   return (
     <Animated.View style={[{ opacity: animationProgress }, styles.container]}>
-      <RemoteComponent name="Feed" props={{ name: "Helloo" }} />
+      <RemoteComponent
+        name="Feed"
+        props={{ backgroundColor: "yellow" }}
+      />
     </Animated.View>
   );
 };

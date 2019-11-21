@@ -1,19 +1,4 @@
-[@genType.import ("./TsTypes", "OpaqueProp")]
-type opaqueProp;
+let add: (~name: string, ~encoder: Instance.encoder) => unit;
 
-type opaqueProps = Js.Dict.t(opaqueProp);
-
-[@genType]
-type createEncoder = opaqueProps => Instance.encoder;
-
-let get: (~name: string) => option(createEncoder);
-
-[@genType]
-let add: (~name: string, ~createEncoder: createEncoder) => unit;
-
-[@genType]
-let registerRawTextEncodedReactElementInitializer:
-  (string => Instance.encodedReactElement) => unit;
-
-[@genType]
-let createRawTextEncodedReactElement: string => Instance.encodedReactElement;
+let createInstance:
+  (~name: string, ~key: option(string), ~props: Js.t('a)) => Instance.t;

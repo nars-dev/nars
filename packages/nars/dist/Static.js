@@ -8,63 +8,58 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
-const NarsServer_1 = require("./NarsServer");
-/* TODO: TEST */
+const NarsServer_gen_1 = require("./NarsServer.gen");
 function createDecoders(config) {
     let res = {};
-    for (const component in config) {
-        const definition = config[component];
-        // @ts-ignore
-        res[component] = (propsIn, localPropKeys) => {
-            let parsedProps = {};
-            if (propsIn && propsIn.fields) {
-                for (const propKey in propsIn.fields) {
-                    const prop = propsIn.fields[propKey];
-                    const decoder = definition.props[propKey];
-                    if (decoder) {
+    for (const config_component in config) {
+        const definition = config[config_component];
+        const component = config_component;
+        res[component] = (propsIn = {}, localPropKeys) => {
+            const parsedProps = {};
+            for (const propKey in definition) {
+                const prop = propsIn[propKey];
+                const decoder = definition[propKey];
+                if (!("local" in decoder)) {
+                    if (prop) {
                         parsedProps[propKey] = decoder.decode(prop);
                     }
-                    else {
-                        console.warn("Unknown prop: " + propKey + " passed in");
+                    else if (!decoder.optional) {
+                        throw `Required prop: ${propKey} has not been passed to component ${component}`;
                     }
-                }
-                localPropKeys.forEach(localPropKey => {
-                    parsedProps[localPropKey] = { key: localPropKey };
-                });
-                return parsedProps;
-            }
-            else {
-                let allPropsOptional = true;
-                for (const def in definition.props) {
-                    if (!definition.props[def].optional) {
-                        allPropsOptional = false;
-                    }
-                }
-                if (allPropsOptional) {
-                    return {};
                 }
                 else {
-                    throw "Missing required props";
+                    const index = localPropKeys.indexOf(propKey);
+                    if (index === -1) {
+                        throw "Local Prop is not found";
+                    }
+                    else {
+                        parsedProps[propKey] = {
+                            key: propKey,
+                        };
+                    }
                 }
             }
+            return parsedProps;
         };
     }
     return res;
 }
 function createRouter(config, definitions) {
     const parsers = createDecoders(config);
-    return (name, props, localProps) => {
+    return function (name, props, localProps) {
         if (name in definitions && name in parsers) {
             const Component = definitions[name];
             const parsedProps = parsers[name](props, localProps);
-            return React.createElement(Component, parsedProps);
+            if (parsedProps) {
+                return React.createElement(Component, parsedProps);
+            }
         }
         return undefined;
     };
 }
 exports.createRouter = createRouter;
 function attatchListener(server, router) {
-    NarsServer_1.startListening(server, componentDescription => {
+    NarsServer_gen_1.startListening(server, componentDescription => {
         if (componentDescription.name) {
             const element = router(componentDescription.name, componentDescription.props, componentDescription.localProps ? componentDescription.localProps : []);
             if (element) {
@@ -73,7 +68,6 @@ function attatchListener(server, router) {
             return null;
         }
         else {
-            /* TODO: Fix the type definition there */
             return null;
         }
     });

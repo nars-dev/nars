@@ -1,2 +1,8 @@
 examples/client/ios/* linguist-generated=true
 examples/client/android/* linguist-generated=true
+examples/server/dist/* linguist-generated=true
+packages/nars-client/dist/* linguist-generated=true
+packages/nars/dist/* linguist-generated=true
+packages/nars-common/dist/* linguist-generated=true
+*.bs.js linguist-generated=true
+

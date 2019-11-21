@@ -6,21 +6,15 @@ var Curry = require("bs-platform/lib/js/curry.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var Instance = require("./Instance.bs.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
+var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var Belt_SetString = require("bs-platform/lib/js/belt_SetString.js");
 var Belt_HashMapInt = require("bs-platform/lib/js/belt_HashMapInt.js");
 var ReactReconciler = require("react-reconciler");
 var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
-function createInstance(instance_type, props, _rootContainer, _context, _internalInstanceHandle) {
-  var match = ComponentRegistry.get(instance_type);
-  if (match !== undefined) {
-    return /* Component */Block.__(1, [/* record */[
-                /* encode */Curry._1(match, props),
-                /* children : array */[]
-              ]]);
-  } else {
-    return Pervasives.invalid_arg("Unknown component type " + instance_type);
-  }
+function createInstance(instance_type, props, _rootContainer, _context, fiber) {
+  var key = fiber.key;
+  return ComponentRegistry.createInstance(instance_type, key === null ? undefined : Caml_option.some(key), props);
 }
 
 function getPublicInstance(x) {
@@ -40,18 +34,20 @@ function prepareForCommit(param) {
 }
 
 function resetAfterCommit(container) {
-  Belt_HashMapInt.clear(container[/* callbackRegistry */2]);
-  var counter = /* record */[/* contents */0];
+  Belt_HashMapInt.clear(container.callbackRegistry);
+  var counter = {
+    contents: 0
+  };
   var registerCallback = function (callback) {
-    var id = counter[0];
-    counter[0] = counter[0] + 1 | 0;
-    Belt_HashMapInt.set(container[/* callbackRegistry */2], id, callback);
+    var id = counter.contents;
+    counter.contents = counter.contents + 1 | 0;
+    Belt_HashMapInt.set(container.callbackRegistry, id, callback);
     return id;
   };
-  var children = container[/* children */1].map((function (inst) {
+  var children = container.children.map((function (inst) {
           return Instance.encode(inst, registerCallback);
         }));
-  Curry._1(container[/* flushUpdates */0], children);
+  Curry._1(container.flushUpdates, children);
   return /* () */0;
 }
 
@@ -65,7 +61,7 @@ function assertComponentInstance(instance, f) {
 
 function appendInitialChild(parentInstance, child) {
   assertComponentInstance(parentInstance, (function (parentInstance) {
-          return parentInstance[/* children */1].push(child);
+          return parentInstance.children.push(child);
         }));
   return /* () */0;
 }
@@ -75,11 +71,13 @@ function finalizeInitialChildren(param, param$1, param$2, param$3, _hostContext)
 }
 
 function prepareUpdate(param, param$1, oldProps, newProps, param$2, param$3) {
+  var oldProps$1 = oldProps;
+  var newProps$1 = newProps;
   var changedProps = /* array */[];
-  var newSet = Belt_SetString.fromArray(Object.keys(newProps));
-  var oldSet = Belt_SetString.fromArray(Object.keys(oldProps));
+  var newSet = Belt_SetString.fromArray(Object.keys(newProps$1));
+  var oldSet = Belt_SetString.fromArray(Object.keys(oldProps$1));
   Belt_SetString.forEachU(Belt_SetString.union(newSet, oldSet), (function (key) {
-          if (Js_dict.get(newProps, key) !== Js_dict.get(oldProps, key)) {
+          if (Js_dict.get(newProps$1, key) !== Js_dict.get(oldProps$1, key)) {
             changedProps.push(key);
             return /* () */0;
           } else {
@@ -90,9 +88,7 @@ function prepareUpdate(param, param$1, oldProps, newProps, param$2, param$3) {
 }
 
 function createTextInstance(text, param, param$1, param$2) {
-  return /* RawText */Block.__(0, [(function (param) {
-                return ComponentRegistry.createRawTextEncodedReactElement(text);
-              })]);
+  return /* RawText */Block.__(0, [text]);
 }
 
 function shouldSetTextContent(param, _props) {
@@ -130,7 +126,7 @@ function getEventTargetChildElement(param, param$1) {
 var appendChild = appendInitialChild;
 
 function appendChildToContainer(container, child) {
-  container[/* children */1].push(child);
+  container.children.push(child);
   return /* () */0;
 }
 
@@ -139,14 +135,9 @@ function commitMount(param, param$1, param$2, param$3) {
 }
 
 function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
-  var match = ComponentRegistry.get(instance_type);
-  if (match !== undefined) {
-    if (instance.tag) {
-      instance[0][/* encode */0] = Curry._1(match, props);
-      return /* () */0;
-    } else {
-      return Pervasives.invalid_arg("Cannot update component type " + instance_type);
-    }
+  if (instance.tag) {
+    instance[0].props = /* Props */[props];
+    return /* () */0;
   } else {
     return Pervasives.invalid_arg("Cannot update component type " + instance_type);
   }
@@ -154,37 +145,37 @@ function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
 
 function insertBefore(parent, child, beforeChild) {
   return assertComponentInstance(parent, (function (parentInstance) {
-                var index = parentInstance[/* children */1].findIndex((function (x) {
+                var index = parentInstance.children.findIndex((function (x) {
                         return beforeChild === x;
                       }));
-                parentInstance[/* children */1].splice(index, 0, child);
+                parentInstance.children.splice(index, 0, child);
                 return /* () */0;
               }));
 }
 
 function insertInContainerBefore(container, child, beforeChild) {
-  var index = container[/* children */1].findIndex((function (x) {
+  var index = container.children.findIndex((function (x) {
           return beforeChild === x;
         }));
-  container[/* children */1].splice(index, 0, child);
+  container.children.splice(index, 0, child);
   return /* () */0;
 }
 
 function removeChild(parent, child) {
   return assertComponentInstance(parent, (function (parent) {
-                var pos = parent[/* children */1].findIndex((function (x) {
+                var pos = parent.children.findIndex((function (x) {
                         return child === x;
                       }));
-                parent[/* children */1].splice(pos, 1);
+                parent.children.splice(pos, 1);
                 return /* () */0;
               }));
 }
 
 function removeChildFromContainer(parent, child) {
-  var pos = parent[/* children */1].findIndex((function (x) {
+  var pos = parent.children.findIndex((function (x) {
           return child === x;
         }));
-  parent[/* children */1].splice(pos, 1);
+  parent.children.splice(pos, 1);
   return /* () */0;
 }
 
@@ -263,19 +254,19 @@ var reconciler = ReactReconciler({
 
 function createContainer(flushUpdates) {
   var registry = Belt_HashMapInt.make(50);
-  var opaqueRoot = reconciler.createContainer(/* record */[
-        /* flushUpdates */flushUpdates,
-        /* children : array */[],
-        /* callbackRegistry */registry
-      ]);
-  return /* record */[
-          /* registry */registry,
-          /* opaqueRoot */opaqueRoot
-        ];
+  var opaqueRoot = reconciler.createContainer({
+        flushUpdates: flushUpdates,
+        children: /* array */[],
+        callbackRegistry: registry
+      });
+  return {
+          registry: registry,
+          opaqueRoot: opaqueRoot
+        };
 }
 
 function updateContainer(element, container) {
-  return reconciler.updateContainer(element, container[/* opaqueRoot */1]);
+  return reconciler.updateContainer(element, container.opaqueRoot);
 }
 
 function unbatchedUpdates(f) {
@@ -283,7 +274,7 @@ function unbatchedUpdates(f) {
 }
 
 function invokeCallback(container, messageId, args) {
-  var match = Belt_HashMapInt.get(container[/* registry */0], messageId);
+  var match = Belt_HashMapInt.get(container.registry, messageId);
   if (match !== undefined) {
     return Curry._1(match, args);
   } else {
@@ -301,6 +292,8 @@ function flushPassiveEffects(param) {
 
 var isThisRendererActing = reconciler.IsThisRendererActing;
 
+var nullElement = null;
+
 exports.createContainer = createContainer;
 exports.updateContainer = updateContainer;
 exports.unbatchedUpdates = unbatchedUpdates;
@@ -308,4 +301,5 @@ exports.invokeCallback = invokeCallback;
 exports.batchedUpdates = batchedUpdates;
 exports.flushPassiveEffects = flushPassiveEffects;
 exports.isThisRendererActing = isThisRendererActing;
+exports.nullElement = nullElement;
 /* reconciler Not a pure module */

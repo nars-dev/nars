@@ -183,14 +183,6 @@ If you've cloned the repository already make sure to pull the submodules:
 git submodule update --init
 ```
 
-Add [esy](https://esy.sh). We require esy for some native tools.
-
-```
-yarn global add esy
-```
-
-Run `esy install`. It will take a minute. It builds some native dev-time tools used by nars.
-
 In the root directory run:
 
 - `yarn && yarn build`

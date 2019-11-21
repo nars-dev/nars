@@ -74,4 +74,6 @@ export type StyleProp<T> = Array<T> | T;
 
 type NamedStyles<T> = { [P in keyof T]: ViewStyle | TextStyle };
 
+export type AnyStyleProp = StyleProp<ViewStyle | TextStyle>;
+
 export const create = <T extends NamedStyles<T>>(obj: T) => obj;

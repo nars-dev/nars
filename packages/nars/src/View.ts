@@ -1,27 +1,10 @@
-import { ViewStyle, StyleProp } from "./StyleSheet";
 import * as React from "react";
-import * as ComponentRegistry from "./ComponentRegistry.gen";
-import { Schema } from "nars-common";
-import { encodeViewStyleInProps } from "./StyleEncoding";
+import { ViewStyle, StyleProp } from "./StyleSheet";
+import { name, props } from "./View.gen";
 
-export interface Props {
+export interface Props extends props {
   style?: StyleProp<ViewStyle>;
   children?: React.ReactNode;
 }
 
-const name = "Nars_View";
-
-export default (props: Props): React.ReactElement<Props> =>
-  React.createElement(name, props, props.children);
-
-ComponentRegistry.add({
-  name,
-  createEncoder: (props: ComponentRegistry.opaqueProps) => ({ children }) => {
-    return Schema.ReactElement.create({
-      view: {
-        style: encodeViewStyleInProps(props),
-        children
-      }
-    });
-  }
-});
+export default (name as unknown) as React.ComponentType<Props>;

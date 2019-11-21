@@ -1,35 +1,47 @@
-[@genType.import ("./TsTypes", "ArgsMap")]
-type args;
+module Struct = Struct.Google_mirror.Protobuf.Struct;
 
-[@genType.import ("./TsTypes", "EncodedReactElement")]
-type encodedReactElement;
+type args = option(Struct.t);
 
-[@genType]
+[@genType.opaque]
+type encoded = Schema.ReactElement.t;
+
 type messageId = int;
 
-[@genType]
+type props =
+  | Props(Js.t('props)): props;
+
 type encoder =
   (
+    ~key: option(Schema.StringValue.t),
+    ~props: props,
     ~registerCallback: (args => unit) => messageId,
-    ~children: array(encodedReactElement)
+    ~children: array(encoded)
   ) =>
-  encodedReactElement;
+  encoded;
 
 type componentInstance = {
-  mutable encode: encoder,
+  mutable props,
+  encode: encoder,
   children: array(t),
+  key: option(string),
 }
 and t =
-  | RawText(unit => encodedReactElement)
+  | RawText(string)
   | Component(componentInstance);
 
 let rec encode = (instance, ~registerCallback) => {
   switch (instance) {
-  | RawText(init) => init()
+  | RawText(string) => {
+      Schema.ReactElement.value: `RawText(string),
+      key: None,
+    }
   | Component(inst) =>
+    let children = Js.Array.map(encode(~registerCallback), inst.children);
     inst.encode(
+      ~key=inst.key,
+      ~props=inst.props,
       ~registerCallback,
-      ~children=Js.Array.map(encode(~registerCallback), inst.children),
-    )
+      ~children,
+    );
   };
 };
