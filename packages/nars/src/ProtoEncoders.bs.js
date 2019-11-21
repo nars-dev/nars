@@ -35,10 +35,10 @@ function encodeCallback(registerCallback, callback) {
 }
 
 function encodeLocalProp(localKey, propKey) {
-  return /* record */[
-          /* localKey */localKey,
-          /* propKey */propKey
-        ];
+  return {
+          localKey: localKey,
+          propKey: propKey
+        };
 }
 
 function encodeOptionalLocalProps(dict) {
@@ -46,10 +46,10 @@ function encodeOptionalLocalProps(dict) {
     return $$Array.to_list(Js_dict.entries(Caml_option.valFromOption(dict)).filter((function (param) {
                         return Belt_Option.isSome(param[1]);
                       })).map((function (param) {
-                      return /* record */[
-                              /* localKey */Belt_Option.getExn(param[1]).key,
-                              /* propKey */param[0]
-                            ];
+                      return {
+                              localKey: Belt_Option.getExn(param[1]).key,
+                              propKey: param[0]
+                            };
                     })));
   } else {
     return /* [] */0;

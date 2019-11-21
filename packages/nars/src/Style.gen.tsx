@@ -2,7 +2,7 @@
 /* eslint-disable import/first */
 
 
-import {AnyStyleProp as t} from './StyleSheet';
+import {AnyStyleProp as $$t} from './StyleSheet';
 
 // tslint:disable-next-line:interface-over-type-literal
-export type t = t;
+export type t = $$t;

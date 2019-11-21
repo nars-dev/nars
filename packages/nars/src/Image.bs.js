@@ -8,16 +8,16 @@ var name = "Image";
 
 function encoder(key, param, param$1, param$2) {
   var props = param[0];
-  return /* record */[
-          /* key */key,
-          /* value : `Image */[
+  return {
+          key: key,
+          value: /* `Image */[
             -795439301,
-            /* record */[
-              /* style */ProtoEncoders.encodeStyleOptional(props),
-              /* sourceURLString */props.source
-            ]
+            {
+              style: ProtoEncoders.encodeStyleOptional(props),
+              sourceURLString: props.source
+            }
           ]
-        ];
+        };
 }
 
 ComponentRegistry.add(name, encoder);

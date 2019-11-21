@@ -2160,10 +2160,10 @@ bs-logger@0.x:
   dependencies:
     fast-json-stable-stringify "2.x"
 
-bs-platform@6.2.1, bs-platform@6.x.x:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-6.2.1.tgz#30266c7f23a3b323e1fc9596a9a6eb9f053981b4"
-  integrity sha512-FmQ8kYV52A0Y302qh6o0/J9TO+kHzsjGQnsjrg/ONUYIY/jWzBnt9dCBO6EBnaEKfFJLqk5JrUDCxuihqtTcnw==
+bs-platform@7.0.0-dev.1:
+  version "7.0.0-dev.1"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.0-dev.1.tgz#e9f2b05c68b16e325fc9a284ca529bb84fd5509b"
+  integrity sha512-nXxk3oUBvp2o0D8Qc2JOKNeeYNg/wPVYj+eu4vPbWzR/dbhfc4bRG/QkU6z6DuV1aiDzGnKIBY06azYPuw4a+g==
 
 bser@^2.0.0:
   version "2.1.1"
@@ -3841,10 +3841,10 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
-gentype@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/gentype/-/gentype-3.2.0.tgz#0409a2f99221ec9fc41f6b41b92382d00014258c"
-  integrity sha512-2uOhJSHNJJFRcvOIyA3/zKRMAEb7xVRoFiIFIDZ+onB4CdfH1le2JZn26UuqgRTtwBJQ3kkTunXnSIDHKLdZ8Q==
+gentype@^3.4.0:
+  version "3.4.4"
+  resolved "https://registry.yarnpkg.com/gentype/-/gentype-3.4.4.tgz#45cf9158ad45c9afde539155215cd9324fc1836e"
+  integrity sha512-sEsrqOa4ys2NJICg+e3cq9YlE12NFEq6bxGJdvg48VEEdLK3gdTNghDN5BMXzwl42qqp4nYYkgOhDgz2xGwwEA==
 
 get-caller-file@^1.0.1:
   version "1.0.3"

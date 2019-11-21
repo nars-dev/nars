@@ -54,8 +54,8 @@ function startListening(server, render) {
                                 return /* () */0;
                               } else {
                                 var match = rad[0];
-                                var value = match[/* value */1];
-                                var rootId = match[/* rootId */0];
+                                var value = match.value;
+                                var rootId = match.rootId;
                                 var match$1 = Belt_HashMapInt.get(containers, rootId);
                                 var variant = value[0];
                                 if (variant !== 747848894) {
@@ -66,22 +66,22 @@ function startListening(server, render) {
                                       container = Caml_option.valFromOption(match$1);
                                     } else {
                                       var container$1 = NarsReconciler.createContainer((function (reactElements) {
-                                              var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, /* record */[
-                                                        /* rootId */rootId,
-                                                        /* value : `Update */[
+                                              var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
+                                                        rootId: rootId,
+                                                        value: /* `Update */[
                                                           999946793,
                                                           $$Array.to_list(reactElements)
                                                         ]
-                                                      ]));
+                                                      }));
                                               return socket.send(message);
                                             }));
                                       Belt_HashMapInt.set(containers, rootId, container$1);
                                       container = container$1;
                                     }
-                                    var props = Js_option.getWithDefault({ }, Js_option.map(JsValue.structToDict, match$2[/* props */1]));
+                                    var props = Js_option.getWithDefault({ }, Js_option.map(JsValue.structToDict, match$2.props));
                                     NarsReconciler.updateContainer(Curry._1(render, {
-                                              name: match$2[/* name */0],
-                                              localProps: $$Array.of_list(match$2[/* localProps */2]),
+                                              name: match$2.name,
+                                              localProps: $$Array.of_list(match$2.localProps),
                                               props: props
                                             }), container);
                                     return /* () */0;
@@ -97,7 +97,7 @@ function startListening(server, render) {
                                   }
                                 } else if (match$1 !== undefined) {
                                   var match$3 = value[1];
-                                  return NarsReconciler.invokeCallback(Caml_option.valFromOption(match$1), match$3[/* messageId */0], match$3[/* args */1]);
+                                  return NarsReconciler.invokeCallback(Caml_option.valFromOption(match$1), match$3.messageId, match$3.args);
                                 } else {
                                   return /* () */0;
                                 }

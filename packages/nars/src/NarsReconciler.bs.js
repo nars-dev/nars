@@ -34,18 +34,20 @@ function prepareForCommit(param) {
 }
 
 function resetAfterCommit(container) {
-  Belt_HashMapInt.clear(container[/* callbackRegistry */2]);
-  var counter = /* record */[/* contents */0];
+  Belt_HashMapInt.clear(container.callbackRegistry);
+  var counter = {
+    contents: 0
+  };
   var registerCallback = function (callback) {
-    var id = counter[0];
-    counter[0] = counter[0] + 1 | 0;
-    Belt_HashMapInt.set(container[/* callbackRegistry */2], id, callback);
+    var id = counter.contents;
+    counter.contents = counter.contents + 1 | 0;
+    Belt_HashMapInt.set(container.callbackRegistry, id, callback);
     return id;
   };
-  var children = container[/* children */1].map((function (inst) {
+  var children = container.children.map((function (inst) {
           return Instance.encode(inst, registerCallback);
         }));
-  Curry._1(container[/* flushUpdates */0], children);
+  Curry._1(container.flushUpdates, children);
   return /* () */0;
 }
 
@@ -59,7 +61,7 @@ function assertComponentInstance(instance, f) {
 
 function appendInitialChild(parentInstance, child) {
   assertComponentInstance(parentInstance, (function (parentInstance) {
-          return parentInstance[/* children */2].push(child);
+          return parentInstance.children.push(child);
         }));
   return /* () */0;
 }
@@ -124,7 +126,7 @@ function getEventTargetChildElement(param, param$1) {
 var appendChild = appendInitialChild;
 
 function appendChildToContainer(container, child) {
-  container[/* children */1].push(child);
+  container.children.push(child);
   return /* () */0;
 }
 
@@ -134,7 +136,7 @@ function commitMount(param, param$1, param$2, param$3) {
 
 function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
   if (instance.tag) {
-    instance[0][/* props */0] = /* Props */[props];
+    instance[0].props = /* Props */[props];
     return /* () */0;
   } else {
     return Pervasives.invalid_arg("Cannot update component type " + instance_type);
@@ -143,37 +145,37 @@ function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
 
 function insertBefore(parent, child, beforeChild) {
   return assertComponentInstance(parent, (function (parentInstance) {
-                var index = parentInstance[/* children */2].findIndex((function (x) {
+                var index = parentInstance.children.findIndex((function (x) {
                         return beforeChild === x;
                       }));
-                parentInstance[/* children */2].splice(index, 0, child);
+                parentInstance.children.splice(index, 0, child);
                 return /* () */0;
               }));
 }
 
 function insertInContainerBefore(container, child, beforeChild) {
-  var index = container[/* children */1].findIndex((function (x) {
+  var index = container.children.findIndex((function (x) {
           return beforeChild === x;
         }));
-  container[/* children */1].splice(index, 0, child);
+  container.children.splice(index, 0, child);
   return /* () */0;
 }
 
 function removeChild(parent, child) {
   return assertComponentInstance(parent, (function (parent) {
-                var pos = parent[/* children */2].findIndex((function (x) {
+                var pos = parent.children.findIndex((function (x) {
                         return child === x;
                       }));
-                parent[/* children */2].splice(pos, 1);
+                parent.children.splice(pos, 1);
                 return /* () */0;
               }));
 }
 
 function removeChildFromContainer(parent, child) {
-  var pos = parent[/* children */1].findIndex((function (x) {
+  var pos = parent.children.findIndex((function (x) {
           return child === x;
         }));
-  parent[/* children */1].splice(pos, 1);
+  parent.children.splice(pos, 1);
   return /* () */0;
 }
 
@@ -252,19 +254,19 @@ var reconciler = ReactReconciler({
 
 function createContainer(flushUpdates) {
   var registry = Belt_HashMapInt.make(50);
-  var opaqueRoot = reconciler.createContainer(/* record */[
-        /* flushUpdates */flushUpdates,
-        /* children : array */[],
-        /* callbackRegistry */registry
-      ]);
-  return /* record */[
-          /* registry */registry,
-          /* opaqueRoot */opaqueRoot
-        ];
+  var opaqueRoot = reconciler.createContainer({
+        flushUpdates: flushUpdates,
+        children: /* array */[],
+        callbackRegistry: registry
+      });
+  return {
+          registry: registry,
+          opaqueRoot: opaqueRoot
+        };
 }
 
 function updateContainer(element, container) {
-  return reconciler.updateContainer(element, container[/* opaqueRoot */1]);
+  return reconciler.updateContainer(element, container.opaqueRoot);
 }
 
 function unbatchedUpdates(f) {
@@ -272,7 +274,7 @@ function unbatchedUpdates(f) {
 }
 
 function invokeCallback(container, messageId, args) {
-  var match = Belt_HashMapInt.get(container[/* registry */0], messageId);
+  var match = Belt_HashMapInt.get(container.registry, messageId);
   if (match !== undefined) {
     return Curry._1(match, args);
   } else {

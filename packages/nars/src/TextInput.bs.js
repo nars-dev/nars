@@ -10,26 +10,26 @@ var name = "TextInput";
 
 function encoder(key, param, registerCallback, param$1) {
   var props = param[0];
-  return /* record */[
-          /* key */key,
-          /* value : `TextInput */[
+  return {
+          key: key,
+          value: /* `TextInput */[
             -119655427,
-            /* record */[
-              /* style */ProtoEncoders.encodeStyleOptional(props),
-              /* placeholderTextColor */ProtoEncoders.optionFlatten(ProtoEncoders.encodeOptional(props.placeholderTextColor, (function (value) {
+            {
+              style: ProtoEncoders.encodeStyleOptional(props),
+              placeholderTextColor: ProtoEncoders.optionFlatten(ProtoEncoders.encodeOptional(props.placeholderTextColor, (function (value) {
                           return ProtoEncoders.encodeNullable(value, ProtoEncoders.encodeString);
                         }))),
-              /* placeholder */ProtoEncoders.encodeOptional(props.placeholder, ProtoEncoders.encodeString),
-              /* value */props.value,
-              /* localProps : [] */0,
-              /* onValueChange */ProtoEncoders.encodeOptional(props.onValueChange, (function (callback) {
+              placeholder: ProtoEncoders.encodeOptional(props.placeholder, ProtoEncoders.encodeString),
+              value: props.value,
+              localProps: /* [] */0,
+              onValueChange: ProtoEncoders.encodeOptional(props.onValueChange, (function (callback) {
                       return ProtoEncoders.encodeCallback(registerCallback, (function (args) {
                                     return Curry._1(callback, StructDecoders.getFieldExn("value", args, StructDecoders.getString));
                                   }));
                     }))
-            ]
+            }
           ]
-        ];
+        };
 }
 
 ComponentRegistry.add(name, encoder);

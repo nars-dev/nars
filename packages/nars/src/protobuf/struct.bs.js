@@ -8,109 +8,109 @@ var Spec$Ocamlprotocplugin = require("ocaml-protoc-plugin-runtime-bs/src/ocaml_p
 var Serialize$Ocamlprotocplugin = require("ocaml-protoc-plugin-runtime-bs/src/ocaml_protoc_plugin/serialize.bs.js");
 var Deserialize$Ocamlprotocplugin = require("ocaml-protoc-plugin-runtime-bs/src/ocaml_protoc_plugin/deserialize.bs.js");
 
-var UndefinedValue = Caml_module.init_mod([
+var UndefinedValue = Caml_module.init_mod(/* tuple */[
       "struct.ml",
       25,
       10
-    ], [[
-        [
-          0,
-          "to_int"
-        ],
-        [
-          0,
-          "from_int"
-        ]
-      ]]);
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "to_int"
+          ],
+          /* tuple */[
+            0,
+            "from_int"
+          ]
+        ]]));
 
-var NullValue = Caml_module.init_mod([
+var NullValue = Caml_module.init_mod(/* tuple */[
       "struct.ml",
       39,
       10
-    ], [[
-        [
-          0,
-          "to_int"
-        ],
-        [
-          0,
-          "from_int"
-        ]
-      ]]);
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "to_int"
+          ],
+          /* tuple */[
+            0,
+            "from_int"
+          ]
+        ]]));
 
-var Struct = Caml_module.init_mod([
+var Struct = Caml_module.init_mod(/* tuple */[
       "struct.ml",
       60,
       10
-    ], [[
-        [
-          [[
-              [
-                0,
-                "name'"
-              ],
-              [
-                0,
-                "to_proto"
-              ],
-              [
-                0,
-                "from_proto"
-              ]
-            ]],
-          "FieldsEntry"
-        ],
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]]);
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Module */Block.__(0, [/* array */[
+                  /* tuple */[
+                    0,
+                    "name'"
+                  ],
+                  /* tuple */[
+                    0,
+                    "to_proto"
+                  ],
+                  /* tuple */[
+                    0,
+                    "from_proto"
+                  ]
+                ]]),
+            "FieldsEntry"
+          ],
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]));
 
-var Value = Caml_module.init_mod([
+var Value = Caml_module.init_mod(/* tuple */[
       "struct.ml",
       102,
       10
-    ], [[
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]]);
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]));
 
-var ListValue = Caml_module.init_mod([
+var ListValue = Caml_module.init_mod(/* tuple */[
       "struct.ml",
       123,
       10
-    ], [[
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]]);
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]));
 
 function to_int(param) {
   return 0;
@@ -127,16 +127,16 @@ function from_int(n) {
   }
 }
 
-Caml_module.update_mod([[
-        [
-          0,
-          "to_int"
-        ],
-        [
-          0,
-          "from_int"
-        ]
-      ]], UndefinedValue, {
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "to_int"
+          ],
+          /* tuple */[
+            0,
+            "from_int"
+          ]
+        ]]), UndefinedValue, {
       to_int: to_int,
       from_int: from_int
     });
@@ -156,38 +156,38 @@ function from_int$1(n) {
   }
 }
 
-Caml_module.update_mod([[
-        [
-          0,
-          "to_int"
-        ],
-        [
-          0,
-          "from_int"
-        ]
-      ]], NullValue, {
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "to_int"
+          ],
+          /* tuple */[
+            0,
+            "from_int"
+          ]
+        ]]), NullValue, {
       to_int: to_int$1,
       from_int: from_int$1
     });
 
-var FieldsEntry = Caml_module.init_mod([
+var FieldsEntry = Caml_module.init_mod(/* tuple */[
       "struct.ml",
       66,
       12
-    ], [[
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]]);
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]));
 
 function name$prime(param) {
   return "Struct.google_mirror.protobuf.Struct.FieldsEntry";
@@ -227,20 +227,20 @@ function from_proto(writer) {
   return Curry._1(deserialize, writer);
 }
 
-Caml_module.update_mod([[
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]], FieldsEntry, {
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]), FieldsEntry, {
       name$prime: name$prime,
       to_proto: to_proto,
       from_proto: from_proto
@@ -273,37 +273,37 @@ function from_proto$1(writer) {
   return Curry._1(deserialize, writer);
 }
 
-Caml_module.update_mod([[
-        [
-          [[
-              [
-                0,
-                "name'"
-              ],
-              [
-                0,
-                "to_proto"
-              ],
-              [
-                0,
-                "from_proto"
-              ]
-            ]],
-          "FieldsEntry"
-        ],
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]], Struct, {
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Module */Block.__(0, [/* array */[
+                  /* tuple */[
+                    0,
+                    "name'"
+                  ],
+                  /* tuple */[
+                    0,
+                    "to_proto"
+                  ],
+                  /* tuple */[
+                    0,
+                    "from_proto"
+                  ]
+                ]]),
+            "FieldsEntry"
+          ],
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]), Struct, {
       FieldsEntry: FieldsEntry,
       name$prime: name$prime$1,
       to_proto: to_proto$1,
@@ -464,20 +464,20 @@ function from_proto$2(writer) {
   return Curry._1(deserialize, writer);
 }
 
-Caml_module.update_mod([[
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]], Value, {
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]), Value, {
       name$prime: name$prime$2,
       to_proto: to_proto$2,
       from_proto: from_proto$2
@@ -510,20 +510,20 @@ function from_proto$3(writer) {
   return Curry._1(deserialize, writer);
 }
 
-Caml_module.update_mod([[
-        [
-          0,
-          "name'"
-        ],
-        [
-          0,
-          "to_proto"
-        ],
-        [
-          0,
-          "from_proto"
-        ]
-      ]], ListValue, {
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]), ListValue, {
       name$prime: name$prime$3,
       to_proto: to_proto$3,
       from_proto: from_proto$3

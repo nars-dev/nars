@@ -10,20 +10,20 @@ var name = "Switch";
 
 function encoder(key, param, registerCallback, param$1) {
   var props = param[0];
-  return /* record */[
-          /* key */key,
-          /* value : `Switch */[
+  return {
+          key: key,
+          value: /* `Switch */[
             -99762668,
-            /* record */[
-              /* style */ProtoEncoders.encodeStyleOptional(props),
-              /* value */props.value,
-              /* onValueChange */ProtoEncoders.encodeCallback(registerCallback, (function (args) {
+            {
+              style: ProtoEncoders.encodeStyleOptional(props),
+              value: props.value,
+              onValueChange: ProtoEncoders.encodeCallback(registerCallback, (function (args) {
                       var callback = props.onValueChange;
                       return Curry._1(callback, StructDecoders.getFieldExn("value", args, StructDecoders.getBool));
                     }))
-            ]
+            }
           ]
-        ];
+        };
 }
 
 ComponentRegistry.add(name, encoder);
