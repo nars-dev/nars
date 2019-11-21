@@ -22,6 +22,17 @@ var Socket = { };
 
 var Server = { };
 
+function sendViewUpdates(socket, rootId, reactElements) {
+  var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
+            rootId: rootId,
+            value: /* `Update */[
+              999946793,
+              $$Array.to_list(reactElements)
+            ]
+          }));
+  return socket.send(message);
+}
+
 function startListening(server, render) {
   var analytics = new AnalyticsNode("RsD4jSdhauL5xheR1WDxcXApnCGh8Kts");
   var match;
@@ -46,14 +57,14 @@ function startListening(server, render) {
                 socket.binaryType = "arraybuffer";
                 var containers = Belt_HashMapInt.make(10);
                 return socket.on("message", (function ($$event) {
-                              var string = Caml_splice_call.spliceApply(String.fromCharCode, [new Uint8Array($$event)]);
-                              var reader = Reader$Ocamlprotocplugin.create(undefined, undefined, string);
-                              var rad = Curry._1(Schema.ClientToServer.from_proto, reader);
-                              if (rad.tag) {
-                                console.error(Curry._1(Result$Ocamlprotocplugin.show_error, rad[0]));
+                              var parsedMessage = Curry._1(Schema.ClientToServer.from_proto, (function (eta) {
+                                        return Reader$Ocamlprotocplugin.create(undefined, undefined, eta);
+                                      })(Caml_splice_call.spliceApply(String.fromCharCode, [new Uint8Array($$event)])));
+                              if (parsedMessage.tag) {
+                                console.error(Curry._1(Result$Ocamlprotocplugin.show_error, parsedMessage[0]));
                                 return /* () */0;
                               } else {
-                                var match = rad[0];
+                                var match = parsedMessage[0];
                                 var value = match.value;
                                 var rootId = match.rootId;
                                 var match$1 = Belt_HashMapInt.get(containers, rootId);
@@ -65,15 +76,8 @@ function startListening(server, render) {
                                     if (match$1 !== undefined) {
                                       container = Caml_option.valFromOption(match$1);
                                     } else {
-                                      var container$1 = NarsReconciler.createContainer((function (reactElements) {
-                                              var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
-                                                        rootId: rootId,
-                                                        value: /* `Update */[
-                                                          999946793,
-                                                          $$Array.to_list(reactElements)
-                                                        ]
-                                                      }));
-                                              return socket.send(message);
+                                      var container$1 = NarsReconciler.createContainer((function (param) {
+                                              return sendViewUpdates(socket, rootId, param);
                                             }));
                                       Belt_HashMapInt.set(containers, rootId, container$1);
                                       container = container$1;
@@ -120,5 +124,6 @@ exports.NodeBuffer = NodeBuffer;
 exports.Socket = Socket;
 exports.Server = Server;
 exports.ContainerMap = ContainerMap;
+exports.sendViewUpdates = sendViewUpdates;
 exports.startListening = startListening;
 /* Schema Not a pure module */

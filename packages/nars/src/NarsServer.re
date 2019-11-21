@@ -40,6 +40,17 @@ external uint8ArrayAsArray: Uint8Array.t => Js.Array.t(Uint8Array.elt) =
 
 module ContainerMap = Belt_HashMapInt;
 
+let sendViewUpdates = (~socket, ~rootId, reactElements) => {
+  let message =
+    Schema.ServerToClient.{
+      rootId,
+      value: `Update(reactElements |> Array.to_list),
+    }
+    |> Schema.ServerToClient.to_proto
+    |> Ocaml_protoc_plugin.Writer.contents;
+  socket##send(Socket.stringToData(message));
+};
+
 [@genType]
 let startListening = (server: server, render) => {
   let analytics = Mixpanel.make("RsD4jSdhauL5xheR1WDxcXApnCGh8Kts");
@@ -58,15 +69,15 @@ let startListening = (server: server, render) => {
     socket##binaryType #= "arraybuffer";
     let containers = ContainerMap.make(~hintSize=10);
     socket##on("message", (. event) => {
-      let string =
+      let parsedMessage =
         Js.String.fromCharCodeMany(
           uint8ArrayAsArray(
             Uint8Array.fromBuffer(Socket.data_to_array_buffer(event)),
           ),
-        );
-      let reader = Ocaml_protoc_plugin.Reader.create(string);
-      let rad = Schema.ClientToServer.from_proto(reader);
-      switch (rad) {
+        )
+        |> Ocaml_protoc_plugin.Reader.create
+        |> Schema.ClientToServer.from_proto;
+      switch (parsedMessage) {
       | Ok({rootId, value}) =>
         switch (value, ContainerMap.get(containers, rootId)) {
         | (`Render({name, props, localProps}), container) =>
@@ -75,16 +86,9 @@ let startListening = (server: server, render) => {
             | Some(container) => container
             | None =>
               let container =
-                NarsReconciler.createContainer(~flushUpdates=reactElements => {
-                  let message =
-                    Schema.ServerToClient.{
-                      rootId,
-                      value: `Update(reactElements |> Array.to_list),
-                    }
-                    |> Schema.ServerToClient.to_proto
-                    |> Ocaml_protoc_plugin.Writer.contents;
-                  socket##send(Socket.stringToData(message));
-                });
+                NarsReconciler.createContainer(
+                  ~flushUpdates=sendViewUpdates(~socket, ~rootId),
+                );
               ContainerMap.set(containers, rootId, container);
               container;
             };
