@@ -5393,6 +5393,7 @@ $root.google_mirror = (function() {
              * @property {boolean|null} [boolValue] Value boolValue
              * @property {google_mirror.protobuf.IStruct|null} [structValue] Value structValue
              * @property {google_mirror.protobuf.IListValue|null} [listValue] Value listValue
+             * @property {google_mirror.protobuf.UndefinedValue|null} [undefinedValue] Value undefinedValue
              */
 
             /**
@@ -5458,17 +5459,25 @@ $root.google_mirror = (function() {
              */
             Value.prototype.listValue = null;
 
+            /**
+             * Value undefinedValue.
+             * @member {google_mirror.protobuf.UndefinedValue} undefinedValue
+             * @memberof google_mirror.protobuf.Value
+             * @instance
+             */
+            Value.prototype.undefinedValue = 0;
+
             // OneOf field names bound to virtual getters and setters
             var $oneOfFields;
 
             /**
              * Value kind.
-             * @member {"nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue"|undefined} kind
+             * @member {"nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue"|"undefinedValue"|undefined} kind
              * @memberof google_mirror.protobuf.Value
              * @instance
              */
             Object.defineProperty(Value.prototype, "kind", {
-                get: $util.oneOfGetter($oneOfFields = ["nullValue", "numberValue", "stringValue", "boolValue", "structValue", "listValue"]),
+                get: $util.oneOfGetter($oneOfFields = ["nullValue", "numberValue", "stringValue", "boolValue", "structValue", "listValue", "undefinedValue"]),
                 set: $util.oneOfSetter($oneOfFields)
             });
 
@@ -5508,6 +5517,8 @@ $root.google_mirror = (function() {
                     $root.google_mirror.protobuf.Struct.encode(message.structValue, writer.uint32(/* id 5, wireType 2 =*/42).fork()).ldelim();
                 if (message.listValue != null && Object.hasOwnProperty.call(message, "listValue"))
                     $root.google_mirror.protobuf.ListValue.encode(message.listValue, writer.uint32(/* id 6, wireType 2 =*/50).fork()).ldelim();
+                if (message.undefinedValue != null && Object.hasOwnProperty.call(message, "undefinedValue"))
+                    writer.uint32(/* id 7, wireType 0 =*/56).int32(message.undefinedValue);
                 return writer;
             };
 
@@ -5559,6 +5570,9 @@ $root.google_mirror = (function() {
                         break;
                     case 6:
                         message.listValue = $root.google_mirror.protobuf.ListValue.decode(reader, reader.uint32());
+                        break;
+                    case 7:
+                        message.undefinedValue = reader.int32();
                         break;
                     default:
                         reader.skipType(tag & 7);
@@ -5646,6 +5660,17 @@ $root.google_mirror = (function() {
                             return "listValue." + error;
                     }
                 }
+                if (message.undefinedValue != null && message.hasOwnProperty("undefinedValue")) {
+                    if (properties.kind === 1)
+                        return "kind: multiple values";
+                    properties.kind = 1;
+                    switch (message.undefinedValue) {
+                    default:
+                        return "undefinedValue: enum value expected";
+                    case 0:
+                        break;
+                    }
+                }
                 return null;
             };
 
@@ -5682,6 +5707,12 @@ $root.google_mirror = (function() {
                     if (typeof object.listValue !== "object")
                         throw TypeError(".google_mirror.protobuf.Value.listValue: object expected");
                     message.listValue = $root.google_mirror.protobuf.ListValue.fromObject(object.listValue);
+                }
+                switch (object.undefinedValue) {
+                case "UNDEFINED_VALUE":
+                case 0:
+                    message.undefinedValue = 0;
+                    break;
                 }
                 return message;
             };
@@ -5729,6 +5760,11 @@ $root.google_mirror = (function() {
                     if (options.oneofs)
                         object.kind = "listValue";
                 }
+                if (message.undefinedValue != null && message.hasOwnProperty("undefinedValue")) {
+                    object.undefinedValue = options.enums === String ? $root.google_mirror.protobuf.UndefinedValue[message.undefinedValue] : message.undefinedValue;
+                    if (options.oneofs)
+                        object.kind = "undefinedValue";
+                }
                 return object;
             };
 
@@ -5744,6 +5780,18 @@ $root.google_mirror = (function() {
             };
 
             return Value;
+        })();
+
+        /**
+         * UndefinedValue enum.
+         * @name google_mirror.protobuf.UndefinedValue
+         * @enum {string}
+         * @property {number} UNDEFINED_VALUE=0 UNDEFINED_VALUE value
+         */
+        protobuf.UndefinedValue = (function() {
+            var valuesById = {}, values = Object.create(valuesById);
+            values[valuesById[0] = "UNDEFINED_VALUE"] = 0;
+            return values;
         })();
 
         /**

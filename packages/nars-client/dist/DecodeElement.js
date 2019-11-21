@@ -25,15 +25,15 @@ function assignLocalProps(props, localProps, getLocalProp) {
 const isCallbackValid = (callback) => {
     return (callback instanceof Schema_1.default.Callback && typeof callback.callId === "number");
 };
-const getChildren = (rpcCall, getLocalProp, element) => {
-    return element.children
-        ? element.children.map(elem => exports.ofEncodedReactElement(rpcCall, getLocalProp, elem))
-        : [];
-};
 /**
  * TODO: Reduce boilerplate
  */
 exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
+    const getChildren = (elem) => {
+        return elem.children
+            ? elem.children.map(e => exports.ofEncodedReactElement(rpcCall, getLocalProp, e))
+            : [];
+    };
     if (element.custom) {
         return null;
     }
@@ -42,7 +42,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (element.view.style) {
             props.style = StructCoders_1.ofStruct(element.view.style);
         }
-        const children = getChildren(rpcCall, getLocalProp, element.view);
+        const children = getChildren(element.view);
         props.children = children;
         return React.createElement(react_native_1.View, props, ...children);
     }
@@ -51,7 +51,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
         if (element.text.style) {
             props.style = StructCoders_1.ofStruct(element.text.style);
         }
-        const children = getChildren(rpcCall, getLocalProp, element.text);
+        const children = getChildren(element.text);
         props.children = children;
         return React.createElement(react_native_1.Text, props, ...children);
     }
@@ -90,7 +90,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element) => {
     else if (element.touchableOpacity) {
         const to = element.touchableOpacity;
         const props = {};
-        const children = getChildren(rpcCall, getLocalProp, to);
+        const children = getChildren(to);
         if (to.localProps) {
             assignLocalProps(props, to.localProps, getLocalProp);
         }

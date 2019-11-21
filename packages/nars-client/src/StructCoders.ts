@@ -30,8 +30,11 @@ export const toValue = (value: unknown): Schema.protobuf.IValue => {
       return {
         boolValue: value,
       };
+    case "undefined":
     default:
-      return { nullValue: 0 };
+      return {
+        undefinedValue: Schema.protobuf.UndefinedValue.UNDEFINED_VALUE,
+      };
   }
 };
 
@@ -77,6 +80,8 @@ export const ofValue = (value: Schema.protobuf.IValue): DecodedValue => {
     Array.isArray(value.listValue)
   ) {
     return value.listValue.map(ofValue);
+  } else if (value.hasOwnProperty("undefinedValue")) {
+    return undefined;
   } else {
     return undefined;
   }

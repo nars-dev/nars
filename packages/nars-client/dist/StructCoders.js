@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const Schema_1 = require("./Schema");
 exports.toValue = (value) => {
     switch (typeof value) {
         case "object":
@@ -32,8 +33,11 @@ exports.toValue = (value) => {
             return {
                 boolValue: value,
             };
+        case "undefined":
         default:
-            return { nullValue: 0 };
+            return {
+                undefinedValue: Schema_1.google_mirror.protobuf.UndefinedValue.UNDEFINED_VALUE,
+            };
     }
 };
 exports.toStruct = (value) => {
@@ -66,6 +70,9 @@ exports.ofValue = (value) => {
     else if (value.hasOwnProperty("listValue") &&
         Array.isArray(value.listValue)) {
         return value.listValue.map(exports.ofValue);
+    }
+    else if (value.hasOwnProperty("undefinedValue")) {
+        return undefined;
     }
     else {
         return undefined;

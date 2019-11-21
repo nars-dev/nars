@@ -477,6 +477,7 @@ export namespace google_mirror {
             boolValue?: (boolean|null);
             structValue?: (google_mirror.protobuf.IStruct|null);
             listValue?: (google_mirror.protobuf.IListValue|null);
+            undefinedValue?: (google_mirror.protobuf.UndefinedValue|null);
         }
 
         class Value implements IValue {
@@ -487,7 +488,8 @@ export namespace google_mirror {
             public boolValue: boolean;
             public structValue?: (google_mirror.protobuf.IStruct|null);
             public listValue?: (google_mirror.protobuf.IListValue|null);
-            public kind?: ("nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue");
+            public undefinedValue: google_mirror.protobuf.UndefinedValue;
+            public kind?: ("nullValue"|"numberValue"|"stringValue"|"boolValue"|"structValue"|"listValue"|"undefinedValue");
             public static create(properties?: google_mirror.protobuf.IValue): google_mirror.protobuf.Value;
             public static encode(message: google_mirror.protobuf.IValue, writer?: $protobuf.Writer): $protobuf.Writer;
             public static encodeDelimited(message: google_mirror.protobuf.IValue, writer?: $protobuf.Writer): $protobuf.Writer;
@@ -497,6 +499,10 @@ export namespace google_mirror {
             public static fromObject(object: { [k: string]: any }): google_mirror.protobuf.Value;
             public static toObject(message: google_mirror.protobuf.Value, options?: $protobuf.IConversionOptions): { [k: string]: any };
             public toJSON(): { [k: string]: any };
+        }
+
+        enum UndefinedValue {
+            UNDEFINED_VALUE = 0
         }
 
         enum NullValue {
