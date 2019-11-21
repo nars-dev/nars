@@ -74,7 +74,18 @@ message Value {
     Struct struct_value = 5;
     // Represents a repeated `Value`.
     ListValue list_value = 6;
+    // Represents an undefined value
+    UndefinedValue undefined_value = 7;
   }
+}
+
+// `Undefined` is a singleton enumeration to represent the undefined value for the
+// `Value` type union.
+//
+//  The JSON representation for `UndefinedValue` is JSON `undefined`.
+enum UndefinedValue {
+  // Null value.
+  UNDEFINED_VALUE = 0;
 }
 
 // `NullValue` is a singleton enumeration to represent the null value for the

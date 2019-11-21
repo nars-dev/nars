@@ -108,8 +108,8 @@ const renderItem = ({ item }: { item: Field }) => {
   }
 };
 
-function Form(_: { props: {} }) {
-  const [isCompany, setIsCompany] = React.useState(false);
+function Form(props: { isCompany?: boolean }) {
+  const [isCompany, setIsCompany] = React.useState(Boolean(props.isCompany));
   const fields = computeFields(isCompany);
   return (
     <FlatList

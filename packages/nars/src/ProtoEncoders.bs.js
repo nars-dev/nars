@@ -3,11 +3,11 @@
 
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
+var JsValue = require("./JsValue.bs.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var Js_option = require("bs-platform/lib/js/js_option.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
-var JsonToStruct = require("./JsonToStruct.bs.js");
 
 function encodeOptional(value, decoder) {
   return Js_option.map(Curry.__1(decoder), value);
@@ -60,7 +60,7 @@ function encodeStyleOptional(props) {
   var value = props.style;
   return Js_option.map((function (value) {
                 var x = value;
-                return JsonToStruct.convertExn(x);
+                return JsValue.dictToStruct(x);
               }), value);
 }
 

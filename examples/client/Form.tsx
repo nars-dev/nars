@@ -23,8 +23,7 @@ const Component = ({ animationProgress }) => {
       <RemoteComponent
         name="Form"
         props={{
-          props: { },
-          localProps: {},
+          isCompany: true,
         }}
       />
     </Animated.View>

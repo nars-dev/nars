@@ -18,7 +18,21 @@
 *)
 module Google_mirror = struct
   module Protobuf = struct
-    module rec NullValue : sig
+    module rec UndefinedValue : sig
+      type t = UNDEFINED_VALUE 
+      val to_int: t -> int
+      val from_int: int -> t Ocaml_protoc_plugin.Result.t
+    end = struct 
+      type t = UNDEFINED_VALUE 
+      let to_int = function
+        | UNDEFINED_VALUE -> 0
+      
+      let from_int = function
+        | 0 -> Ok UNDEFINED_VALUE
+        | n -> Error (`Unknown_enum_value n)
+      
+    end
+    and NullValue : sig
       type t = NULL_VALUE 
       val to_int: t -> int
       val from_int: int -> t Ocaml_protoc_plugin.Result.t
@@ -82,21 +96,21 @@ module Google_mirror = struct
     end
     and Value : sig
       val name': unit -> string
-      type t = [ `Null_value of NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Struct_value of Struct.t | `List_value of ListValue.t ] 
+      type t = [ `Null_value of NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Struct_value of Struct.t | `List_value of ListValue.t | `Undefined_value of UndefinedValue.t ] 
       val to_proto: t -> Ocaml_protoc_plugin.Writer.t
       val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
     end = struct 
       let name' () = "Struct.google_mirror.protobuf.Value"
-      type t = [ `Null_value of NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Struct_value of Struct.t | `List_value of ListValue.t ] 
+      type t = [ `Null_value of NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Struct_value of Struct.t | `List_value of ListValue.t | `Undefined_value of UndefinedValue.t ] 
       let to_proto t = 
         let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Null_value v -> oneof_elem (1, (enum NullValue.to_int), v) | `Number_value v -> oneof_elem (2, double, v) | `String_value v -> oneof_elem (3, string, v) | `Bool_value v -> oneof_elem (4, bool, v) | `Struct_value v -> oneof_elem (5, (message Struct.to_proto), v) | `List_value v -> oneof_elem (6, (message ListValue.to_proto), v))) ^:: nil ) in
+        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Null_value v -> oneof_elem (1, (enum NullValue.to_int), v) | `Number_value v -> oneof_elem (2, double, v) | `String_value v -> oneof_elem (3, string, v) | `Bool_value v -> oneof_elem (4, bool, v) | `Struct_value v -> oneof_elem (5, (message Struct.to_proto), v) | `List_value v -> oneof_elem (6, (message ListValue.to_proto), v) | `Undefined_value v -> oneof_elem (7, (enum UndefinedValue.to_int), v))) ^:: nil ) in
         let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
         apply ~f:(serialize ()) t
       
       let from_proto writer = 
         let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, (enum NullValue.from_int), fun v -> `Null_value v); oneof_elem (2, double, fun v -> `Number_value v); oneof_elem (3, string, fun v -> `String_value v); oneof_elem (4, bool, fun v -> `Bool_value v); oneof_elem (5, (message Struct.from_proto), fun v -> `Struct_value v); oneof_elem (6, (message ListValue.from_proto), fun v -> `List_value v) ]) ^:: nil ) in
+        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, (enum NullValue.from_int), fun v -> `Null_value v); oneof_elem (2, double, fun v -> `Number_value v); oneof_elem (3, string, fun v -> `String_value v); oneof_elem (4, bool, fun v -> `Bool_value v); oneof_elem (5, (message Struct.from_proto), fun v -> `Struct_value v); oneof_elem (6, (message ListValue.from_proto), fun v -> `List_value v); oneof_elem (7, (enum UndefinedValue.from_int), fun v -> `Undefined_value v) ]) ^:: nil ) in
         let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
         deserialize writer
       

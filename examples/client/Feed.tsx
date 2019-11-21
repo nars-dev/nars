@@ -16,7 +16,7 @@ const Component = ({ animationProgress }) => {
     <Animated.View style={[{ opacity: animationProgress }, styles.container]}>
       <RemoteComponent
         name="Feed"
-        props={{ props: { }, localProps: {} }}
+        props={{ backgroundColor: "yellow" }}
       />
     </Animated.View>
   );

@@ -1,13 +1,13 @@
+import { InputProp } from "nars-common";
+
 /*
  * Define Routes and the props
  */
 export const config = {
   Form: {
-    props: {},
-    localProps: {},
+    isCompany: InputProp.optional(InputProp.boolean)
   },
   Feed: {
-    props: {},
-    localProps: {},
+    backgroundColor: InputProp.string
   },
 };

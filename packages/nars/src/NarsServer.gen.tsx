@@ -10,9 +10,9 @@ const NarsServerBS = require('./NarsServer.bs');
 
 import {Dict_t as Js_Dict_t} from '../src/shims/Js.shim';
 
-import {Json_t as Js_Json_t} from '../src/shims/Js.shim';
-
 import {reactElement as ReactReconciler_reactElement} from '../src/shims/ReactReconciler.shim';
+
+import {t as JsValue_t} from './JsValue.gen';
 
 // tslint:disable-next-line:max-classes-per-file 
 export abstract class Socket_data { protected opaque!: any }; /* simulate opaque types */
@@ -37,7 +37,7 @@ export type server = Server_t;
 export type componentSpec = {
   readonly name: string; 
   readonly localProps: string[]; 
-  readonly props: Js_Dict_t<Js_Json_t>
+  readonly props: Js_Dict_t<JsValue_t>
 };
 
 export const startListening: (_1:server, _2:((_1:componentSpec) => ReactReconciler_reactElement)) => void = function (Arg1: any, Arg2: any) {

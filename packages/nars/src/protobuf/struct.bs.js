@@ -8,7 +8,7 @@ var Spec$Ocamlprotocplugin = require("ocaml-protoc-plugin-runtime-bs/src/ocaml_p
 var Serialize$Ocamlprotocplugin = require("ocaml-protoc-plugin-runtime-bs/src/ocaml_protoc_plugin/serialize.bs.js");
 var Deserialize$Ocamlprotocplugin = require("ocaml-protoc-plugin-runtime-bs/src/ocaml_protoc_plugin/deserialize.bs.js");
 
-var NullValue = Caml_module.init_mod([
+var UndefinedValue = Caml_module.init_mod([
       "struct.ml",
       25,
       10
@@ -23,9 +23,24 @@ var NullValue = Caml_module.init_mod([
         ]
       ]]);
 
+var NullValue = Caml_module.init_mod([
+      "struct.ml",
+      39,
+      10
+    ], [[
+        [
+          0,
+          "to_int"
+        ],
+        [
+          0,
+          "from_int"
+        ]
+      ]]);
+
 var Struct = Caml_module.init_mod([
       "struct.ml",
-      46,
+      60,
       10
     ], [[
         [
@@ -61,7 +76,7 @@ var Struct = Caml_module.init_mod([
 
 var Value = Caml_module.init_mod([
       "struct.ml",
-      88,
+      102,
       10
     ], [[
         [
@@ -80,7 +95,7 @@ var Value = Caml_module.init_mod([
 
 var ListValue = Caml_module.init_mod([
       "struct.ml",
-      109,
+      123,
       10
     ], [[
         [
@@ -108,6 +123,35 @@ function from_int(n) {
                 n
               ]]);
   } else {
+    return /* Ok */Block.__(0, [/* UNDEFINED_VALUE */0]);
+  }
+}
+
+Caml_module.update_mod([[
+        [
+          0,
+          "to_int"
+        ],
+        [
+          0,
+          "from_int"
+        ]
+      ]], UndefinedValue, {
+      to_int: to_int,
+      from_int: from_int
+    });
+
+function to_int$1(param) {
+  return 0;
+}
+
+function from_int$1(n) {
+  if (n !== 0) {
+    return /* Error */Block.__(1, [/* `Unknown_enum_value */[
+                353152616,
+                n
+              ]]);
+  } else {
     return /* Ok */Block.__(0, [/* NULL_VALUE */0]);
   }
 }
@@ -122,13 +166,13 @@ Caml_module.update_mod([[
           "from_int"
         ]
       ]], NullValue, {
-      to_int: to_int,
-      from_int: from_int
+      to_int: to_int$1,
+      from_int: from_int$1
     });
 
 var FieldsEntry = Caml_module.init_mod([
       "struct.ml",
-      52,
+      66,
       12
     ], [[
         [
@@ -273,44 +317,52 @@ function name$prime$2(param) {
 function to_proto$2(t) {
   var spec = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof, (function (param) {
               var variant = param[0];
-              if (variant >= -663343517) {
-                if (variant >= -483181849) {
-                  if (variant >= 258787964) {
+              if (variant >= -654604135) {
+                if (variant >= 258787964) {
+                  if (variant >= 629889314) {
+                    return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                                7,
+                                Curry._1(Spec$Ocamlprotocplugin.Serialize.C.$$enum, UndefinedValue.to_int),
+                                param[1]
+                              ]);
+                  } else {
                     return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
                                 4,
                                 Spec$Ocamlprotocplugin.Serialize.C.bool,
                                 param[1]
                               ]);
-                  } else {
-                    return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
-                                5,
-                                Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, Struct.to_proto),
-                                param[1]
-                              ]);
                   }
-                } else if (variant >= -654604135) {
+                } else if (variant >= -483181849) {
+                  return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                              5,
+                              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, Struct.to_proto),
+                              param[1]
+                            ]);
+                } else {
                   return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
                               1,
                               Curry._1(Spec$Ocamlprotocplugin.Serialize.C.$$enum, NullValue.to_int),
                               param[1]
                             ]);
-                } else {
+                }
+              } else if (variant !== -769490512) {
+                if (variant >= -663343517) {
                   return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
                               3,
                               Spec$Ocamlprotocplugin.Serialize.C.string,
                               param[1]
                             ]);
+                } else {
+                  return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                              2,
+                              Spec$Ocamlprotocplugin.Serialize.C.$$double,
+                              param[1]
+                            ]);
                 }
-              } else if (variant >= -769490512) {
+              } else {
                 return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
                             6,
                             Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, ListValue.to_proto),
-                            param[1]
-                          ]);
-              } else {
-                return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
-                            2,
-                            Spec$Ocamlprotocplugin.Serialize.C.$$double,
                             param[1]
                           ]);
               }
@@ -389,7 +441,19 @@ function from_proto$2(writer) {
                                       ];
                               })
                           ]),
-                      /* [] */0
+                      /* :: */[
+                        Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.oneof_elem, /* tuple */[
+                              7,
+                              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.$$enum, UndefinedValue.from_int),
+                              (function (v) {
+                                  return /* `Undefined_value */[
+                                          629889314,
+                                          v
+                                        ];
+                                })
+                            ]),
+                        /* [] */0
+                      ]
                     ]
                   ]
                 ]
@@ -466,6 +530,7 @@ Caml_module.update_mod([[
     });
 
 var Protobuf = {
+  UndefinedValue: UndefinedValue,
   NullValue: NullValue,
   Struct: Struct,
   Value: Value,
@@ -477,4 +542,4 @@ var Google_mirror = {
 };
 
 exports.Google_mirror = Google_mirror;
-/* NullValue Not a pure module */
+/* UndefinedValue Not a pure module */

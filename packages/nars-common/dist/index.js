@@ -5,6 +5,10 @@ exports.InputProp = {
         decode: (obj) => String(obj),
         encode: (obj) => obj,
     },
+    boolean: {
+        decode: (obj) => Boolean(obj),
+        encode: (obj) => obj,
+    },
     optional: ({ encode, decode, }) => ({
         decode: (obj) => (obj ? decode(obj) : undefined),
         encode: (obj) => (obj ? encode(obj) : undefined),

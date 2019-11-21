@@ -17,7 +17,7 @@ const renderItem = ({ item }: { item: Post }) => {
   }
 };
 
-function Feed(_: {}) {
+function Feed(props: { backgroundColor: string }) {
   const [posts, setPosts] = React.useState(generatePosts);
   const loadMore = () => {
     setPosts([...posts, ...generatePosts()]);
@@ -31,6 +31,7 @@ function Feed(_: {}) {
 
   return (
     <FlatList
+      style={{ backgroundColor: props.backgroundColor }}
       onEndReached={loadMore}
       onEndReachedThreshold={0.3}
       data={[...posts, { id: "loading", type: PostType.Loading }] as Post[]}

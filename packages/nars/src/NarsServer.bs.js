@@ -4,11 +4,11 @@
 var $$Array = require("bs-platform/lib/js/array.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Schema = require("./protobuf/schema.bs.js");
+var JsValue = require("./JsValue.bs.js");
 var V1 = require("uuid/v1");
 var Mixpanel = require("./Mixpanel.bs.js");
 var Js_option = require("bs-platform/lib/js/js_option.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
-var JsonOfStruct = require("./JsonOfStruct.bs.js");
 var NarsReconciler = require("./NarsReconciler.bs.js");
 var AnalyticsNode = require("analytics-node");
 var Belt_HashMapInt = require("bs-platform/lib/js/belt_HashMapInt.js");
@@ -78,7 +78,7 @@ function startListening(server, render) {
                                       Belt_HashMapInt.set(containers, rootId, container$1);
                                       container = container$1;
                                     }
-                                    var props = Js_option.getWithDefault({ }, Js_option.map(JsonOfStruct.convertStruct, match$2[/* props */1]));
+                                    var props = Js_option.getWithDefault({ }, Js_option.map(JsValue.structToDict, match$2[/* props */1]));
                                     NarsReconciler.updateContainer(Curry._1(render, {
                                               name: match$2[/* name */0],
                                               localProps: $$Array.of_list(match$2[/* localProps */2]),

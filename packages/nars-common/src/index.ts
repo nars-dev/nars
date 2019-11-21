@@ -36,6 +36,10 @@ export const InputProp = {
     decode: (obj: unknown) => String(obj),
     encode: (obj: string) => obj,
   },
+  boolean: {
+    decode: (obj: unknown) => Boolean(obj),
+    encode: (obj: boolean) => obj,
+  },
   optional: <T>({
     encode,
     decode,

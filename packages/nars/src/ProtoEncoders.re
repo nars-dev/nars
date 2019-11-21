@@ -26,16 +26,19 @@ let encodeOptionalLocalProps = dict => {
     |> Js.Dict.entries
     |> Js.Array.filter(((_, value)) => Belt.Option.isSome(value))
     |> Js.Array.map(((key, value)) =>
-         encodeLocalProp(~localKey=Belt.Option.getExn(value)##key, ~propKey=key)
+         encodeLocalProp(
+           ~localKey=Belt.Option.getExn(value)##key,
+           ~propKey=key,
+         )
        )
     |> Array.to_list
   };
 };
 
 let encodeStyleOptional = props => {
-  encodeOptional(props##style, x =>
-    x |> Style.tToJSONDict |> JsonToStruct.convertExn
-  );
+  encodeOptional(props##style, x => {
+    x |> Style.tToJSONDict |> JsValue.dictToStruct
+  });
 };
 
 let encodeNullable = (value, decoder) => {

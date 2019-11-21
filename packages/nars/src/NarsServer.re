@@ -32,7 +32,7 @@ type componentSpec = {
   .
   "name": string,
   "localProps": array(string),
-  "props": Js.Dict.t(Js.Json.t),
+  "props": Js.Dict.t(JsValue.t),
 };
 
 external uint8ArrayAsArray: Uint8Array.t => Js.Array.t(Uint8Array.elt) =
@@ -89,10 +89,7 @@ let startListening = (server: server, render) => {
               container;
             };
           let props =
-            Js.Option.map(
-              (. props) => JsonOfStruct.convertStruct(props),
-              props,
-            )
+            Js.Option.map((. props) => JsValue.structToDict(props), props)
             |> Js.Option.getWithDefault(Js.Dict.empty());
           NarsReconciler.updateContainer(
             ~element=

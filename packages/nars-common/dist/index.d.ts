@@ -23,6 +23,10 @@ export declare const InputProp: {
         decode: (obj: unknown) => string;
         encode: (obj: string) => string;
     };
+    boolean: {
+        decode: (obj: unknown) => boolean;
+        encode: (obj: boolean) => boolean;
+    };
     optional: <T>({ encode, decode, }: InputPropType<T>) => InputPropType<T | undefined>;
 };
 export declare function localProp<IsRequired extends LocalPropRequired, A extends string, B extends string>(isRequired: IsRequired, a: A, b: B): LocalPropKey<A, B, IsRequired>;
