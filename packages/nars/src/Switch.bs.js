@@ -8,7 +8,7 @@ var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
 var name = "Switch";
 
-function encoder(key, param, registerCallback, param$1) {
+function encoder(key, param, bridge, param$1) {
   var props = param[0];
   return {
           key: key,
@@ -17,7 +17,7 @@ function encoder(key, param, registerCallback, param$1) {
             {
               style: ProtoEncoders.encodeStyleOptional(props),
               value: props.value,
-              onValueChange: ProtoEncoders.encodeCallback(registerCallback, (function (args) {
+              onValueChange: ProtoEncoders.encodeCallback(bridge.registerCallback, (function (args) {
                       var callback = props.onValueChange;
                       return Curry._1(callback, StructDecoders.getFieldExn("value", args, StructDecoders.getBool));
                     }))

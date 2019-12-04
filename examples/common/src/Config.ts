@@ -10,4 +10,7 @@ export const config = {
   Feed: {
     backgroundColor: InputProp.string
   },
+  ProgressBar: {
+    height: InputProp.number
+  },
 };

@@ -48,6 +48,10 @@ export const InputProp = {
     encode: (obj: T | undefined) => (obj ? encode(obj) : undefined),
     optional: true,
   }),
+  number: {
+    decode: (obj: unknown) => Number(obj),
+    encode: (obj: number) => obj,
+  }
 };
 
 export function localProp<

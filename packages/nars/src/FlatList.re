@@ -21,7 +21,7 @@ module FL = Schema.FlatList;
 let opt_map = Js.Option.map;
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~registerCallback, ~children)
+    (~key, ~props as Instance.Props(props), ~bridge, ~children)
     : Schema.ReactElement.t => {
   open Schema;
   let props = toProps(props);
@@ -41,7 +41,7 @@ let encoder =
           style: ProtoEncoders.encodeStyleOptional(props),
           onEndReached:
             ProtoEncoders.encodeArityZeroCallbackOptional(
-              ~registerCallback,
+              ~registerCallback=bridge.Instance.registerCallback,
               ~callback=props##onEndReached,
             ),
           onEndReachedThreshold:

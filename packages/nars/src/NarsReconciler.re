@@ -4,6 +4,8 @@ type instance = Instance.t;
 
 type containerInfo = {
   flushUpdates: array(Instance.encoded) => unit,
+  updateAnimatedValue:
+    (~value: Animated.animatedValue, ~toValue: Animated.adaptable) => unit,
   children: array(instance),
   callbackRegistry: CallbackRegistry.t(Instance.args => unit),
 };
@@ -38,7 +40,12 @@ let resetAfterCommit = (container: containerInfo) => {
   };
   let children =
     Js.Array.map(
-      inst => Instance.encode(~registerCallback, inst),
+      inst =>
+        Instance.encode(
+          ~registerCallback,
+          ~updateAnimatedValue=container.updateAnimatedValue,
+          inst,
+        ),
       container.children,
     );
   container.flushUpdates(children);
@@ -250,12 +257,17 @@ type container = {
   opaqueRoot: ReactReconciler.opaqueRoot,
 };
 
-let createContainer = (~flushUpdates) => {
+let createContainer = (~flushUpdates, ~updateAnimatedValue) => {
   let registry = CallbackRegistry.make(~hintSize=50);
   let opaqueRoot =
     ReactReconciler.createContainer(
       reconciler,
-      {flushUpdates, children: [||], callbackRegistry: registry},
+      {
+        flushUpdates,
+        children: [||],
+        callbackRegistry: registry,
+        updateAnimatedValue,
+      },
     );
   {registry, opaqueRoot};
 };

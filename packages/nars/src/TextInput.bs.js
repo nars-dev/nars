@@ -8,7 +8,7 @@ var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
 var name = "TextInput";
 
-function encoder(key, param, registerCallback, param$1) {
+function encoder(key, param, bridge, param$1) {
   var props = param[0];
   return {
           key: key,
@@ -23,7 +23,7 @@ function encoder(key, param, registerCallback, param$1) {
               value: props.value,
               localProps: /* [] */0,
               onValueChange: ProtoEncoders.encodeOptional(props.onValueChange, (function (callback) {
-                      return ProtoEncoders.encodeCallback(registerCallback, (function (args) {
+                      return ProtoEncoders.encodeCallback(bridge.registerCallback, (function (args) {
                                     return Curry._1(callback, StructDecoders.getFieldExn("value", args, StructDecoders.getString));
                                   }));
                     }))

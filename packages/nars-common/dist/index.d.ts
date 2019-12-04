@@ -28,6 +28,10 @@ export declare const InputProp: {
         encode: (obj: boolean) => boolean;
     };
     optional: <T>({ encode, decode, }: InputPropType<T>) => InputPropType<T | undefined>;
+    number: {
+        decode: (obj: unknown) => number;
+        encode: (obj: number) => number;
+    };
 };
 export declare function localProp<IsRequired extends LocalPropRequired, A extends string, B extends string>(isRequired: IsRequired, a: A, b: B): LocalPropKey<A, B, IsRequired>;
 //# sourceMappingURL=index.d.ts.map

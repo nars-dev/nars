@@ -1,6 +1,11 @@
 jest.mock("react-native", () => ({
   Text: "Text",
 }));
+jest.mock("react-native-reanimated", () => ({
+  Text: "AnimatedText",
+  Image: "AnimatedImage",
+  View: "AnimatedView",
+}));
 
 import * as React from "react";
 import { ReactTestInstance } from "react-test-renderer";
@@ -10,6 +15,7 @@ import { createRemoteComponent, render, getChildren } from "./TestRenderer";
 const config = {
   Test: {
     text: InputProp.string,
+    number: InputProp.number,
     textOptional: InputProp.optional(InputProp.string),
   },
 };
@@ -31,6 +37,7 @@ describe("Props", () => {
             name="Test"
             props={{
               text: "A",
+              number: 10,
               textOptional: undefined,
             }}
           />
@@ -44,6 +51,7 @@ describe("Props", () => {
             name="Test"
             props={{
               text: "A",
+              number: 20,
               textOptional: "B",
             }}
           />

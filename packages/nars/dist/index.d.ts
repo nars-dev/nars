@@ -12,4 +12,6 @@ import * as Server from "./NarsServer.gen";
 export { Static, Server };
 export { t as LocalProp } from "./LocalProp.gen";
 export * from "nars-common";
+import * as Animated from "./Animated";
+export { Animated };
 //# sourceMappingURL=index.d.ts.map

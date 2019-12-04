@@ -45,7 +45,7 @@ function resetAfterCommit(container) {
     return id;
   };
   var children = container.children.map((function (inst) {
-          return Instance.encode(inst, registerCallback);
+          return Instance.encode(inst, registerCallback, container.updateAnimatedValue);
         }));
   Curry._1(container.flushUpdates, children);
   return /* () */0;
@@ -252,10 +252,11 @@ var reconciler = ReactReconciler({
       resetTextContent: resetTextContent
     });
 
-function createContainer(flushUpdates) {
+function createContainer(flushUpdates, updateAnimatedValue) {
   var registry = Belt_HashMapInt.make(50);
   var opaqueRoot = reconciler.createContainer({
         flushUpdates: flushUpdates,
+        updateAnimatedValue: updateAnimatedValue,
         children: /* array */[],
         callbackRegistry: registry
       });

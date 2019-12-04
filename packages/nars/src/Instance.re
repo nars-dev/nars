@@ -10,11 +10,17 @@ type messageId = int;
 type props =
   | Props(Js.t('props)): props;
 
+type bridge = {
+  registerCallback: (args => unit) => messageId,
+  updateAnimatedValue:
+    (~value: Animated.animatedValue, ~toValue: Animated.adaptable) => unit,
+};
+
 type encoder =
   (
     ~key: option(Schema.StringValue.t),
     ~props: props,
-    ~registerCallback: (args => unit) => messageId,
+    ~bridge: bridge,
     ~children: array(encoded)
   ) =>
   encoded;
@@ -29,19 +35,19 @@ and t =
   | RawText(string)
   | Component(componentInstance);
 
-let rec encode = (instance, ~registerCallback) => {
+let rec encode = (instance, ~registerCallback, ~updateAnimatedValue) => {
   switch (instance) {
   | RawText(string) => {
       Schema.ReactElement.value: `RawText(string),
       key: None,
     }
   | Component(inst) =>
-    let children = Js.Array.map(encode(~registerCallback), inst.children);
-    inst.encode(
-      ~key=inst.key,
-      ~props=inst.props,
-      ~registerCallback,
-      ~children,
-    );
+    let bridge = {registerCallback, updateAnimatedValue};
+    let children =
+      Js.Array.map(
+        encode(~registerCallback, ~updateAnimatedValue),
+        inst.children,
+      );
+    inst.encode(~key=inst.key, ~props=inst.props, ~bridge, ~children);
   };
 };

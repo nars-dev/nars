@@ -37,7 +37,13 @@ let encodeOptionalLocalProps = dict => {
 
 let encodeStyleOptional = props => {
   encodeOptional(props##style, x => {
-    x |> Style.tToJSONDict |> JsValue.dictToStruct
+    x |> Style.tToJsValue |> JsValue.tToStruct
+  });
+};
+
+let encodeAnimatedStyleOptional = (~updateAnimatedValue as updater, props) => {
+  encodeOptional(props##style, x => {
+    x |> AnimatedStyle.tToStruct(props##idGenerator, updater)
   });
 };
 

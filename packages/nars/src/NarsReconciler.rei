@@ -2,7 +2,15 @@
 type container;
 
 let createContainer:
-  (~flushUpdates: array(Instance.encoded) => unit) => container;
+  (
+    ~flushUpdates: array(Instance.encoded) => unit,
+    ~updateAnimatedValue: (
+                            ~value: Animated.animatedValue,
+                            ~toValue: Animated.adaptable
+                          ) =>
+                          unit
+  ) =>
+  container;
 let updateContainer:
   (~element: ReactReconciler.reactElement, ~container: container) =>
   ReactReconciler.expirationTime;

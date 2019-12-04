@@ -1,7 +1,15 @@
 import * as React from "react";
-import Schema from "./Schema";
 import { toStruct } from "./StructCoders";
 import { ofEncodedReactElement } from "./DecodeElement";
+import Animated from "react-native-reanimated";
+import { RetainedInstances, updateAnimatedValue } from "./AnimatedCoders";
+import {
+  ServerToClient,
+  ClientToServer,
+  Call,
+  Unmount,
+  Render,
+} from "./schema_pb";
 
 export type State =
   | "Loading"
@@ -44,6 +52,33 @@ class InstanceCounter {
 
 const instanceCounter = new InstanceCounter();
 
+const createRetainedInstanceContainer = (): RetainedInstances => {
+  const clocks = new Map<number, Animated.Clock>();
+  const values = new Map<number, Animated.Value<any>>();
+  const nodes = new Map<number, Animated.Node<any>>();
+
+  return {
+    getClock: n => {
+      return clocks.get(n.getNodeid());
+    },
+    setClock: (n, clock: Animated.Clock) => {
+      return clocks.set(n.getNodeid(), clock);
+    },
+    getValue: n => {
+      return values.get(n.getNodeid());
+    },
+    setValue: (node, value: Animated.Value<any>) => {
+      return values.set(node.getNodeid(), value);
+    },
+    getNode: n => {
+      return nodes.get(n.getNodeid());
+    },
+    setNode: (n, value: Animated.Node<any>) => {
+      nodes.set(n.getNodeid(), value);
+    },
+  };
+};
+
 export const useNars = (
   wsOrAddress: SocketLike | string,
   name: string,
@@ -55,6 +90,9 @@ export const useNars = (
   );
   const localProps = localPropsOptional ? localPropsOptional : {};
   const [instanceId] = React.useState(() => instanceCounter.next());
+  const [retainedInstances] = React.useState(() =>
+    createRetainedInstanceContainer()
+  );
   const ws = React.useRef<SocketLike | null>(null);
   const websocket = () => {
     if (ws.current) {
@@ -69,15 +107,12 @@ export const useNars = (
   };
   React.useEffect(() => {
     const ws = websocket();
-    ws.addEventListener("message", event => {
-      if (typeof event.data !== "string") {
-        throw "Bad binary format";
-      }
-      const message = Schema.ServerToClient.decode(
-        Uint8Array.from(event.data, x => x.charCodeAt(0))
+    ws.addEventListener("message", (event: { data: ArrayBuffer }) => {
+      const message = ServerToClient.deserializeBinary(
+        new Uint8Array(event.data)
       );
-      if (message.rootId === instanceId) {
-        if (message.error) {
+      if (message.getRootid() === instanceId) {
+        if (message.hasError()) {
           setRenderedElement(currentValue => {
             if (currentValue === "Loading") {
               return "Error";
@@ -85,58 +120,58 @@ export const useNars = (
               return currentValue;
             }
           });
-        } else if (message.update && message.update.element) {
+        } else if (message.hasUpdate()) {
           setRenderedElement({
             type: "Rendered",
-            element: message.update.element.map(elem =>
-              ofEncodedReactElement(
-                (messageId, args) => {
-                  ws.send(
-                    Schema.ClientToServer.encode(
-                      Schema.ClientToServer.create({
-                        call: {
-                          messageId,
-                          args,
-                        },
-                        rootId: instanceId,
-                      })
-                    ).finish()
-                  );
-                },
-                key => {
-                  return localProps[key];
-                },
-                elem
-              )
-            ),
+            element: message
+              .getUpdate()!
+              .getElementList()
+              .map(elem =>
+                ofEncodedReactElement(
+                  (messageId, args) => {
+                    const msg = new ClientToServer();
+                    const call = new Call();
+                    call.setMessageid(messageId);
+                    call.setArgs(args);
+                    msg.setCall(call);
+                    msg.setRootid(instanceId);
+                    ws.send(msg.serializeBinary());
+                  },
+                  key => {
+                    return localProps[key];
+                  },
+                  elem,
+                  retainedInstances
+                )
+              ),
           });
+        } else if (message.hasAnimatedvalueupdate()) {
+                console.log("UPDATEP");
+          const update = message.getAnimatedvalueupdate()!;
+          const value = update.getValue();
+          const toValue = update.getTovalue();
+          updateAnimatedValue(value, toValue, retainedInstances);
         }
       }
     });
     return () => {
       instanceCounter.free(instanceId);
-      ws.send(
-        Schema.ClientToServer.encode(
-          Schema.ClientToServer.create({
-            unmount: {},
-            rootId: instanceId,
-          })
-        ).finish()
-      );
+      const msg = new ClientToServer();
+      msg.setUnmount(new Unmount());
+      msg.setRootid(instanceId);
+      ws.send(msg.serializeBinary());
     };
   }, []);
   React.useEffect(() => {
     const ws = websocket();
-    const renderMessage = Schema.ClientToServer.encode(
-      Schema.ClientToServer.create({
-        render: {
-          name,
-          props: toStruct(props),
-          localProps: Object.keys(localProps),
-        },
-        rootId: instanceId,
-      })
-    ).finish();
+    const msg = new ClientToServer();
+    const payload = new Render();
+    payload.setName(name);
+    payload.setProps(toStruct(props));
+    payload.setLocalpropsList(Object.keys(localProps));
+    msg.setRootid(instanceId);
+    msg.setRender(payload);
+    const renderMessage = msg.serializeBinary();
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(renderMessage);
     } else {

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { ofStruct, toStruct } from "./StructCoders";
-import Schema from "./Schema";
+import * as Schema from "./schema_pb";
+import { Struct } from "./struct_pb";
 import {
   View,
   Text,
@@ -10,6 +11,8 @@ import {
   Switch,
   Image,
 } from "react-native";
+import Animated from "react-native-reanimated";
+import { decodeAnimatedStyle, RetainedInstances } from "./AnimatedCoders";
 
 type Writable<T> = {
   -readonly [K in keyof T]: T[K];
@@ -17,148 +20,170 @@ type Writable<T> = {
 
 function assignLocalProps<T extends object>(
   props: T,
-  localProps: Array<Schema.ILocalProp>,
+  localProps: Array<Schema.LocalProp>,
   getLocalProp: (key: string) => unknown
 ) {
   const unsafeProps = props as { [k: string]: any };
-  localProps.forEach(({ propKey, localKey }) => {
-    if (propKey && localKey) {
-      unsafeProps[propKey] = getLocalProp(localKey);
-    }
+  localProps.forEach(l => {
+    unsafeProps[l.getPropkey()] = getLocalProp(l.getLocalkey());
   });
 }
-
-const isCallbackValid = (callback: unknown): callback is Schema.Callback => {
-  return (
-    callback instanceof Schema.Callback && typeof callback.callId === "number"
-  );
-};
 
 /**
  * TODO: Reduce boilerplate
  */
 export const ofEncodedReactElement = (
-  rpcCall: (
-    callId: number,
-    args?: Schema.google_mirror.protobuf.IStruct
-  ) => void,
+  rpcCall: (callId: number, args?: Struct) => void,
   getLocalProp: (key: string) => unknown,
-  element: Schema.IReactElement
+  element: Schema.ReactElement,
+  retainedInstances: RetainedInstances
 ): React.ReactChild | null => {
-  const getChildren = (elem: { children?: Schema.IReactElement[] | null }) => {
-    return elem.children
-      ? elem.children.map(e => ofEncodedReactElement(rpcCall, getLocalProp, e))
-      : [];
+  const getChildren = (elems: { getChildrenList(): Schema.ReactElement[] }) => {
+    return elems
+      .getChildrenList()
+      .map(e =>
+        ofEncodedReactElement(rpcCall, getLocalProp, e, retainedInstances)
+      );
   };
-  if (element.custom) {
+  if (element.hasCustom()) {
     return null;
-  } else if (element.view) {
+  } else if (element.hasView()) {
     const props = {} as Writable<View["props"]>;
-    if (element.view.style) {
-      props.style = ofStruct(element.view.style);
+    const view = element.getView()!;
+    if (view.hasStyle()) {
+      props.style = ofStruct(view.getStyle()!);
     }
-    const children = getChildren(element.view);
+    const children = getChildren(view);
     props.children = children;
     return React.createElement(View, props, ...children);
-  } else if (element.text) {
+  } else if (element.hasText()) {
     const props = {} as Writable<Text["props"]>;
-    if (element.text.style) {
-      props.style = ofStruct(element.text.style);
+    const text = element.getText()!;
+    if (text.hasStyle()) {
+      props.style = ofStruct(text.getStyle()!);
     }
-    const children = getChildren(element.text);
+    const children = getChildren(text);
     props.children = children;
     return React.createElement(Text, props, ...children);
-  } else if (element.rawText) {
-    return String(element.rawText.text);
-  } else if (element.flatList) {
-    const fl = element.flatList;
-    const props = {} as Writable<FlatList<Schema.IReactElement>["props"]>;
-    if (fl.style) {
-      props.style = ofStruct(fl.style);
+  } else if (element.hasRawtext()) {
+    return String(element.getRawtext()!.getText());
+  } else if (element.hasFlatlist()) {
+    const fl = element.getFlatlist()!;
+    const props = {} as Writable<FlatList<Schema.ReactElement>["props"]>;
+    if (fl.hasStyle()) {
+      props.style = ofStruct(fl.getStyle()!);
     }
-    if (fl.onEndReachedThreshold) {
-      props.onEndReachedThreshold = fl.onEndReachedThreshold.value;
+    if (fl.hasOnendreachedthreshold()) {
+      props.onEndReachedThreshold = fl.getOnendreachedthreshold()!.getValue();
     }
-    if (fl.localProps) {
-      assignLocalProps(props, fl.localProps, getLocalProp);
-    }
-    if (isCallbackValid(fl.onEndReached)) {
-      const callId = fl.onEndReached.callId;
+    assignLocalProps(props, fl.getLocalpropsList(), getLocalProp);
+    if (fl.hasOnendreached()) {
+      const callId = fl.getOnendreached()!.getCallid();
       props.onEndReached = () => {
         rpcCall(callId);
       };
     }
-    props.data = fl.children ? fl.children : [];
+    props.data = fl.getChildrenList();
     props.renderItem = ({ item }) => {
-      const rendered = ofEncodedReactElement(rpcCall, getLocalProp, item);
+      const rendered = ofEncodedReactElement(
+        rpcCall,
+        getLocalProp,
+        item,
+        retainedInstances
+      );
       /* Make sure it's a react element */
       return typeof rendered === "object" ? rendered : null;
     };
     props.keyExtractor = item => {
-      return String(item.key ? item.key.value : undefined);
+      return String(item.hasKey() ? item.getKey()!.getValue() : undefined);
     };
     return <FlatList {...props} />;
-  } else if (element.touchableOpacity) {
-    const to = element.touchableOpacity;
+  } else if (element.hasTouchableopacity()) {
+    const to = element.getTouchableopacity()!;
     const props = {} as Writable<TouchableOpacity["props"]>;
     const children = getChildren(to);
-    if (to.localProps) {
-      assignLocalProps(props, to.localProps, getLocalProp);
-    }
-    if (isCallbackValid(to.onPress)) {
-      const callId = to.onPress.callId;
+    assignLocalProps(props, to.getLocalpropsList(), getLocalProp);
+    if (to.hasOnpress()) {
+      const callId = to.getOnpress()!.getCallid();
       props.onPress = () => {
         rpcCall(callId);
       };
     }
     return React.createElement(TouchableOpacity, props, ...children);
-  } else if (element.textInput) {
+  } else if (element.hasTextinput()) {
     const props = {} as Writable<TextInput["props"]>;
-    const ti = element.textInput;
-    if (ti.style) {
-      props.style = ofStruct(ti.style);
+    const ti = element.getTextinput()!;
+    if (ti.hasStyle()) {
+      props.style = ofStruct(ti.getStyle());
     }
-    props.value = ti.value ? ti.value : undefined;
-    if (isCallbackValid(ti.onValueChange)) {
-      const callId = ti.onValueChange.callId;
+    props.value = ti.getValue();
+    if (ti.hasOnvaluechange()) {
+      const callId = ti.getOnvaluechange()!.getCallid();
       props.onChangeText = value => {
         rpcCall(callId, toStruct({ value }));
       };
     }
-    if (ti.localProps) {
-      assignLocalProps(props, ti.localProps, getLocalProp);
+    assignLocalProps(props, ti.getLocalpropsList(), getLocalProp);
+    if (ti.hasPlaceholdertextcolor()) {
+      props.placeholderTextColor = ti.getPlaceholdertextcolor()!.getValue();
     }
-    if (ti.placeholderTextColor && ti.placeholderTextColor.value) {
-      props.placeholderTextColor = ti.placeholderTextColor.value;
-    }
-    if (ti.placeholder && ti.placeholder.value) {
-      props.placeholder = ti.placeholder.value;
+    if (ti.hasPlaceholder()) {
+      props.placeholder = ti.getPlaceholder()!.getValue();
     }
     return <TextInput {...props} />;
-  } else if (element.switch) {
+  } else if (element.hasSwitch()) {
     const props = {} as Writable<Switch["props"]>;
-    const sw = element.switch;
-    if (sw.style) {
-      props.style = ofStruct(sw.style);
+    const sw = element.getSwitch()!;
+    if (sw.hasStyle()) {
+      props.style = ofStruct(sw.getStyle());
     }
-    props.value = sw.value ? sw.value : undefined;
-    if (isCallbackValid(sw.onValueChange)) {
-      const callId = sw.onValueChange.callId;
+    props.value = sw.getValue();
+    if (sw.hasOnvaluechange()) {
+      const callId = sw.getOnvaluechange()!.getCallid();
       props.onValueChange = value => {
         rpcCall(callId, toStruct({ value }));
       };
     }
     return <Switch {...props} />;
-  } else if (element.image) {
+  } else if (element.hasImage()) {
     const props = {} as Writable<Image["props"]>;
-    const im = element.image;
-    if (im.style) {
-      props.style = ofStruct(im.style);
+    const im = element.getImage()!;
+    if (im.hasStyle()) {
+      props.style = ofStruct(im.getStyle());
     }
-    if (im.sourceURLString) {
-      props.source = { uri: im.sourceURLString };
+    if (im.getSourceurlstring()) {
+      props.source = { uri: im.getSourceurlstring() };
     }
     return <Image {...props} />;
+  } else if (element.hasAnimatedview()) {
+    const props = {} as Writable<Animated.View["props"]>;
+    const av = element.getAnimatedview()!;
+    if (av.hasStyle()) {
+      props.style = decodeAnimatedStyle(av.getStyle(), retainedInstances);
+      console.log(props.style);
+    }
+    const children = getChildren(av);
+    props.children = children;
+    return React.createElement(Animated.View, props, ...children);
+  } else if (element.hasAnimatedtext()) {
+    const props = {} as Writable<Animated.Text["props"]>;
+    const at = element.getAnimatedtext()!;
+    if (at.hasStyle()) {
+      props.style = decodeAnimatedStyle(at.getStyle(), retainedInstances);
+    }
+    const children = getChildren(at);
+    props.children = children;
+    return React.createElement(Animated.Text, props, ...children);
+  } else if (element.hasAnimatedimage()) {
+    const props = {} as Writable<Animated.Image["props"]>;
+    const im = element.getAnimatedimage()!;
+    if (im.hasStyle()) {
+      props.style = decodeAnimatedStyle(im.getStyle(), retainedInstances);
+    }
+    if (im.getSourceurlstring()) {
+      props.source = { uri: im.getSourceurlstring() };
+    }
+    return <Animated.Image {...props} />;
   }
   return null;
 };

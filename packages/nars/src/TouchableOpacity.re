@@ -11,11 +11,11 @@ type props = {
 external props_unsafe_cast: Js.t('a) => props = "%identity";
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~registerCallback, ~children) => {
+    (~key, ~props as Instance.Props(props), ~bridge, ~children) => {
   let props = props_unsafe_cast(props);
   let onPress =
     ProtoEncoders.encodeArityZeroCallbackOptional(
-      ~registerCallback,
+      ~registerCallback=bridge.Instance.registerCallback,
       ~callback=props##onPress,
     );
   Schema.ReactElement.{

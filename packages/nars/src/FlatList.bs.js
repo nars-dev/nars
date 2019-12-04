@@ -9,7 +9,7 @@ var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
 var name = "FlatList";
 
-function encoder(key, param, registerCallback, children) {
+function encoder(key, param, bridge, children) {
   var props = param[0];
   var children$1 = $$Array.to_list(props.keys.map((function (key, i) {
               var init = Caml_array.caml_array_get(children, i);
@@ -24,7 +24,7 @@ function encoder(key, param, registerCallback, children) {
             -193011497,
             {
               style: ProtoEncoders.encodeStyleOptional(props),
-              onEndReached: ProtoEncoders.encodeArityZeroCallbackOptional(registerCallback, props.onEndReached),
+              onEndReached: ProtoEncoders.encodeArityZeroCallbackOptional(bridge.registerCallback, props.onEndReached),
               onEndReachedThreshold: Js_option.map((function (threshold) {
                       return threshold | 0;
                     }), props.onEndReachedThreshold),

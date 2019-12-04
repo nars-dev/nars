@@ -86,3 +86,26 @@ and structToDict = structDict => {
      });
   result;
 };
+
+let concatStyle = (styleDict, value) => {
+  switch (value) {
+  | Object(d) =>
+    Js.Dict.entries(d)
+    |> Js.Array.forEach(((key, value)) => {
+         Js.Dict.set(styleDict, key, value)
+       })
+  | _ => assert(false)
+  };
+};
+
+let tToStruct = (t) => {
+  switch (classify(t)) {
+  | Object(o) => dictToStruct(o)
+  | Array(a) =>
+    let styles = Js.Dict.empty();
+    Js.Array.map(classify, a)
+    |> Js.Array.forEach(concatStyle(styles));
+    dictToStruct(styles);
+  | _ => assert(false)
+  };
+};

@@ -3,13 +3,17 @@
 
 var Curry = require("bs-platform/lib/js/curry.js");
 
-function encode(instance, registerCallback) {
+function encode(instance, registerCallback, updateAnimatedValue) {
   if (instance.tag) {
     var inst = instance[0];
+    var bridge = {
+      registerCallback: registerCallback,
+      updateAnimatedValue: updateAnimatedValue
+    };
     var children = inst.children.map((function (param) {
-            return encode(param, registerCallback);
+            return encode(param, registerCallback, updateAnimatedValue);
           }));
-    return Curry._4(inst.encode, inst.key, inst.props, registerCallback, children);
+    return Curry._4(inst.encode, inst.key, inst.props, bridge, children);
   } else {
     return {
             key: undefined,

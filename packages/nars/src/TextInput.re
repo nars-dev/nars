@@ -14,7 +14,7 @@ type props = {
 external props_unsafe_cast: Js.t('a) => props = "%identity";
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~registerCallback, ~children as _) => {
+    (~key, ~props as Instance.Props(props), ~bridge, ~children as _) => {
   let props = props_unsafe_cast(props);
   Schema.ReactElement.{
     value:
@@ -30,7 +30,9 @@ let encoder =
           value: props##value,
           onValueChange:
             encodeOptional(props##onValueChange, callback =>
-              encodeCallback(~registerCallback, ~callback=args => {
+              encodeCallback(
+                ~registerCallback=bridge.Instance.registerCallback,
+                ~callback=args => {
                 callback(
                   StructDecoders.(getFieldExn("value", args, getString)),
                 )
@@ -39,7 +41,7 @@ let encoder =
           localProps: [],
         },
       ),
-      key
+    key,
   };
 };
 

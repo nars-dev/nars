@@ -2,6 +2,8 @@ jest.mock("react-native", () => ({
   FlatList: "FlatList",
   TouchableOpacity: "TouchableOpacity",
 }));
+jest.mock("react-native-reanimated", () => ({
+}));
 
 import * as React from "react";
 import { ReactTestInstance } from "react-test-renderer";

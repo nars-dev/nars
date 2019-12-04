@@ -22,6 +22,14 @@ var Socket = { };
 
 var Server = { };
 
+function stringToArrayBuffer(str) {
+  return Uint8Array.from(Buffer.from(str, "ascii")).buffer;
+}
+
+function send(socket, message) {
+  return socket.send(stringToArrayBuffer(message));
+}
+
 function sendViewUpdates(socket, rootId, reactElements) {
   var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
             rootId: rootId,
@@ -30,7 +38,21 @@ function sendViewUpdates(socket, rootId, reactElements) {
               $$Array.to_list(reactElements)
             ]
           }));
-  return socket.send(message);
+  return send(socket, message);
+}
+
+function updateAnimatedValue(socket, rootId, value, toValue) {
+  var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
+            rootId: rootId,
+            value: /* `AnimatedValueUpdate */[
+              -20525481,
+              {
+                value: value,
+                toValue: toValue
+              }
+            ]
+          }));
+  return send(socket, message);
 }
 
 function startListening(server, render) {
@@ -78,6 +100,8 @@ function startListening(server, render) {
                                     } else {
                                       var container$1 = NarsReconciler.createContainer((function (param) {
                                               return sendViewUpdates(socket, rootId, param);
+                                            }), (function (param, param$1) {
+                                              return updateAnimatedValue(socket, rootId, param, param$1);
                                             }));
                                       Belt_HashMapInt.set(containers, rootId, container$1);
                                       container = container$1;
@@ -124,6 +148,9 @@ exports.NodeBuffer = NodeBuffer;
 exports.Socket = Socket;
 exports.Server = Server;
 exports.ContainerMap = ContainerMap;
+exports.stringToArrayBuffer = stringToArrayBuffer;
+exports.send = send;
 exports.sendViewUpdates = sendViewUpdates;
+exports.updateAnimatedValue = updateAnimatedValue;
 exports.startListening = startListening;
 /* Schema Not a pure module */

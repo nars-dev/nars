@@ -1,10 +1,11 @@
-#!/bin/sh
+PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
+OUT_DIR="./dist"
 
-yarn pbjs -t static-module -w commonjs -I ../nars-common/proto/ -o ./dist/Schema.js ../nars-common/proto/schema.proto
-yarn pbts --no-comments -o ./src/Schema.d.ts ./dist/Schema.js
-cp ./src/Schema.d.ts ./dist/Schema.d.ts
+protoc \
+    --plugin="protoc-gen-ts=${PROTOC_GEN_TS_PATH}" \
+    --js_out="import_style=commonjs,binary:./dist" \
+    --ts_out="./src" \
+    -I ../nars-common/proto/ \
+    struct.proto nars_animated.proto schema.proto
 
-if [ "$1" == "--watch" ]
-then
-  yarn watch ./generate_proto.sh ./src/proto
-fi
+cp ./src/*_pb.d.ts ./dist/

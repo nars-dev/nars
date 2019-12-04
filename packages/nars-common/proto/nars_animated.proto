@@ -1,0 +1,408 @@
+syntax = "proto3";
+import "struct.proto";
+
+package nars.animated;
+
+/*
+export type EasingFunction = (value: Adaptable<number>) => AnimatedNode<number>;
+*/
+message EasingCustom {
+  Node result = 1;
+}
+
+message EasingStatic {}
+
+message EasingFunction {
+  oneof value {
+    EasingStatic builtin = 1;
+    EasingCustom custom = 2;
+  }
+}
+
+enum UnaryOperatorType {
+  sqrt = 0;
+  log = 1;
+  sin = 2;
+  cos = 3;
+  tan = 4;
+  acos = 5;
+  asin = 6;
+  atan = 7;
+  exp = 8;
+  round = 9;
+  floor = 10;
+  ceil = 11;
+  defined = 12;
+  not = 13;
+};
+
+message UnaryOperator {
+  Adaptable value = 1;
+  UnaryOperatorType operator = 2;
+}
+
+enum MultiOperatorType {
+  add = 0;
+  sub = 1;
+  multiply = 2;
+  divide = 3;
+  pow = 4;
+  modulo = 5;
+  and = 6;
+  or = 7;
+};
+
+message MultiOperator {
+  Adaptable a = 1;
+  Adaptable b = 2;
+  repeated Adaptable others = 3;
+  MultiOperatorType operator = 4;
+}
+
+message Condition {
+  Adaptable condition = 1;
+  Adaptable ifNode = 2;
+  Adaptable elseNode = 3;
+}
+
+message Value {
+  oneof initialValue {
+    float float = 1;
+    string string = 2;
+    bool bool = 3;
+  }
+  int32 __nodeID = 4;
+}
+
+message Setter {
+  Value valueToBeUpdated = 1;
+  Adaptable toValue = 2;
+}
+
+/*
+export function abs(value: Adaptable<number>): AnimatedNode<number>;
+export function acc(value: Adaptable<number>): AnimatedNode<number>;
+export function diff(value: Adaptable<number>): AnimatedNode<number>;
+*/
+enum UnaryDerivedOperatorType {
+  abs = 0;
+  acc = 1;
+  diff = 2;
+}
+
+message UnaryDerivedOperator {
+  Adaptable value = 1;
+  UnaryDerivedOperatorType operator = 2;
+};
+
+/*
+export const max: BinaryOperator;
+export const min: BinaryOperator;
+*/
+enum BinaryOperatorType {
+  max = 0;
+  min = 1;
+  lessThan = 2;
+  eq = 3;
+  greaterThan = 4;
+  lessOrEq = 5;
+  greaterOrEq = 6;
+  neq = 7;
+};
+
+message BinaryOperator {
+  BinaryOperatorType operator = 1;
+  Adaptable left = 2;
+  Adaptable right = 3;
+}
+
+/*
+export function color(
+  r: Adaptable<number>,
+  g: Adaptable<number>,
+  b: Adaptable<number>,
+  a?: Adaptable<number>,
+): AnimatedNode<number>;
+*/
+message Color {
+  Adaptable r = 1;
+  Adaptable g = 2;
+  Adaptable b = 3;
+  Adaptable alpha = 4;
+}
+
+/*
+export function diffClamp(
+  value: Adaptable<number>,
+  minVal: Adaptable<number>,
+  maxVal: Adaptable<number>,
+): AnimatedNode<number>;
+*/
+message DiffClamp {
+  Adaptable value = 1;
+  Adaptable minVal = 2;
+  Adaptable maxVal = 3;
+}
+
+/*
+export function interpolate(
+  value: Adaptable<number>,
+  config: InterpolationConfig,
+): AnimatedNode<number>;
+*/
+
+enum ExtrapolateType {
+  Extend = 0;
+  Clamp = 1;
+  Identity = 2;
+}
+
+message Extrapolate {
+  ExtrapolateType value = 1;
+}
+
+message InterpolationConfig {
+  repeated Adaptable inputRange = 1;
+  repeated Adaptable outputRange = 2;
+  Extrapolate extrapolate = 3;
+  Extrapolate extrapolateLeft = 4;
+  Extrapolate extrapolateRight = 5;
+}
+
+message Interpolate {
+  Adaptable value = 1;
+  InterpolationConfig config = 2;
+}
+
+message Block {
+  repeated Adaptable values = 1;
+}
+
+message Concat {
+  repeated Adaptable values = 1;
+}
+
+message Node {
+  oneof innerNode {
+    Condition cond = 1;
+    UnaryOperator unary = 2;
+    MultiOperator multi = 3;
+    Setter setter = 4;
+    BinaryOperator binary = 5;
+    UnaryDerivedOperator derivedUnary = 6;
+    Animation animation = 7;
+    Block block = 8;
+    Value value = 9;
+    Concat concat = 10;
+    Call call = 11;
+    Debug debug = 12;
+    OnChange onChange = 13;
+    ClockOperation clockOperation = 14;
+    Clock clock = 15;
+    Interpolate interpolate = 16;
+    Color color = 17;
+    DiffClamp diffClamp = 18;
+  }
+}
+
+/* Represents an argument passed to function */
+message ValueArgument {
+  string key = 1;
+}
+
+message Primitive {
+  oneof value {
+    float float = 1;
+    string string = 2;
+    bool bool = 3;
+  }
+}
+
+message Adaptable {
+  oneof container {
+    Primitive primitive = 1;
+    Node node = 2;
+  }
+}
+
+message Call {
+  repeated Adaptable args = 1;
+  int32 callId = 2;
+}
+
+/*
+export function debug<T>(
+  message: string,
+  value: AnimatedNode<T>,
+): AnimatedNode<T>;
+*/
+
+message Debug {
+  string debugMessage = 1;
+  Node value = 2;
+}
+
+/*
+export function onChange(
+  value: Adaptable<number>,
+  action: Adaptable<number>,
+): AnimatedNode<number>;
+*/
+message OnChange {
+  Adaptable value = 1;
+  Adaptable action = 2;
+}
+
+/*
+export function startClock(clock: AnimatedClock): AnimatedNode<0>;
+export function stopClock(clock: AnimatedClock): AnimatedNode<0>;
+export function clockRunning(clock: AnimatedClock): AnimatedNode<0 | 1>;
+*/
+message Clock {
+  int32 __nodeID = 1;
+}
+
+enum ClockOperationType {
+  start = 0;
+  stop = 1;
+  isRunning = 2;
+}
+
+message ClockOperation {
+  Clock clock = 1;
+  ClockOperationType operation = 2;
+}
+  
+message AnimationState {
+  Value finished = 1;
+  Value position = 2;
+  Value time = 3;
+}
+
+message PhysicsAnimationState {
+  AnimationState animation = 1;
+  Value velocity = 2;
+}
+
+/*
+export function decay(
+  clock: AnimatedClock,
+  state: DecayState,
+  config: DecayConfig,
+): AnimatedNode<number>;
+*/
+
+message DecayConfig {
+  Adaptable deceleration = 1;
+}
+
+message DecayAnimation {
+  Clock clock = 1;
+  PhysicsAnimationState state = 2;
+  DecayConfig config = 3;
+}
+
+/*
+export function timing(
+  clock: Clock,
+  state: TimingState,
+  config: TimingConfig,
+): Node<number>;
+*/
+
+message TimingState {
+  AnimationState animation = 1;
+  Value frameTime = 2;
+}
+
+message TimingConfig {
+  Adaptable toValue = 1;
+  Adaptable duration = 2;
+  EasingFunction easing = 3;
+}
+
+message TimingAnimation {
+  Clock clock = 1;
+  TimingState state = 2;
+  TimingConfig config = 3;
+}
+
+/*
+export function spring(
+  clock: AnimatedClock,
+  state: SpringState,
+  config: SpringConfig,
+): AnimatedNode<number>;
+*/
+message SpringConfig {
+  Adaptable damping = 1;
+  Adaptable mass = 2;
+  Adaptable stiffness = 3;
+  Adaptable overshootClamping = 4;
+  Adaptable restSpeedThreshold = 5;
+  Adaptable restDisplacementThreshold = 6;
+  Adaptable toValue = 7;
+}
+
+message SpringAnimation {
+  Clock clock = 1;
+  PhysicsAnimationState state = 2;
+  SpringConfig config = 3;
+}
+
+message Animation {
+  oneof animation {
+    DecayAnimation decay = 1;
+    TimingAnimation timing = 2;
+    SpringAnimation spring = 3;
+  }
+}
+
+message ListValue {
+  // Repeated field of dynamically typed values.
+  repeated ValueOrAnimatedNode values = 1;
+}
+
+message TopLevelNode {
+  // Represents animated value
+  Node node = 1;
+  /**
+    * __nodeID is only significant for the top nodes
+    * Based on this value we can determine whether the
+    * animated node hierarchy should be recreated on
+    * re-render on ther client.
+    */
+  int32 __nodeID = 2;
+}
+
+message ValueOrAnimatedNode {
+  // The kind of value.
+  oneof kind {
+    // Represents a null value.
+    google_mirror.protobuf.NullValue null_value = 1;
+    // Represents a double value.
+    double number_value = 2;
+    // Represents a string value.
+    string string_value = 3;
+    // Represents a boolean value.
+    bool bool_value = 4;
+    // Represents a style struct value.
+    Style style_value = 5;
+    // Represents a repeated `Value`.
+    ListValue list_value = 6;
+    // Represents an undefined value
+    google_mirror.protobuf.UndefinedValue undefined_value = 7;
+    // Represents animated value
+    TopLevelNode node = 8;
+  }
+}
+
+message Style {
+  // Unordered map of dynamically typed values.
+  map<string, ValueOrAnimatedNode> fields = 1;
+}
+
+message ValueUpdate {
+  Value value = 1;
+  Adaptable toValue = 2;
+}
