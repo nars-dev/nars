@@ -27,3 +27,4 @@ lib/bs
 node_modules
 _esy
 tsconfig.tsbuildinfo
+yarn-error.log
