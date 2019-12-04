@@ -41,6 +41,12 @@ let encodeStyleOptional = props => {
   });
 };
 
+let encodeAnimatedStyleOptional = props => {
+  encodeOptional(props##style, x => {
+    x |> AnimatedStyle.tToStruct(props##idGenerator)
+  });
+};
+
 let encodeNullable = (value, decoder) => {
   encodeOptional(Js.Null.toOption(value), decoder);
 };

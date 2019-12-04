@@ -1,5 +1,6 @@
 syntax = "proto3";
 import "struct.proto";
+import "nars_animated.proto";
 
 /********** Generic **********/
 
@@ -20,6 +21,9 @@ message LocalProp {
   string propKey = 2;
 }
 
+message FloatValue {
+  float value = 1;
+}
 
 /********** Components **********/
 
@@ -88,6 +92,9 @@ message ReactElement {
     RawText rawText = 8;
     Switch switch = 9;
     Image image = 10;
+    AnimatedText animatedText = 11;
+    AnimatedView animatedView = 12;
+    AnimatedImage animatedImage = 13;
   }
 };
 
@@ -125,3 +132,18 @@ message ServerToClient {
     Update update = 3;
   }
 };
+
+message AnimatedView {
+  nars.animated.Style style = 1;
+  repeated ReactElement children = 2;
+};
+
+message AnimatedText {
+  nars.animated.Style style = 1;
+  repeated ReactElement children = 2;
+};
+
+message AnimatedImage {
+  nars.animated.Style style = 1;
+  string sourceURLString = 2;
+}

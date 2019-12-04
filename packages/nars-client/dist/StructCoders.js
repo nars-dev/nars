@@ -1,77 +1,68 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const Schema_1 = require("./Schema");
+const struct_pb_1 = require("./struct_pb");
 exports.toValue = (value) => {
+    const pbValue = new struct_pb_1.Value();
     switch (typeof value) {
         case "object":
             if (value === null) {
-                return {
-                    nullValue: 0,
-                };
+                pbValue.setNullValue(0);
             }
             else if (Array.isArray(value)) {
-                return {
-                    listValue: {
-                        values: value.map(exports.toValue),
-                    },
-                };
+                const listValues = new struct_pb_1.ListValue();
+                listValues.setValuesList(value.map(exports.toValue));
+                pbValue.setListValue(listValues);
             }
             else {
-                return {
-                    structValue: exports.toStruct(value),
-                };
+                pbValue.setStructValue(exports.toStruct(value));
             }
+            break;
         case "number":
-            return {
-                numberValue: value,
-            };
+            pbValue.setNumberValue(value);
+            break;
         case "string":
-            return {
-                stringValue: value,
-            };
+            pbValue.setStringValue(value);
+            break;
         case "boolean":
-            return {
-                boolValue: value,
-            };
+            pbValue.setBoolValue(value);
+            break;
         case "undefined":
         default:
-            return {
-                undefinedValue: Schema_1.google_mirror.protobuf.UndefinedValue.UNDEFINED_VALUE,
-            };
+            pbValue.setUndefinedValue(0);
     }
+    return pbValue;
 };
 exports.toStruct = (value) => {
-    const fields = {};
+    const struct = new struct_pb_1.Struct();
+    const fields = struct.getFieldsMap();
     Object.entries(value).forEach(([key, value]) => {
         if (typeof value !== "undefined") {
-            fields[key] = exports.toValue(value);
+            fields.set(key, exports.toValue(value));
         }
     });
-    return {
-        fields: fields,
-    };
+    return struct;
 };
 exports.ofValue = (value) => {
-    if (value.hasOwnProperty("numberValue")) {
-        return Number(value.numberValue);
+    if (value.hasNumberValue()) {
+        return Number(value.getNumberValue());
     }
-    else if (value.hasOwnProperty("nullValue")) {
+    else if (value.hasNullValue()) {
         return null;
     }
-    else if (value.hasOwnProperty("stringValue")) {
-        return String(value.stringValue);
+    else if (value.hasStringValue()) {
+        return String(value.getStringValue());
     }
-    else if (value.hasOwnProperty("boolValue")) {
-        return Boolean(value.boolValue);
+    else if (value.hasBoolValue()) {
+        return Boolean(value.getBoolValue());
     }
-    else if (value.hasOwnProperty("structValue") && value.structValue) {
-        return exports.ofStruct(value.structValue);
+    else if (value.hasStructValue()) {
+        return exports.ofStruct(value.getStructValue());
     }
-    else if (value.hasOwnProperty("listValue") &&
-        Array.isArray(value.listValue)) {
-        return value.listValue.map(exports.ofValue);
+    else if (value.hasListValue()) {
+        const list = value.getListValue();
+        return list ? list.getValuesList().map(exports.ofValue) : [];
     }
-    else if (value.hasOwnProperty("undefinedValue")) {
+    else if (value.hasUndefinedValue()) {
         return undefined;
     }
     else {
@@ -79,9 +70,9 @@ exports.ofValue = (value) => {
     }
 };
 exports.ofStruct = (struct) => {
-    if (struct.fields) {
+    if (struct) {
         const fields = {};
-        Object.entries(struct.fields).forEach(([key, value]) => {
+        struct.getFieldsMap().forEach((value, key) => {
             fields[key] = exports.ofValue(value);
         });
         return fields;

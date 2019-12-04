@@ -20,6 +20,7 @@ import * as Colors from "./Colors";
 import ExampleScreen from "./ExampleScreen";
 import Form from "./Form";
 import Feed from "./Feed";
+import ProgressBar from "./ProgressBar";
 
 const styles = StyleSheet.create({
   background: {
@@ -90,7 +91,7 @@ interface Example {
 }
 
 const ExampleCards = ({ renderExampleCard }) => {
-  const examples: Example[] = [Form, Feed];
+  const examples: Example[] = [Form, Feed, ProgressBar];
   return (
     <Carousel
       containerCustomStyle={styles.carouselCustomStyle}

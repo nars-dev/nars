@@ -24,17 +24,17 @@ module rec StringValue : sig
 end = struct 
   let name' () = "Schema.StringValue"
   type t = string 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f a -> f a in
     let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun a -> a in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Int32Value : sig
@@ -45,17 +45,17 @@ and Int32Value : sig
 end = struct 
   let name' () = "Schema.Int32Value"
   type t = int 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f a -> f a in
     let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun a -> a in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Callback : sig
@@ -66,17 +66,17 @@ and Callback : sig
 end = struct 
   let name' () = "Schema.Callback"
   type t = int 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f a -> f a in
     let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun a -> a in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and LocalProp : sig
@@ -87,17 +87,38 @@ and LocalProp : sig
 end = struct 
   let name' () = "Schema.LocalProp"
   type t = { localKey: string; propKey: string } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { localKey; propKey } -> f' localKey propKey in
     let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: basic (2, string, proto3) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun localKey propKey -> { localKey; propKey } in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: basic (2, string, proto3) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
+  
+end
+and FloatValue : sig
+  val name': unit -> string
+  type t = float 
+  val to_proto: t -> Ocaml_protoc_plugin.Writer.t
+  val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+end = struct 
+  let name' () = "Schema.FloatValue"
+  type t = float 
+  let to_proto = 
+    let apply = fun ~f a -> f a in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, float, proto3) ^:: nil ) in
+    let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
+    fun t -> apply ~f:(serialize ()) t
+  
+  let from_proto = 
+    let constructor = fun a -> a in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, float, proto3) ^:: nil ) in
+    let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
+    fun writer -> deserialize writer
   
 end
 and CustomComponent : sig
@@ -108,17 +129,17 @@ and CustomComponent : sig
 end = struct 
   let name' () = "Schema.CustomComponent"
   type t = { type_id: string; contents: bytes } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { type_id; contents } -> f' type_id contents in
     let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: basic (2, bytes, proto3) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun type_id contents -> { type_id; contents } in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: basic (2, bytes, proto3) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and View : sig
@@ -129,17 +150,17 @@ and View : sig
 end = struct 
   let name' () = "Schema.View"
   type t = { style: Struct.Google_mirror.Protobuf.Struct.t option; children: ReactElement.t list } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { style; children } -> f' style children in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: repeated (2, (message ReactElement.to_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.to_proto t)), not_packed) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun style children -> { style; children } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: repeated (2, (message ReactElement.from_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.from_proto t)), not_packed) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and FlatList : sig
@@ -150,17 +171,17 @@ and FlatList : sig
 end = struct 
   let name' () = "Schema.FlatList"
   type t = { style: Struct.Google_mirror.Protobuf.Struct.t option; onEndReached: Callback.t option; onEndReachedThreshold: Int32Value.t option; children: ReactElement.t list; localProps: LocalProp.t list } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { style; onEndReached; onEndReachedThreshold; children; localProps } -> f' style onEndReached onEndReachedThreshold children localProps in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: basic_opt (2, (message Callback.to_proto)) ^:: basic_opt (3, (message Int32Value.to_proto)) ^:: repeated (4, (message ReactElement.to_proto), not_packed) ^:: repeated (5, (message LocalProp.to_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: basic_opt (2, (message (fun t -> Callback.to_proto t))) ^:: basic_opt (3, (message (fun t -> Int32Value.to_proto t))) ^:: repeated (4, (message (fun t -> ReactElement.to_proto t)), not_packed) ^:: repeated (5, (message (fun t -> LocalProp.to_proto t)), not_packed) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun style onEndReached onEndReachedThreshold children localProps -> { style; onEndReached; onEndReachedThreshold; children; localProps } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: basic_opt (2, (message Callback.from_proto)) ^:: basic_opt (3, (message Int32Value.from_proto)) ^:: repeated (4, (message ReactElement.from_proto), not_packed) ^:: repeated (5, (message LocalProp.from_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: basic_opt (2, (message (fun t -> Callback.from_proto t))) ^:: basic_opt (3, (message (fun t -> Int32Value.from_proto t))) ^:: repeated (4, (message (fun t -> ReactElement.from_proto t)), not_packed) ^:: repeated (5, (message (fun t -> LocalProp.from_proto t)), not_packed) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and TouchableOpacity : sig
@@ -171,17 +192,17 @@ and TouchableOpacity : sig
 end = struct 
   let name' () = "Schema.TouchableOpacity"
   type t = { onPress: Callback.t option; children: ReactElement.t list; localProps: LocalProp.t list } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { onPress; children; localProps } -> f' onPress children localProps in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message Callback.to_proto)) ^:: repeated (2, (message ReactElement.to_proto), not_packed) ^:: repeated (3, (message LocalProp.to_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Callback.to_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.to_proto t)), not_packed) ^:: repeated (3, (message (fun t -> LocalProp.to_proto t)), not_packed) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun onPress children localProps -> { onPress; children; localProps } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message Callback.from_proto)) ^:: repeated (2, (message ReactElement.from_proto), not_packed) ^:: repeated (3, (message LocalProp.from_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Callback.from_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.from_proto t)), not_packed) ^:: repeated (3, (message (fun t -> LocalProp.from_proto t)), not_packed) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and RawText : sig
@@ -192,17 +213,17 @@ and RawText : sig
 end = struct 
   let name' () = "Schema.RawText"
   type t = string 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f a -> f a in
     let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun a -> a in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Text : sig
@@ -213,17 +234,17 @@ and Text : sig
 end = struct 
   let name' () = "Schema.Text"
   type t = { style: Struct.Google_mirror.Protobuf.Struct.t option; children: ReactElement.t list } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { style; children } -> f' style children in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: repeated (2, (message ReactElement.to_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.to_proto t)), not_packed) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun style children -> { style; children } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: repeated (2, (message ReactElement.from_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.from_proto t)), not_packed) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and TextInput : sig
@@ -234,17 +255,17 @@ and TextInput : sig
 end = struct 
   let name' () = "Schema.TextInput"
   type t = { style: Struct.Google_mirror.Protobuf.Struct.t option; placeholderTextColor: StringValue.t option; placeholder: StringValue.t option; value: string; localProps: LocalProp.t list; onValueChange: Callback.t option } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { style; placeholderTextColor; placeholder; value; localProps; onValueChange } -> f' style placeholderTextColor placeholder value localProps onValueChange in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: basic_opt (2, (message StringValue.to_proto)) ^:: basic_opt (3, (message StringValue.to_proto)) ^:: basic (4, string, proto3) ^:: repeated (5, (message LocalProp.to_proto), not_packed) ^:: basic_opt (6, (message Callback.to_proto)) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: basic_opt (2, (message (fun t -> StringValue.to_proto t))) ^:: basic_opt (3, (message (fun t -> StringValue.to_proto t))) ^:: basic (4, string, proto3) ^:: repeated (5, (message (fun t -> LocalProp.to_proto t)), not_packed) ^:: basic_opt (6, (message (fun t -> Callback.to_proto t))) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun style placeholderTextColor placeholder value localProps onValueChange -> { style; placeholderTextColor; placeholder; value; localProps; onValueChange } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: basic_opt (2, (message StringValue.from_proto)) ^:: basic_opt (3, (message StringValue.from_proto)) ^:: basic (4, string, proto3) ^:: repeated (5, (message LocalProp.from_proto), not_packed) ^:: basic_opt (6, (message Callback.from_proto)) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: basic_opt (2, (message (fun t -> StringValue.from_proto t))) ^:: basic_opt (3, (message (fun t -> StringValue.from_proto t))) ^:: basic (4, string, proto3) ^:: repeated (5, (message (fun t -> LocalProp.from_proto t)), not_packed) ^:: basic_opt (6, (message (fun t -> Callback.from_proto t))) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Switch : sig
@@ -255,17 +276,17 @@ and Switch : sig
 end = struct 
   let name' () = "Schema.Switch"
   type t = { style: Struct.Google_mirror.Protobuf.Struct.t option; value: bool; onValueChange: Callback.t option } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { style; value; onValueChange } -> f' style value onValueChange in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: basic (2, bool, proto3) ^:: basic_opt (3, (message Callback.to_proto)) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: basic (2, bool, proto3) ^:: basic_opt (3, (message (fun t -> Callback.to_proto t))) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun style value onValueChange -> { style; value; onValueChange } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: basic (2, bool, proto3) ^:: basic_opt (3, (message Callback.from_proto)) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: basic (2, bool, proto3) ^:: basic_opt (3, (message (fun t -> Callback.from_proto t))) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Image : sig
@@ -276,38 +297,38 @@ and Image : sig
 end = struct 
   let name' () = "Schema.Image"
   type t = { style: Struct.Google_mirror.Protobuf.Struct.t option; sourceURLString: string } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { style; sourceURLString } -> f' style sourceURLString in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: basic (2, string, proto3) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: basic (2, string, proto3) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun style sourceURLString -> { style; sourceURLString } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: basic (2, string, proto3) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: basic (2, string, proto3) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and ReactElement : sig
   val name': unit -> string
-  type t = { key: StringValue.t option; value: [ `Custom of CustomComponent.t | `View of View.t | `FlatList of FlatList.t | `TouchableOpacity of TouchableOpacity.t | `TextInput of TextInput.t | `Text of Text.t | `RawText of RawText.t | `Switch of Switch.t | `Image of Image.t ] } 
+  type t = { key: StringValue.t option; value: [ `Custom of CustomComponent.t | `View of View.t | `FlatList of FlatList.t | `TouchableOpacity of TouchableOpacity.t | `TextInput of TextInput.t | `Text of Text.t | `RawText of RawText.t | `Switch of Switch.t | `Image of Image.t | `AnimatedText of AnimatedText.t | `AnimatedView of AnimatedView.t | `AnimatedImage of AnimatedImage.t ] } 
   val to_proto: t -> Ocaml_protoc_plugin.Writer.t
   val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
 end = struct 
   let name' () = "Schema.ReactElement"
-  type t = { key: StringValue.t option; value: [ `Custom of CustomComponent.t | `View of View.t | `FlatList of FlatList.t | `TouchableOpacity of TouchableOpacity.t | `TextInput of TextInput.t | `Text of Text.t | `RawText of RawText.t | `Switch of Switch.t | `Image of Image.t ] } 
-  let to_proto t = 
+  type t = { key: StringValue.t option; value: [ `Custom of CustomComponent.t | `View of View.t | `FlatList of FlatList.t | `TouchableOpacity of TouchableOpacity.t | `TextInput of TextInput.t | `Text of Text.t | `RawText of RawText.t | `Switch of Switch.t | `Image of Image.t | `AnimatedText of AnimatedText.t | `AnimatedView of AnimatedView.t | `AnimatedImage of AnimatedImage.t ] } 
+  let to_proto = 
     let apply = fun ~f:f' { key; value } -> f' key value in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message StringValue.to_proto)) ^:: oneof ((function `Custom v -> oneof_elem (2, (message CustomComponent.to_proto), v) | `View v -> oneof_elem (3, (message View.to_proto), v) | `FlatList v -> oneof_elem (4, (message FlatList.to_proto), v) | `TouchableOpacity v -> oneof_elem (5, (message TouchableOpacity.to_proto), v) | `TextInput v -> oneof_elem (6, (message TextInput.to_proto), v) | `Text v -> oneof_elem (7, (message Text.to_proto), v) | `RawText v -> oneof_elem (8, (message RawText.to_proto), v) | `Switch v -> oneof_elem (9, (message Switch.to_proto), v) | `Image v -> oneof_elem (10, (message Image.to_proto), v))) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> StringValue.to_proto t))) ^:: oneof ((function `Custom v -> oneof_elem (2, (message (fun t -> CustomComponent.to_proto t)), v) | `View v -> oneof_elem (3, (message (fun t -> View.to_proto t)), v) | `FlatList v -> oneof_elem (4, (message (fun t -> FlatList.to_proto t)), v) | `TouchableOpacity v -> oneof_elem (5, (message (fun t -> TouchableOpacity.to_proto t)), v) | `TextInput v -> oneof_elem (6, (message (fun t -> TextInput.to_proto t)), v) | `Text v -> oneof_elem (7, (message (fun t -> Text.to_proto t)), v) | `RawText v -> oneof_elem (8, (message (fun t -> RawText.to_proto t)), v) | `Switch v -> oneof_elem (9, (message (fun t -> Switch.to_proto t)), v) | `Image v -> oneof_elem (10, (message (fun t -> Image.to_proto t)), v) | `AnimatedText v -> oneof_elem (11, (message (fun t -> AnimatedText.to_proto t)), v) | `AnimatedView v -> oneof_elem (12, (message (fun t -> AnimatedView.to_proto t)), v) | `AnimatedImage v -> oneof_elem (13, (message (fun t -> AnimatedImage.to_proto t)), v))) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun key value -> { key; value } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message StringValue.from_proto)) ^:: oneof ([ oneof_elem (2, (message CustomComponent.from_proto), fun v -> `Custom v); oneof_elem (3, (message View.from_proto), fun v -> `View v); oneof_elem (4, (message FlatList.from_proto), fun v -> `FlatList v); oneof_elem (5, (message TouchableOpacity.from_proto), fun v -> `TouchableOpacity v); oneof_elem (6, (message TextInput.from_proto), fun v -> `TextInput v); oneof_elem (7, (message Text.from_proto), fun v -> `Text v); oneof_elem (8, (message RawText.from_proto), fun v -> `RawText v); oneof_elem (9, (message Switch.from_proto), fun v -> `Switch v); oneof_elem (10, (message Image.from_proto), fun v -> `Image v) ]) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> StringValue.from_proto t))) ^:: oneof ([ oneof_elem (2, (message (fun t -> CustomComponent.from_proto t)), fun v -> `Custom v); oneof_elem (3, (message (fun t -> View.from_proto t)), fun v -> `View v); oneof_elem (4, (message (fun t -> FlatList.from_proto t)), fun v -> `FlatList v); oneof_elem (5, (message (fun t -> TouchableOpacity.from_proto t)), fun v -> `TouchableOpacity v); oneof_elem (6, (message (fun t -> TextInput.from_proto t)), fun v -> `TextInput v); oneof_elem (7, (message (fun t -> Text.from_proto t)), fun v -> `Text v); oneof_elem (8, (message (fun t -> RawText.from_proto t)), fun v -> `RawText v); oneof_elem (9, (message (fun t -> Switch.from_proto t)), fun v -> `Switch v); oneof_elem (10, (message (fun t -> Image.from_proto t)), fun v -> `Image v); oneof_elem (11, (message (fun t -> AnimatedText.from_proto t)), fun v -> `AnimatedText v); oneof_elem (12, (message (fun t -> AnimatedView.from_proto t)), fun v -> `AnimatedView v); oneof_elem (13, (message (fun t -> AnimatedImage.from_proto t)), fun v -> `AnimatedImage v) ]) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Unmount : sig
@@ -318,17 +339,17 @@ and Unmount : sig
 end = struct 
   let name' () = "Schema.Unmount"
   type t = unit 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f () -> f in
     let spec = Ocaml_protoc_plugin.Serialize.C.( nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = () in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Render : sig
@@ -339,17 +360,17 @@ and Render : sig
 end = struct 
   let name' () = "Schema.Render"
   type t = { name: string; props: Struct.Google_mirror.Protobuf.Struct.t option; localProps: string list } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { name; props; localProps } -> f' name props localProps in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: repeated (3, string, packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: repeated (3, string, packed) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun name props localProps -> { name; props; localProps } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: repeated (3, string, packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: repeated (3, string, packed) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Call : sig
@@ -360,17 +381,17 @@ and Call : sig
 end = struct 
   let name' () = "Schema.Call"
   type t = { messageId: int; args: Struct.Google_mirror.Protobuf.Struct.t option } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { messageId; args } -> f' messageId args in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message Struct.Google_mirror.Protobuf.Struct.to_proto)) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun messageId args -> { messageId; args } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message Struct.Google_mirror.Protobuf.Struct.from_proto)) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message (fun t -> Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and ClientToServer : sig
@@ -381,17 +402,17 @@ and ClientToServer : sig
 end = struct 
   let name' () = "Schema.ClientToServer"
   type t = { rootId: int; value: [ `Unmount of Unmount.t | `Render of Render.t | `Call of Call.t ] } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { rootId; value } -> f' rootId value in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function `Unmount v -> oneof_elem (2, (message Unmount.to_proto), v) | `Render v -> oneof_elem (3, (message Render.to_proto), v) | `Call v -> oneof_elem (4, (message Call.to_proto), v))) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function `Unmount v -> oneof_elem (2, (message (fun t -> Unmount.to_proto t)), v) | `Render v -> oneof_elem (3, (message (fun t -> Render.to_proto t)), v) | `Call v -> oneof_elem (4, (message (fun t -> Call.to_proto t)), v))) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun rootId value -> { rootId; value } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message Unmount.from_proto), fun v -> `Unmount v); oneof_elem (3, (message Render.from_proto), fun v -> `Render v); oneof_elem (4, (message Call.from_proto), fun v -> `Call v) ]) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Unmount.from_proto t)), fun v -> `Unmount v); oneof_elem (3, (message (fun t -> Render.from_proto t)), fun v -> `Render v); oneof_elem (4, (message (fun t -> Call.from_proto t)), fun v -> `Call v) ]) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Error : sig
@@ -402,17 +423,17 @@ and Error : sig
 end = struct 
   let name' () = "Schema.Error"
   type t = unit 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f () -> f in
     let spec = Ocaml_protoc_plugin.Serialize.C.( nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = () in
     let spec = Ocaml_protoc_plugin.Deserialize.C.( nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and Update : sig
@@ -423,17 +444,17 @@ and Update : sig
 end = struct 
   let name' () = "Schema.Update"
   type t = ReactElement.t list 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f a -> f a in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message ReactElement.to_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message (fun t -> ReactElement.to_proto t)), not_packed) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun a -> a in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message ReactElement.from_proto), not_packed) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message (fun t -> ReactElement.from_proto t)), not_packed) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
   
 end
 and ServerToClient : sig
@@ -444,16 +465,79 @@ and ServerToClient : sig
 end = struct 
   let name' () = "Schema.ServerToClient"
   type t = { rootId: int; value: [ `Error of Error.t | `Update of Update.t ] } 
-  let to_proto t = 
+  let to_proto = 
     let apply = fun ~f:f' { rootId; value } -> f' rootId value in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function `Error v -> oneof_elem (2, (message Error.to_proto), v) | `Update v -> oneof_elem (3, (message Update.to_proto), v))) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function `Error v -> oneof_elem (2, (message (fun t -> Error.to_proto t)), v) | `Update v -> oneof_elem (3, (message (fun t -> Update.to_proto t)), v))) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-    apply ~f:(serialize ()) t
+    fun t -> apply ~f:(serialize ()) t
   
-  let from_proto writer = 
+  let from_proto = 
     let constructor = fun rootId value -> { rootId; value } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message Error.from_proto), fun v -> `Error v); oneof_elem (3, (message Update.from_proto), fun v -> `Update v) ]) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Error.from_proto t)), fun v -> `Error v); oneof_elem (3, (message (fun t -> Update.from_proto t)), fun v -> `Update v) ]) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-    deserialize writer
+    fun writer -> deserialize writer
+  
+end
+and AnimatedView : sig
+  val name': unit -> string
+  type t = { style: Nars_animated.Nars.Animated.Style.t option; children: ReactElement.t list } 
+  val to_proto: t -> Ocaml_protoc_plugin.Writer.t
+  val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+end = struct 
+  let name' () = "Schema.AnimatedView"
+  type t = { style: Nars_animated.Nars.Animated.Style.t option; children: ReactElement.t list } 
+  let to_proto = 
+    let apply = fun ~f:f' { style; children } -> f' style children in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Nars_animated.Nars.Animated.Style.to_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.to_proto t)), not_packed) ^:: nil ) in
+    let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
+    fun t -> apply ~f:(serialize ()) t
+  
+  let from_proto = 
+    let constructor = fun style children -> { style; children } in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Nars_animated.Nars.Animated.Style.from_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.from_proto t)), not_packed) ^:: nil ) in
+    let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
+    fun writer -> deserialize writer
+  
+end
+and AnimatedText : sig
+  val name': unit -> string
+  type t = { style: Nars_animated.Nars.Animated.Style.t option; children: ReactElement.t list } 
+  val to_proto: t -> Ocaml_protoc_plugin.Writer.t
+  val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+end = struct 
+  let name' () = "Schema.AnimatedText"
+  type t = { style: Nars_animated.Nars.Animated.Style.t option; children: ReactElement.t list } 
+  let to_proto = 
+    let apply = fun ~f:f' { style; children } -> f' style children in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Nars_animated.Nars.Animated.Style.to_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.to_proto t)), not_packed) ^:: nil ) in
+    let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
+    fun t -> apply ~f:(serialize ()) t
+  
+  let from_proto = 
+    let constructor = fun style children -> { style; children } in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Nars_animated.Nars.Animated.Style.from_proto t))) ^:: repeated (2, (message (fun t -> ReactElement.from_proto t)), not_packed) ^:: nil ) in
+    let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
+    fun writer -> deserialize writer
+  
+end
+and AnimatedImage : sig
+  val name': unit -> string
+  type t = { style: Nars_animated.Nars.Animated.Style.t option; sourceURLString: string } 
+  val to_proto: t -> Ocaml_protoc_plugin.Writer.t
+  val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+end = struct 
+  let name' () = "Schema.AnimatedImage"
+  type t = { style: Nars_animated.Nars.Animated.Style.t option; sourceURLString: string } 
+  let to_proto = 
+    let apply = fun ~f:f' { style; sourceURLString } -> f' style sourceURLString in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Nars_animated.Nars.Animated.Style.to_proto t))) ^:: basic (2, string, proto3) ^:: nil ) in
+    let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
+    fun t -> apply ~f:(serialize ()) t
+  
+  let from_proto = 
+    let constructor = fun style sourceURLString -> { style; sourceURLString } in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Nars_animated.Nars.Animated.Style.from_proto t))) ^:: basic (2, string, proto3) ^:: nil ) in
+    let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
+    fun writer -> deserialize writer
   
 end

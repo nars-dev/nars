@@ -31,3 +31,5 @@ exports.Static = Static;
 const Server = __importStar(require("./NarsServer.gen"));
 exports.Server = Server;
 __export(require("nars-common"));
+const Animated = __importStar(require("./Animated"));
+exports.Animated = Animated;

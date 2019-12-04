@@ -3,11 +3,13 @@ import { Server } from "ws";
 import Form from "./Form";
 import { config } from "../common";
 import Feed from "./Feed";
+import ProgressBar from "./ProgressBar";
 
 /* Define which component is rendered per given route */
 const components = {
   Form: Form,
   Feed: Feed,
+  ProgressBar: ProgressBar
 };
 
 /* Create a router. config and components have to match! */

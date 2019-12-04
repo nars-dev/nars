@@ -14,6 +14,10 @@ exports.InputProp = {
         encode: (obj) => (obj ? encode(obj) : undefined),
         optional: true,
     }),
+    number: {
+        decode: (obj) => Number(obj),
+        encode: (obj) => obj,
+    }
 };
 function localProp(isRequired, a, b) {
     return { component: a, key: b, local: true, isRequired };

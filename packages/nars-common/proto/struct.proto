@@ -64,7 +64,7 @@ message Value {
   oneof kind {
     // Represents a null value.
     NullValue null_value = 1;
-    // Represents a double value.
+    // Represents a float value.
     double number_value = 2;
     // Represents a string value.
     string string_value = 3;

@@ -1,55 +1,44 @@
-import { google_mirror as Schema } from "./Schema";
+import { Value, ListValue, Struct } from "./struct_pb";
 
-export const toValue = (value: unknown): Schema.protobuf.IValue => {
+export const toValue = (value: unknown): Value => {
+  const pbValue = new Value();
   switch (typeof value) {
     case "object":
       if (value === null) {
-        return {
-          nullValue: 0,
-        };
+        pbValue.setNullValue(0);
       } else if (Array.isArray(value)) {
-        return {
-          listValue: {
-            values: value.map(toValue),
-          },
-        };
+        const listValues = new ListValue();
+        listValues.setValuesList(value.map(toValue));
+        pbValue.setListValue(listValues);
       } else {
-        return {
-          structValue: toStruct(value),
-        };
+        pbValue.setStructValue(toStruct(value));
       }
+      break;
     case "number":
-      return {
-        numberValue: value,
-      };
+      pbValue.setNumberValue(value as number);
+      break;
     case "string":
-      return {
-        stringValue: value,
-      };
+      pbValue.setStringValue(value as string);
+      break;
     case "boolean":
-      return {
-        boolValue: value,
-      };
+      pbValue.setBoolValue(value as boolean);
+      break;
     case "undefined":
     default:
-      return {
-        undefinedValue: Schema.protobuf.UndefinedValue.UNDEFINED_VALUE,
-      };
+      pbValue.setUndefinedValue(0);
   }
+  return pbValue;
 };
 
-type Fields = NonNullable<Schema.protobuf.IStruct["fields"]>;
-
-export const toStruct = (value: object): Schema.protobuf.IStruct => {
-  const fields = {} as Fields;
+export const toStruct = (value: object): Struct => {
+  const struct = new Struct();
+  const fields = struct.getFieldsMap();
   Object.entries(value).forEach(([key, value]) => {
     if (typeof value !== "undefined") {
-      fields[key] = toValue(value);
+      fields.set(key, toValue(value));
     }
   });
-  return {
-    fields: fields,
-  };
+  return struct;
 };
 
 type UnknownObject = { [k: string]: DecodedValue };
@@ -64,23 +53,21 @@ type DecodedValue =
   | UnknownObject
   | DecodedValueArray;
 
-export const ofValue = (value: Schema.protobuf.IValue): DecodedValue => {
-  if (value.hasOwnProperty("numberValue")) {
-    return Number(value.numberValue);
-  } else if (value.hasOwnProperty("nullValue")) {
+export const ofValue = (value: Value): DecodedValue => {
+  if (value.hasNumberValue()) {
+    return Number(value.getNumberValue());
+  } else if (value.hasNullValue()) {
     return null;
-  } else if (value.hasOwnProperty("stringValue")) {
-    return String(value.stringValue);
-  } else if (value.hasOwnProperty("boolValue")) {
-    return Boolean(value.boolValue);
-  } else if (value.hasOwnProperty("structValue") && value.structValue) {
-    return ofStruct(value.structValue);
-  } else if (
-    value.hasOwnProperty("listValue") &&
-    Array.isArray(value.listValue)
-  ) {
-    return value.listValue.map(ofValue);
-  } else if (value.hasOwnProperty("undefinedValue")) {
+  } else if (value.hasStringValue()) {
+    return String(value.getStringValue());
+  } else if (value.hasBoolValue()) {
+    return Boolean(value.getBoolValue());
+  } else if (value.hasStructValue()) {
+    return ofStruct(value.getStructValue());
+  } else if (value.hasListValue()) {
+    const list = value.getListValue();
+    return list ? list.getValuesList().map(ofValue) : [];
+  } else if (value.hasUndefinedValue()) {
     return undefined;
   } else {
     return undefined;
@@ -88,11 +75,11 @@ export const ofValue = (value: Schema.protobuf.IValue): DecodedValue => {
 };
 
 export const ofStruct = (
-  struct: Schema.protobuf.IStruct
+  struct: Struct | undefined
 ): { [k: string]: DecodedValue } => {
-  if (struct.fields) {
+  if (struct) {
     const fields = {} as UnknownObject;
-    Object.entries(struct.fields).forEach(([key, value]) => {
+    struct.getFieldsMap().forEach((value, key) => {
       fields[key] = ofValue(value);
     });
     return fields;

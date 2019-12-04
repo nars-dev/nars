@@ -8,6 +8,7 @@ var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var Js_option = require("bs-platform/lib/js/js_option.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
+var AnimatedStyle = require("./AnimatedStyle.bs.js");
 
 function encodeOptional(value, decoder) {
   return Js_option.map(Curry.__1(decoder), value);
@@ -64,6 +65,14 @@ function encodeStyleOptional(props) {
               }), value);
 }
 
+function encodeAnimatedStyleOptional(props) {
+  var value = props.style;
+  return Js_option.map((function (value) {
+                var x = value;
+                return AnimatedStyle.tToStruct(props.idGenerator, x);
+              }), value);
+}
+
 function encodeNullable(value, decoder) {
   return Js_option.map(Curry.__1(decoder), value === null ? undefined : Caml_option.some(value));
 }
@@ -94,7 +103,8 @@ exports.encodeCallback = encodeCallback;
 exports.encodeLocalProp = encodeLocalProp;
 exports.encodeOptionalLocalProps = encodeOptionalLocalProps;
 exports.encodeStyleOptional = encodeStyleOptional;
+exports.encodeAnimatedStyleOptional = encodeAnimatedStyleOptional;
 exports.encodeNullable = encodeNullable;
 exports.encodeString = encodeString;
 exports.optionFlatten = optionFlatten;
-/* No side effect */
+/* AnimatedStyle Not a pure module */
