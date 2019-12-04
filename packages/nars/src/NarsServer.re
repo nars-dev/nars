@@ -50,6 +50,10 @@ let stringToArrayBuffer = str => {
   |> Uint8Array.buffer;
 };
 
+let send = (socket, message) => {
+  socket##send(stringToArrayBuffer(message) |> Socket.arrayBufferToData);
+};
+
 let sendViewUpdates = (~socket, ~rootId, reactElements) => {
   let message =
     Schema.ServerToClient.{
@@ -58,8 +62,19 @@ let sendViewUpdates = (~socket, ~rootId, reactElements) => {
     }
     |> Schema.ServerToClient.to_proto
     |> Ocaml_protoc_plugin.Writer.contents;
-  let msg = stringToArrayBuffer(message) |> Socket.arrayBufferToData;
-  socket##send(msg);
+  send(socket, message);
+};
+
+let updateAnimatedValue = (~socket, ~rootId, ~value, ~toValue) => {
+  let message =
+    Schema.ServerToClient.{
+      rootId,
+      value:
+        `AnimatedValueUpdate({value: Some(value), toValue: Some(toValue)}),
+    }
+    |> Schema.ServerToClient.to_proto
+    |> Ocaml_protoc_plugin.Writer.contents;
+  send(socket, message);
 };
 
 [@genType]
@@ -99,6 +114,7 @@ let startListening = (server: server, render) => {
               let container =
                 NarsReconciler.createContainer(
                   ~flushUpdates=sendViewUpdates(~socket, ~rootId),
+                  ~updateAnimatedValue=updateAnimatedValue(~socket, ~rootId),
                 );
               ContainerMap.set(containers, rootId, container);
               container;

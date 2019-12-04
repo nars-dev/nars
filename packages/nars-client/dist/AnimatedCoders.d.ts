@@ -1,4 +1,4 @@
-import { Clock, Style, TopLevelNode, Value } from "./nars_animated_pb";
+import { Clock, Style, Adaptable, TopLevelNode, Value } from "./nars_animated_pb";
 import Animated from "react-native-reanimated";
 declare type AnyAnimatedPrimitive = string | number | boolean;
 export interface RetainedInstances {
@@ -18,5 +18,6 @@ declare type DecodedValue = undefined | null | number | string | boolean | Unkno
 export declare const decodeAnimatedStyle: (struct: Style | null | undefined, retainedInstances: RetainedInstances) => {
     [k: string]: DecodedValue;
 };
+export declare const updateAnimatedValue: (value: Value | undefined, toValue: Adaptable | undefined, retainedInstances: RetainedInstances) => void;
 export {};
 //# sourceMappingURL=AnimatedCoders.d.ts.map

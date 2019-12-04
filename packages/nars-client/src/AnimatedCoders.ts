@@ -592,11 +592,11 @@ const ofValueOrAnimatedNode = (
       return decoded;
     }
     return unreachable();
-  } else if (value.hasOwnProperty("numberValue")) {
+  } else if (value.hasNumberValue()) {
     return Number(value.getNumberValue());
-  } else if (value.hasOwnProperty("nullValue")) {
+  } else if (value.hasNullValue()) {
     return null;
-  } else if (value.hasOwnProperty("stringValue")) {
+  } else if (value.hasStringValue()) {
     return String(value.getStringValue());
   } else if (value.hasBoolValue()) {
     return Boolean(value.getBoolValue());
@@ -606,7 +606,7 @@ const ofValueOrAnimatedNode = (
     return getListValues(value).map(x =>
       ofValueOrAnimatedNode(x, retainedInstances)
     );
-  } else if (value.hasOwnProperty("undefinedValue")) {
+  } else if (value.hasUndefinedValue()) {
     return undefined;
   } else {
     return undefined;
@@ -625,4 +625,16 @@ export const decodeAnimatedStyle = (
     return fields;
   }
   return {};
+};
+
+export const updateAnimatedValue = (
+  value: Value | undefined,
+  toValue: Adaptable | undefined,
+  retainedInstances: RetainedInstances
+): void => {
+  if (value && toValue) {
+    const animatedValue = decodeValue(decodeAny, value, retainedInstances);
+    const adaptale = decodeAdaptable(decodeAny, toValue, retainedInstances);
+    animatedValue.setValue(adaptale);
+  }
 };

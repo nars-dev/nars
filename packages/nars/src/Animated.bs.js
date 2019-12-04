@@ -2,6 +2,7 @@
 'use strict';
 
 var $$Array = require("bs-platform/lib/js/array.js");
+var Curry = require("bs-platform/lib/js/curry.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
 
 function ofString(x) {
@@ -40,84 +41,190 @@ var AnimatedAdaptable = {
   ofBool: ofBool
 };
 
-function ofString$1(x, __nodeID) {
+function make(constructor) {
+  var state = {
+    constructor: constructor,
+    memoizedNode: undefined
+  };
   return {
-          initialValue: /* `String */[
-            -976970511,
-            x
-          ],
-          __nodeID: __nodeID
+          getNode: (function (encodingContext) {
+              var match = state.memoizedNode;
+              if (match !== undefined) {
+                return match;
+              } else {
+                var newNode = Curry._1(state.constructor, encodingContext);
+                state.memoizedNode = newNode;
+                return newNode;
+              }
+            })
         };
 }
 
-function ofFloat$1(x, __nodeID) {
+function encode(value, encodingContext) {
+  return Curry._1(value.getNode, encodingContext);
+}
+
+function toAdaptable(t, encodingContext) {
+  return /* `Node */[
+          870528546,
+          Curry._1(t.getNode, encodingContext)
+        ];
+}
+
+var AnimatedNode = {
+  make: make,
+  encode: encode,
+  toAdaptable: toAdaptable
+};
+
+function setValue(value, toValue) {
+  var match = value.bridge.contents;
+  if (match !== undefined) {
+    return Curry._2(match.updateValue, (function (encodingContext) {
+                  return Curry._1(value.getValue, encodingContext);
+                }), Curry.__1(toValue));
+  } else {
+    return /* () */0;
+  }
+}
+
+function encode$1(value, encodingContext) {
+  return Curry._1(value.getValue, encodingContext);
+}
+
+function toNode(value) {
+  return value.node;
+}
+
+function make$1(constructor) {
+  var state = {
+    constructor: constructor,
+    memoizedValue: undefined
+  };
+  var bridge = {
+    contents: undefined
+  };
+  var getValue = function (encodingContext) {
+    bridge.contents = encodingContext.bridge;
+    var match = state.memoizedValue;
+    if (match !== undefined) {
+      return match;
+    } else {
+      var newValue = Curry._1(state.constructor, encodingContext);
+      state.memoizedValue = newValue;
+      return newValue;
+    }
+  };
   return {
-          initialValue: /* `Float */[
-            365180284,
-            x
-          ],
-          __nodeID: __nodeID
+          bridge: bridge,
+          getValue: getValue,
+          node: {
+            getNode: (function (encodingContext) {
+                return /* `Value */[
+                        -991563951,
+                        getValue(encodingContext)
+                      ];
+              })
+          }
         };
 }
 
-function ofBool$1(x, __nodeID) {
-  return {
-          initialValue: /* `Bool */[
-            737456202,
-            x
-          ],
-          __nodeID: __nodeID
-        };
+function ofFloat$1(x) {
+  return make$1((function (encodingContext) {
+                return {
+                        initialValue: /* `Float */[
+                          365180284,
+                          x
+                        ],
+                        __nodeID: Curry._1(encodingContext.idGenerator, /* () */0)
+                      };
+              }));
+}
+
+function ofString$1(x) {
+  return make$1((function (encodingContext) {
+                return {
+                        initialValue: /* `String */[
+                          -976970511,
+                          x
+                        ],
+                        __nodeID: Curry._1(encodingContext.idGenerator, /* () */0)
+                      };
+              }));
+}
+
+function ofBool$1(x) {
+  return make$1((function (encodingContext) {
+                return {
+                        initialValue: /* `Bool */[
+                          737456202,
+                          x
+                        ],
+                        __nodeID: Curry._1(encodingContext.idGenerator, /* () */0)
+                      };
+              }));
 }
 
 var AnimatedValue = {
-  ofString: ofString$1,
+  setValue: setValue,
+  encode: encode$1,
+  toNode: toNode,
+  make: make$1,
   ofFloat: ofFloat$1,
+  ofString: ofString$1,
   ofBool: ofBool$1
 };
 
-function toAdaptable(t) {
+function make$2(param) {
+  var state = {
+    constructor: (function (encodingContext) {
+        return Curry._1(encodingContext.idGenerator, /* () */0);
+      }),
+    memoizedClock: undefined
+  };
+  var getClock = function (encodingContext) {
+    var match = state.memoizedClock;
+    if (match !== undefined) {
+      return match;
+    } else {
+      var newValue = Curry._1(state.constructor, encodingContext);
+      state.memoizedClock = newValue;
+      return newValue;
+    }
+  };
+  return {
+          getClock: getClock,
+          node: {
+            getNode: (function (encodingContext) {
+                return /* `Clock */[
+                        -611288658,
+                        getClock(encodingContext)
+                      ];
+              })
+          }
+        };
+}
+
+function encode$2(value, encodingContext) {
+  return Curry._1(value.getClock, encodingContext);
+}
+
+function toNode$1(value, encodingContext) {
+  return Curry._1(value.node.getNode, encodingContext);
+}
+
+var Clock = {
+  make: make$2,
+  encode: encode$2,
+  toNode: toNode$1
+};
+
+function nodeToAdaptable(t) {
   return /* `Node */[
           870528546,
           t
         ];
 }
-
-function make(x) {
-  return /* `Value */[
-          -991563951,
-          x
-        ];
-}
-
-var AnimatedNode = {
-  toAdaptable: toAdaptable,
-  make: make
-};
-
-function operationToNode(operation) {
-  return /* `ClockOperation */[
-          -641121127,
-          operation
-        ];
-}
-
-function toNode(clock) {
-  return /* `Clock */[
-          -611288658,
-          clock
-        ];
-}
-
-function make$1(__nodeId) {
-  return __nodeId;
-}
-
-var Clock = {
-  operationToNode: operationToNode,
-  toNode: toNode,
-  make: make$1
-};
 
 function interpolate(value, config) {
   return /* `Interpolate */[
@@ -444,9 +551,10 @@ var spring = animation;
 
 exports.Schema = Schema;
 exports.AnimatedAdaptable = AnimatedAdaptable;
-exports.AnimatedValue = AnimatedValue;
 exports.AnimatedNode = AnimatedNode;
+exports.AnimatedValue = AnimatedValue;
 exports.Clock = Clock;
+exports.nodeToAdaptable = nodeToAdaptable;
 exports.interpolate = interpolate;
 exports.multiOperator = multiOperator;
 exports.add = add;

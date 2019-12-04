@@ -10,40 +10,211 @@ module AnimatedAdaptable = {
   [@genType]
   let ofBool = (x): t => `Primitive(`Bool(x));
 };
-module AnimatedValue = {
-  [@genType.opaque]
-  type t = Schema.Value.t;
-  [@genType]
-  let ofString = (x, __nodeID): t => {initialValue: `String(x), __nodeID};
-  [@genType]
-  let ofFloat = (x, __nodeID): t => {initialValue: `Float(x), __nodeID};
-  [@genType]
-  let ofBool = (x, __nodeID): t => {initialValue: `Bool(x), __nodeID};
-};
+
 module AnimatedNode = {
   [@genType.opaque]
   type t = Schema.Node.t;
+
+  type idGenerator = unit => int;
+
+  [@genType.opaque]
+  type encodingContext = {
+    idGenerator,
+    bridge,
+  }
+  [@genType.opaque]
+  and bridge = {
+    updateValue:
+      (
+        encodingContext => Schema.Value.t,
+        encodingContext => AnimatedAdaptable.t
+      ) =>
+      unit,
+  };
+
+  type constructor = encodingContext => t;
+
+  [@genType.opaque]
+  type internal = {getNode: encodingContext => t};
+
+  type state = {
+    constructor,
+    mutable memoizedNode: option(t),
+  };
+
   [@genType]
-  let toAdaptable = (t: t): AnimatedAdaptable.t => `Node(t);
+  let make = constructor => {
+    let state = {constructor, memoizedNode: None};
+    {
+      getNode: encodingContext => {
+        switch (state.memoizedNode) {
+        | Some(memo) => memo
+        | None =>
+          let newNode = state.constructor(encodingContext);
+          state.memoizedNode = Some(newNode);
+          newNode;
+        };
+      },
+    };
+  };
+
   [@genType]
-  let make = (x: AnimatedValue.t): t => `Value(x);
+  let encode = (value: internal, encodingContext: encodingContext): t => {
+    value.getNode(encodingContext);
+  };
+
+  [@genType]
+  let toAdaptable =
+      (t: internal, encodingContext: encodingContext): AnimatedAdaptable.t => {
+    `Node(t.getNode(encodingContext));
+  };
 };
+
+module AnimatedValue = {
+  [@genType.opaque]
+  type t = Schema.Value.t;
+
+  type constructor = AnimatedNode.encodingContext => t;
+
+  type state = {
+    constructor,
+    mutable memoizedValue: option(t),
+  };
+
+  [@genType.opaque]
+  type internal = {
+    bridge: ref(option(AnimatedNode.bridge)),
+    getValue: constructor,
+    node: AnimatedNode.internal,
+  };
+
+  [@genType]
+  let setValue =
+      (
+        value: internal,
+        toValue: AnimatedNode.encodingContext => AnimatedAdaptable.t,
+      ) => {
+    switch (value.bridge^) {
+    | None => ()
+    | Some(bridge) =>
+      bridge.updateValue(
+        encodingContext => value.getValue(encodingContext),
+        encodingContext => toValue(encodingContext),
+      )
+    };
+  };
+
+  [@genType]
+  let encode = (value: internal, encodingContext): t => {
+    value.getValue(encodingContext);
+  };
+
+  [@genType]
+  let toNode = (value: internal): AnimatedNode.internal => {
+    value.node;
+  };
+
+  let make = (constructor): internal => {
+    let state: state = {constructor, memoizedValue: None};
+    let bridge = ref(None);
+    let getValue = encodingContext => {
+      bridge := Some(encodingContext.AnimatedNode.bridge);
+      switch (state.memoizedValue) {
+      | Some(memo) => memo
+      | None =>
+        let newValue = state.constructor(encodingContext);
+        state.memoizedValue = Some(newValue);
+        newValue;
+      };
+    };
+    {
+      bridge,
+      getValue,
+      node: {
+        AnimatedNode.getNode: encodingContext => {
+          `Value(getValue(encodingContext));
+        },
+      },
+    };
+  };
+
+  [@genType]
+  let ofFloat = (x): internal => {
+    make(encodingContext =>
+      {initialValue: `Float(x), __nodeID: encodingContext.idGenerator()}
+    );
+  };
+
+  [@genType]
+  let ofString = (x): internal =>
+    make(encodingContext =>
+      {initialValue: `String(x), __nodeID: encodingContext.idGenerator()}
+    );
+
+  [@genType]
+  let ofBool = (x): internal =>
+    make(encodingContext =>
+      {initialValue: `Bool(x), __nodeID: encodingContext.idGenerator()}
+    );
+};
+
 module Clock = {
   [@genType.opaque]
   type t = Schema.Clock.t;
+
   [@genType.opaque]
   type operation = Schema.ClockOperation.t;
-  [@genType]
-  let operationToNode = (operation: operation): AnimatedNode.t => {
-    `ClockOperation(operation);
+
+  type constructor = AnimatedNode.encodingContext => t;
+
+  [@genType.opaque]
+  type internal = {
+    getClock: constructor,
+    node: AnimatedNode.internal,
   };
-  [@genType]
-  let toNode = (clock: t): AnimatedNode.t => {
-    `Clock(clock);
+  type state = {
+    constructor,
+    mutable memoizedClock: option(t),
   };
+
   [@genType]
-  let make = (__nodeId: int): t => {
-    __nodeId;
+  let make = (): internal => {
+    let state: state = {
+      constructor: encodingContext => {
+        encodingContext.idGenerator();
+      },
+      memoizedClock: None,
+    };
+    let getClock = encodingContext => {
+      switch (state.memoizedClock) {
+      | Some(memo) => memo
+      | None =>
+        let newValue = state.constructor(encodingContext);
+        state.memoizedClock = Some(newValue);
+        newValue;
+      };
+    };
+    {
+      getClock,
+      node: {
+        AnimatedNode.getNode: encodingContext => {
+          `Clock(getClock(encodingContext));
+        },
+      },
+    };
+  };
+
+  [@genType]
+  let encode =
+      (value: internal, encodingContext: AnimatedNode.encodingContext): t => {
+    value.getClock(encodingContext);
+  };
+
+  [@genType]
+  let toNode =
+      (value: internal, encodingContext: AnimatedNode.encodingContext)
+      : AnimatedNode.t => {
+    value.node.getNode(encodingContext);
   };
 };
 
@@ -57,6 +228,11 @@ type animatedValue = AnimatedValue.t;
 type adaptable = AnimatedAdaptable.t;
 [@genType]
 type node = AnimatedNode.t;
+
+[@genType]
+let nodeToAdaptable = (t: node): AnimatedAdaptable.t => {
+  `Node(t);
+};
 
 [@genType]
 type extrapolate = Schema.ExtrapolateType.t = | Extend | Clamp | Identity;

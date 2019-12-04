@@ -1,13 +1,12 @@
-import { AnimatedNode } from "./AnimatedBase";
-import { node } from "./Animated.gen";
-export type nodeClass = AnimatedNode<any>;
+import { AnimatedNode, AnimatedValue } from "./AnimatedBase";
+import * as AnimatedGen from "./Animated.gen";
 
-export const isAnimatedNode = (x: any): x is AnimatedNode<any> =>
-  x instanceof AnimatedNode;
+export const getAnimatedValue = (
+  x: any
+): AnimatedGen.AnimatedValue_internal | undefined =>
+  x instanceof AnimatedValue ? x.value : undefined;
 
-export const getProtobufNode = (
-  idGenerator: () => number,
-  x: AnimatedNode<any>
-): node => {
-  return x.node(idGenerator);
-};
+export const getAnimatedNode = (
+  x: any
+): AnimatedGen.AnimatedNode_internal | undefined =>
+  x instanceof AnimatedNode ? x.internal : undefined;

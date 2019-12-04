@@ -13,7 +13,7 @@ function encoder(key, param, param$1, children) {
           value: /* `AnimatedView */[
             -207705400,
             {
-              style: ProtoEncoders.encodeAnimatedStyleOptional(param[0]),
+              style: ProtoEncoders.encodeAnimatedStyleOptional(param$1.updateAnimatedValue, param[0]),
               children: $$Array.to_list(children)
             }
           ]

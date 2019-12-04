@@ -14,16 +14,34 @@ const AnimatedBS = require('./Animated.bs');
 export abstract class AnimatedAdaptable_t { protected opaque!: any }; /* simulate opaque types */
 
 // tslint:disable-next-line:max-classes-per-file 
+export abstract class AnimatedNode_t { protected opaque!: any }; /* simulate opaque types */
+
+// tslint:disable-next-line:max-classes-per-file 
+export abstract class AnimatedNode_encodingContext { protected opaque!: any }; /* simulate opaque types */
+
+// tslint:disable-next-line:max-classes-per-file 
+export abstract class AnimatedNode_bridge { protected opaque!: any }; /* simulate opaque types */
+
+// tslint:disable-next-line:interface-over-type-literal
+export type AnimatedNode_constructor = (_1:AnimatedNode_encodingContext) => AnimatedNode_t;
+
+// tslint:disable-next-line:max-classes-per-file 
+export abstract class AnimatedNode_internal { protected opaque!: any }; /* simulate opaque types */
+
+// tslint:disable-next-line:max-classes-per-file 
 export abstract class AnimatedValue_t { protected opaque!: any }; /* simulate opaque types */
 
 // tslint:disable-next-line:max-classes-per-file 
-export abstract class AnimatedNode_t { protected opaque!: any }; /* simulate opaque types */
+export abstract class AnimatedValue_internal { protected opaque!: any }; /* simulate opaque types */
 
 // tslint:disable-next-line:max-classes-per-file 
 export abstract class Clock_t { protected opaque!: any }; /* simulate opaque types */
 
 // tslint:disable-next-line:max-classes-per-file 
 export abstract class Clock_operation { protected opaque!: any }; /* simulate opaque types */
+
+// tslint:disable-next-line:max-classes-per-file 
+export abstract class Clock_internal { protected opaque!: any }; /* simulate opaque types */
 
 // tslint:disable-next-line:interface-over-type-literal
 export type clock = Clock_t;
@@ -94,30 +112,49 @@ export const AnimatedAdaptable_ofFloat: (_1:number) => AnimatedAdaptable_t = Ani
 
 export const AnimatedAdaptable_ofBool: (_1:boolean) => AnimatedAdaptable_t = AnimatedBS.AnimatedAdaptable.ofBool;
 
-export const AnimatedValue_ofString: (_1:string, _2:number) => AnimatedValue_t = function (Arg1: any, Arg2: any) {
-  const result = Curry._2(AnimatedBS.AnimatedValue.ofString, Arg1, Arg2);
+export const AnimatedNode_make: (_1:AnimatedNode_constructor) => AnimatedNode_internal = AnimatedBS.AnimatedNode.make;
+
+export const AnimatedNode_encode: (_1:AnimatedNode_internal, _2:AnimatedNode_encodingContext) => AnimatedNode_t = function (Arg1: any, Arg2: any) {
+  const result = Curry._2(AnimatedBS.AnimatedNode.encode, Arg1, Arg2);
   return result
 };
 
-export const AnimatedValue_ofFloat: (_1:number, _2:number) => AnimatedValue_t = function (Arg1: any, Arg2: any) {
-  const result = Curry._2(AnimatedBS.AnimatedValue.ofFloat, Arg1, Arg2);
+export const AnimatedNode_toAdaptable: (_1:AnimatedNode_internal, _2:AnimatedNode_encodingContext) => AnimatedAdaptable_t = function (Arg1: any, Arg2: any) {
+  const result = Curry._2(AnimatedBS.AnimatedNode.toAdaptable, Arg1, Arg2);
   return result
 };
 
-export const AnimatedValue_ofBool: (_1:boolean, _2:number) => AnimatedValue_t = function (Arg1: any, Arg2: any) {
-  const result = Curry._2(AnimatedBS.AnimatedValue.ofBool, Arg1, Arg2);
+export const AnimatedValue_setValue: (_1:AnimatedValue_internal, _2:((_1:AnimatedNode_encodingContext) => AnimatedAdaptable_t)) => void = function (Arg1: any, Arg2: any) {
+  const result = Curry._2(AnimatedBS.AnimatedValue.setValue, Arg1, Arg2);
   return result
 };
 
-export const AnimatedNode_toAdaptable: (_1:AnimatedNode_t) => AnimatedAdaptable_t = AnimatedBS.AnimatedNode.toAdaptable;
+export const AnimatedValue_encode: (_1:AnimatedValue_internal, _2:AnimatedNode_encodingContext) => AnimatedValue_t = function (Arg1: any, Arg2: any) {
+  const result = Curry._2(AnimatedBS.AnimatedValue.encode, Arg1, Arg2);
+  return result
+};
 
-export const AnimatedNode_make: (_1:AnimatedValue_t) => AnimatedNode_t = AnimatedBS.AnimatedNode.make;
+export const AnimatedValue_toNode: (_1:AnimatedValue_internal) => AnimatedNode_internal = AnimatedBS.AnimatedValue.toNode;
 
-export const Clock_operationToNode: (_1:Clock_operation) => AnimatedNode_t = AnimatedBS.Clock.operationToNode;
+export const AnimatedValue_ofFloat: (_1:number) => AnimatedValue_internal = AnimatedBS.AnimatedValue.ofFloat;
 
-export const Clock_toNode: (_1:Clock_t) => AnimatedNode_t = AnimatedBS.Clock.toNode;
+export const AnimatedValue_ofString: (_1:string) => AnimatedValue_internal = AnimatedBS.AnimatedValue.ofString;
 
-export const Clock_make: (_1:number) => Clock_t = AnimatedBS.Clock.make;
+export const AnimatedValue_ofBool: (_1:boolean) => AnimatedValue_internal = AnimatedBS.AnimatedValue.ofBool;
+
+export const Clock_make: (_1:void) => Clock_internal = AnimatedBS.Clock.make;
+
+export const Clock_encode: (_1:Clock_internal, _2:AnimatedNode_encodingContext) => Clock_t = function (Arg1: any, Arg2: any) {
+  const result = Curry._2(AnimatedBS.Clock.encode, Arg1, Arg2);
+  return result
+};
+
+export const Clock_toNode: (_1:Clock_internal, _2:AnimatedNode_encodingContext) => AnimatedNode_t = function (Arg1: any, Arg2: any) {
+  const result = Curry._2(AnimatedBS.Clock.toNode, Arg1, Arg2);
+  return result
+};
+
+export const nodeToAdaptable: (_1:node) => AnimatedAdaptable_t = AnimatedBS.nodeToAdaptable;
 
 export const interpolate: (_1:adaptable, _2:interpolationConfig) => node = function (Arg1: any, Arg2: any) {
   const result = AnimatedBS.interpolate(Arg1, {inputRange:Arg2.inputRange, outputRange:Arg2.outputRange, extrapolate:(Arg2.extrapolate == null ? undefined : $$toRE922137290[Arg2.extrapolate]), extrapolateLeft:(Arg2.extrapolateLeft == null ? undefined : $$toRE922137290[Arg2.extrapolateLeft]), extrapolateRight:(Arg2.extrapolateRight == null ? undefined : $$toRE922137290[Arg2.extrapolateRight])});
@@ -225,12 +262,19 @@ export const timing: (_1:clock, _2:TimingAnimation_state, _3:TimingAnimation_con
 export const spring: (_1:clock, _2:physicsState, _3:SpringAnimation_config) => node = AnimatedBS.spring;
 
 export const AnimatedValue: {
-  ofString: (_1:string, _2:number) => AnimatedValue_t; 
-  ofFloat: (_1:number, _2:number) => AnimatedValue_t; 
-  ofBool: (_1:boolean, _2:number) => AnimatedValue_t
+  setValue: (_1:AnimatedValue_internal, _2:((_1:AnimatedNode_encodingContext) => AnimatedAdaptable_t)) => void; 
+  ofFloat: (_1:number) => AnimatedValue_internal; 
+  ofString: (_1:string) => AnimatedValue_internal; 
+  toNode: (_1:AnimatedValue_internal) => AnimatedNode_internal; 
+  ofBool: (_1:boolean) => AnimatedValue_internal; 
+  encode: (_1:AnimatedValue_internal, _2:AnimatedNode_encodingContext) => AnimatedValue_t
 } = AnimatedBS.AnimatedValue
 
-export const AnimatedNode: { toAdaptable: (_1:AnimatedNode_t) => AnimatedAdaptable_t; make: (_1:AnimatedValue_t) => AnimatedNode_t } = AnimatedBS.AnimatedNode
+export const AnimatedNode: {
+  toAdaptable: (_1:AnimatedNode_internal, _2:AnimatedNode_encodingContext) => AnimatedAdaptable_t; 
+  make: (_1:AnimatedNode_constructor) => AnimatedNode_internal; 
+  encode: (_1:AnimatedNode_internal, _2:AnimatedNode_encodingContext) => AnimatedNode_t
+} = AnimatedBS.AnimatedNode
 
 export const AnimatedAdaptable: {
   ofString: (_1:string) => AnimatedAdaptable_t; 
@@ -239,7 +283,7 @@ export const AnimatedAdaptable: {
 } = AnimatedBS.AnimatedAdaptable
 
 export const Clock: {
-  operationToNode: (_1:Clock_operation) => AnimatedNode_t; 
-  toNode: (_1:Clock_t) => AnimatedNode_t; 
-  make: (_1:number) => Clock_t
+  toNode: (_1:Clock_internal, _2:AnimatedNode_encodingContext) => AnimatedNode_t; 
+  make: (_1:void) => Clock_internal; 
+  encode: (_1:Clock_internal, _2:AnimatedNode_encodingContext) => Clock_t
 } = AnimatedBS.Clock

@@ -459,21 +459,21 @@ end = struct
 end
 and ServerToClient : sig
   val name': unit -> string
-  type t = { rootId: int; value: [ `Error of Error.t | `Update of Update.t ] } 
+  type t = { rootId: int; value: [ `Error of Error.t | `Update of Update.t | `AnimatedValueUpdate of Nars_animated.Nars.Animated.ValueUpdate.t ] } 
   val to_proto: t -> Ocaml_protoc_plugin.Writer.t
   val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
 end = struct 
   let name' () = "Schema.ServerToClient"
-  type t = { rootId: int; value: [ `Error of Error.t | `Update of Update.t ] } 
+  type t = { rootId: int; value: [ `Error of Error.t | `Update of Update.t | `AnimatedValueUpdate of Nars_animated.Nars.Animated.ValueUpdate.t ] } 
   let to_proto = 
     let apply = fun ~f:f' { rootId; value } -> f' rootId value in
-    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function `Error v -> oneof_elem (2, (message (fun t -> Error.to_proto t)), v) | `Update v -> oneof_elem (3, (message (fun t -> Update.to_proto t)), v))) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function `Error v -> oneof_elem (2, (message (fun t -> Error.to_proto t)), v) | `Update v -> oneof_elem (3, (message (fun t -> Update.to_proto t)), v) | `AnimatedValueUpdate v -> oneof_elem (4, (message (fun t -> Nars_animated.Nars.Animated.ValueUpdate.to_proto t)), v))) ^:: nil ) in
     let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
     fun t -> apply ~f:(serialize ()) t
   
   let from_proto = 
     let constructor = fun rootId value -> { rootId; value } in
-    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Error.from_proto t)), fun v -> `Error v); oneof_elem (3, (message (fun t -> Update.from_proto t)), fun v -> `Update v) ]) ^:: nil ) in
+    let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Error.from_proto t)), fun v -> `Error v); oneof_elem (3, (message (fun t -> Update.from_proto t)), fun v -> `Update v); oneof_elem (4, (message (fun t -> Nars_animated.Nars.Animated.ValueUpdate.from_proto t)), fun v -> `AnimatedValueUpdate v) ]) ^:: nil ) in
     let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
     fun writer -> deserialize writer
   

@@ -1,7 +1,5 @@
 [@genType.import ("./StyleSheet", "AnyAnimatedStyleProp")]
 type t;
-[@genType.import ("./ReasonAnimatedUtils", "nodeClass")]
-type animatedNode;
 type jsFunction;
 
 module ProtobufAnimated = Nars_animated.Nars.Animated;
@@ -19,7 +17,8 @@ type classification =
   | Number(float)
   | Function(jsFunction)
   | Undefined
-  | Animated(animatedNode);
+  | AnimatedValue(Animated.AnimatedValue.internal)
+  | AnimatedNode(Animated.AnimatedNode.internal);
 
 external to_nullable: t => Js.Null.t(t) = "%identity";
 external to_object: t => Js.Dict.t(t) = "%identity";
@@ -28,14 +27,13 @@ external to_boolean: t => bool = "%identity";
 external to_string: t => string = "%identity";
 external to_number: t => float = "%identity";
 external to_function: t => jsFunction = "%identity";
-external to_animatedNode: t => animatedNode = "%identity";
 
 [@bs.module "./ReasonAnimatedUtils"]
-external isAnimatedNode: t => bool = "isAnimatedNode";
-
+external getAnimatedValue: t => option(Animated.AnimatedValue.internal) =
+  "getAnimatedValue";
 [@bs.module "./ReasonAnimatedUtils"]
-external getProtobufNode: (unit => int, animatedNode) => Node.t =
-  "getProtobufNode";
+external getAnimatedNode: t => option(Animated.AnimatedNode.internal) =
+  "getAnimatedNode";
 
 let classify = x =>
   switch (Js.typeof(x)) {
@@ -45,10 +43,14 @@ let classify = x =>
     | Some(x) =>
       if (Js.Array.isArray(x)) {
         Array(x |> to_array);
-      } else if (isAnimatedNode(x)) {
-        Animated(x |> to_animatedNode);
       } else {
-        Object(x |> to_object);
+        switch (getAnimatedValue(x), getAnimatedNode(x)) {
+        | (Some(value), _) =>
+          AnimatedValue(value);
+        | (None, Some(node)) =>
+          AnimatedNode(node);
+        | _ => Object(x |> to_object)
+        };
       }
     }
   | "boolean" => Boolean(x |> to_boolean)
@@ -59,33 +61,64 @@ let classify = x =>
   | _ => assert(false)
   };
 
-let rec dictToStruct = (idGenerator, dict) => {
+let rec dictToStruct = (idGenerator, updater, dict) => {
   dict
   |> Js.Dict.entries
   |> Js.Array.map(((key, value)) =>
-       (key, Some(toValue(idGenerator, value)))
+       (key, Some(toValue(idGenerator, updater, value)))
      )
   |> Array.to_list;
 }
-and toValue = (idGenerator, t): Value.t =>
+and toValue = (idGenerator, updater, t): Value.t => {
+  let rec bridge = {
+    Animated.AnimatedNode.updateValue: (value, toValue) => {
+      let value = value({ idGenerator, bridge } );
+      let toValue = toValue({ idGenerator, bridge });
+      updater(~value, ~toValue);
+    },
+  };
+  let encodingContext = { Animated.AnimatedNode.idGenerator, bridge };
   switch (classify(t)) {
   | Null => `Null_value(Struct.NullValue.NULL_VALUE)
   | Boolean(b) => `Bool_value(b)
   | String(s) => `String_value(s)
   | Number(n) => `Number_value(n)
   | Undefined => `Undefined_value(Struct.UndefinedValue.UNDEFINED_VALUE)
-  | Object(dict) => `Style_value(dictToStruct(idGenerator, dict))
+  | Object(dict) => `Style_value(dictToStruct(idGenerator, updater, dict))
   | Array(array) =>
-    `List_value(Js.Array.map(toValue(idGenerator), array) |> Array.to_list)
+    `List_value(
+      Js.Array.map(toValue(idGenerator, updater), array) |> Array.to_list,
+    )
   | Function(_) => assert(false)
-  | Animated(animatedNode) =>
+  | AnimatedNode(animatedNode) =>
     `Node({
-      node: Some(getProtobufNode(idGenerator, animatedNode)),
-      __nodeID: idGenerator(),
+      node: Some(animatedNode.getNode(encodingContext)),
+      __nodeID: encodingContext.idGenerator(),
     })
+  | AnimatedValue(animatedValue) =>
+    let value = animatedValue.getValue(encodingContext);
+    `Node({node: Some(`Value(value)), __nodeID: encodingContext.idGenerator()});
   };
+};
 
-external tToDict: t => Js.Dict.t(t) = "%identity";
-let tToStruct = (idGenerator, t) => {
-  dictToStruct(idGenerator, tToDict(t));
+let concatStyle = (styleDict, value) => {
+  switch (value) {
+  | Object(d) =>
+    Js.Dict.entries(d)
+    |> Js.Array.forEach(((key, value)) => {
+         Js.Dict.set(styleDict, key, value)
+       })
+  | _ => assert(false)
+  };
+};
+
+let tToStruct = (idGenerator, updater, t) => {
+  switch (classify(t)) {
+  | Object(o) => dictToStruct(idGenerator, updater, o)
+  | Array(a) =>
+    let styles = Js.Dict.empty();
+    Js.Array.map(classify, a) |> Js.Array.forEach(concatStyle(styles));
+    dictToStruct(idGenerator, updater, styles);
+  | _ => assert(false)
+  };
 };

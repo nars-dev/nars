@@ -2154,14 +2154,25 @@ var spec$42 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
           Spec$Ocamlprotocplugin.Serialize.C.int32_int,
           Spec$Ocamlprotocplugin.Serialize.C.proto3
         ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof, (function (param) {
-                if (param[0] >= 999946793) {
-                  return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
-                              3,
-                              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                                      return Curry._1(Update.to_proto, t);
-                                    })),
-                              param[1]
-                            ]);
+                var variant = param[0];
+                if (variant !== 106380200) {
+                  if (variant >= 999946793) {
+                    return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                                3,
+                                Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                                        return Curry._1(Update.to_proto, t);
+                                      })),
+                                param[1]
+                              ]);
+                  } else {
+                    return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                                4,
+                                Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                                        return Curry._1(Nars_animated.Nars.Animated.ValueUpdate.to_proto, t);
+                                      })),
+                                param[1]
+                              ]);
+                  }
                 } else {
                   return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
                               2,
@@ -2218,7 +2229,21 @@ var spec$43 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
                                 ];
                         })
                     ]),
-                /* [] */0
+                /* :: */[
+                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.oneof_elem, /* tuple */[
+                        4,
+                        Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                                return Curry._1(Nars_animated.Nars.Animated.ValueUpdate.from_proto, t);
+                              })),
+                        (function (v) {
+                            return /* `AnimatedValueUpdate */[
+                                    -20525481,
+                                    v
+                                  ];
+                          })
+                      ]),
+                  /* [] */0
+                ]
               ]
             ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 

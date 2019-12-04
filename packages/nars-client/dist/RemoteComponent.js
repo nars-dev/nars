@@ -10,6 +10,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const React = __importStar(require("react"));
 const StructCoders_1 = require("./StructCoders");
 const DecodeElement_1 = require("./DecodeElement");
+const AnimatedCoders_1 = require("./AnimatedCoders");
 const schema_pb_1 = require("./schema_pb");
 class InstanceCounter {
     constructor() {
@@ -109,6 +110,12 @@ exports.useNars = (wsOrAddress, name, props, localPropsOptional) => {
                             return localProps[key];
                         }, elem, retainedInstances)),
                     });
+                }
+                else if (message.hasAnimatedvalueupdate()) {
+                    const update = message.getAnimatedvalueupdate();
+                    const value = update.getValue();
+                    const toValue = update.getTovalue();
+                    AnimatedCoders_1.updateAnimatedValue(value, toValue, retainedInstances);
                 }
             }
         });

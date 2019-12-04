@@ -58,7 +58,7 @@ type Props = {
 };
 
 const ProgressBar = (props: Props) => {
-  const progressValue = 0.5;
+  const progressValue = 1;
   const [animation] = React.useState(() => new Value<number>(0));
   const [transX] = React.useState(() => {
     const clock = new Animated.Clock();
@@ -67,11 +67,12 @@ const ProgressBar = (props: Props) => {
     return transX;
   });
   React.useEffect(() => {
-    const progress = Math.max(Math.min(progressValue, 1), 0);
-    animation.setValue(progress * 100);
+    animation.setValue(100);
   }, [progressValue]);
+
   const progressStyle = {
     width: concat(transX, "%"),
+    backgroundColor: "white",
     height: props.height,
     borderRadius: 2,
   };
@@ -81,6 +82,7 @@ const ProgressBar = (props: Props) => {
         {
           backgroundColor: "red",
           width: 100,
+          height: 30,
         },
       ]}
     >

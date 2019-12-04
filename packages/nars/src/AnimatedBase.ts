@@ -1,26 +1,23 @@
 import * as AnimatedGen from "./Animated.gen";
 
-export type IdGenerator = () => number;
+export type EncodingContext = AnimatedGen.AnimatedNode_encodingContext;
 
 export class AnimatedNode<T> {
-  private _node: AnimatedGen.node | undefined;
-  private makeNode: (g: IdGenerator) => AnimatedGen.node;
-  private __nodeId: number | undefined;
+  readonly internal: AnimatedGen.AnimatedNode_internal;
   __typesystem_clue__?: T;
-  constructor(makeNode_: (g: IdGenerator) => AnimatedGen.node) {
-    this.makeNode = makeNode_;
-  }
-  node(idGenerator: IdGenerator): AnimatedGen.node {
-    if (!this._node) {
-      this._node = this.makeNode(idGenerator);
+  constructor(
+    internalOrFunction:
+      | AnimatedGen.AnimatedNode_internal
+      | AnimatedGen.AnimatedNode_constructor
+  ) {
+    if (typeof internalOrFunction === "function") {
+      this.internal = AnimatedGen.AnimatedNode_make(internalOrFunction);
+    } else {
+      this.internal = internalOrFunction;
     }
-    return this._node;
   }
-  lazyNodeId(generator: IdGenerator): number {
-    if (!this.__nodeId) {
-      this.__nodeId = generator();
-    }
-    return this.__nodeId;
+  encode(encodingContext: EncodingContext) {
+    return AnimatedGen.AnimatedNode_encode(this.internal, encodingContext);
   }
 }
 
@@ -46,61 +43,50 @@ export interface InterpolationConfig {
 }
 
 export class AnimatedValue<T extends Value> extends AnimatedNode<T> {
-  private _value: AnimatedGen.animatedValue | undefined;
-  private makeValue: (generator: IdGenerator) => AnimatedGen.animatedValue;
+  readonly value: AnimatedGen.AnimatedValue_internal;
+
   constructor(initialValue: T) {
-    super(idGenerator =>
-      AnimatedGen.AnimatedNode_make(this.value(idGenerator))
-    );
-    this.makeValue = generateId => {
-      let value;
-      if (typeof initialValue === "string") {
-        value = AnimatedGen.AnimatedValue_ofString(
-          initialValue,
-          this.lazyNodeId(generateId)
-        );
-      } else if (typeof initialValue === "number") {
-        value = AnimatedGen.AnimatedValue_ofFloat(
-          initialValue,
-          this.lazyNodeId(generateId)
-        );
-      } else if (typeof initialValue === "boolean") {
-        value = AnimatedGen.AnimatedValue_ofBool(
-          initialValue,
-          this.lazyNodeId(generateId)
-        );
-      } else {
-        throw Error(
-          `AnimatedValue cannot be initiated with ${typeof initialValue}`
-        );
-      }
-      return value;
-    };
-  }
-  value(generator: IdGenerator): AnimatedGen.animatedValue {
-    if (!this._value) {
-      this._value = this.makeValue(generator);
+    let value;
+    if (typeof initialValue === "string") {
+      value = AnimatedGen.AnimatedValue_ofString(initialValue);
+    } else if (typeof initialValue === "number") {
+      value = AnimatedGen.AnimatedValue_ofFloat(initialValue);
+    } else if (typeof initialValue === "boolean") {
+      value = AnimatedGen.AnimatedValue_ofBool(initialValue);
+    } else {
+      throw Error(
+        `AnimatedValue cannot be initiated with ${typeof initialValue}`
+      );
     }
-    return this._value;
+    super(AnimatedGen.AnimatedValue.toNode(value));
+    this.value = value;
   }
 
-  setValue(_value: Adaptable<T>): void {
-    /* TODO: add implmenetaiton */
+  setValue(toValue: Adaptable<T>): void {
+    AnimatedGen.AnimatedValue_setValue(this.value, encodingContext =>
+      toAdaptable(toValue, encodingContext)
+    );
   }
 
   interpolate(config: InterpolationConfig): AnimatedNode<number> {
     return new AnimatedNode(idGenerator =>
       AnimatedGen.interpolate(
-        AnimatedGen.AnimatedNode_toAdaptable(this.node(idGenerator)),
+        AnimatedGen.AnimatedNode_toAdaptable(this.internal, idGenerator),
         serializeInterpolationConfig(config, idGenerator)
       )
     );
+  }
+
+  encodeValue(
+    encodingContext: EncodingContext
+  ) {
+    return AnimatedGen.AnimatedValue_encode(this.value, encodingContext);
   }
 }
 
 export const arrayToNode = <T extends Value>(
   array: ReadonlyArray<Adaptable<T>>,
-  idGenerator: IdGenerator
+  idGenerator: EncodingContext
 ): AnimatedGen.node => {
   return AnimatedGen.block(
     array.map(x => {
@@ -115,9 +101,9 @@ export const arrayToNode = <T extends Value>(
 
 const arrayToAdaptable = <T extends Value>(
   array: ReadonlyArray<Adaptable<T>>,
-  idGenerator: IdGenerator
+  idGenerator: EncodingContext
 ): AnimatedGen.adaptable => {
-  return AnimatedGen.AnimatedNode_toAdaptable(arrayToNode(array, idGenerator));
+  return AnimatedGen.nodeToAdaptable(arrayToNode(array, idGenerator));
 };
 
 const primitiveToAdaptable = (x: any): AnimatedGen.adaptable => {
@@ -134,10 +120,13 @@ const primitiveToAdaptable = (x: any): AnimatedGen.adaptable => {
 
 export const toAdaptable = <T extends Value>(
   adaptable: Adaptable<T>,
-  idGenerator: IdGenerator
+  idGenerator: EncodingContext
 ): AnimatedGen.adaptable => {
   if (adaptable instanceof AnimatedNode || adaptable instanceof AnimatedValue) {
-    return AnimatedGen.AnimatedNode_toAdaptable(adaptable.node(idGenerator));
+    return AnimatedGen.AnimatedNode_toAdaptable(
+      adaptable.internal,
+      idGenerator
+    );
   } else if (Array.isArray(adaptable)) {
     return arrayToAdaptable(adaptable, idGenerator);
   } else {
@@ -147,7 +136,7 @@ export const toAdaptable = <T extends Value>(
 
 export const serializeInterpolationConfig = (
   config: InterpolationConfig,
-  idGenerator: IdGenerator
+  idGenerator: EncodingContext
 ) => ({
   inputRange: config.inputRange.map(x => toAdaptable(x, idGenerator)),
   outputRange: config.outputRange.map(x => toAdaptable(x, idGenerator)),
@@ -157,15 +146,16 @@ export const serializeInterpolationConfig = (
 });
 
 export class AnimatedClock extends AnimatedNode<number> {
-  private _clock: AnimatedGen.clock | undefined;
+  private readonly clock: AnimatedGen.Clock_internal;
   constructor() {
-    super(generateId => AnimatedGen.Clock_toNode(this.clock(generateId)));
+    const clock = AnimatedGen.Clock_make();
+    super(encodingContext => {
+      return AnimatedGen.Clock_toNode(clock, encodingContext);
+    });
+    this.clock = clock;
   }
-  clock(idGenerator: IdGenerator): AnimatedGen.clock {
-    if (!this._clock) {
-      this._clock = AnimatedGen.Clock_make(this.lazyNodeId(idGenerator));
-    }
-    return this._clock;
+  encodeClock(encodingContext: EncodingContext) {
+    return AnimatedGen.Clock_encode(this.clock, encodingContext);
   }
 }
 

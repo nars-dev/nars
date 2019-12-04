@@ -14,13 +14,22 @@ type props = {
 external toProps: Js.t('a) => props = "%identity";
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~registerCallback as _, ~children as _) => {
+    (
+      ~key,
+      ~props as Instance.Props(props),
+      ~bridge as {Instance.updateAnimatedValue},
+      ~children as _,
+    ) => {
   let props = toProps(props);
   {
     key,
     value:
       `AnimatedImage({
-        style: ProtoEncoders.encodeAnimatedStyleOptional(props),
+        style:
+          ProtoEncoders.encodeAnimatedStyleOptional(
+            ~updateAnimatedValue,
+            props,
+          ),
         sourceURLString: props##source,
       }),
   };

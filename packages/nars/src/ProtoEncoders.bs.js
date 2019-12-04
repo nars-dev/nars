@@ -61,15 +61,15 @@ function encodeStyleOptional(props) {
   var value = props.style;
   return Js_option.map((function (value) {
                 var x = value;
-                return JsValue.dictToStruct(x);
+                return JsValue.tToStruct(x);
               }), value);
 }
 
-function encodeAnimatedStyleOptional(props) {
+function encodeAnimatedStyleOptional(updater, props) {
   var value = props.style;
   return Js_option.map((function (value) {
                 var x = value;
-                return AnimatedStyle.tToStruct(props.idGenerator, x);
+                return AnimatedStyle.tToStruct(props.idGenerator, updater, x);
               }), value);
 }
 

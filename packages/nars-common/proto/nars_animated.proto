@@ -401,3 +401,8 @@ message Style {
   // Unordered map of dynamically typed values.
   map<string, ValueOrAnimatedNode> fields = 1;
 }
+
+message ValueUpdate {
+  Value value = 1;
+  Adaptable toValue = 2;
+}

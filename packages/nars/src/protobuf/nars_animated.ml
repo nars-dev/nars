@@ -1035,5 +1035,26 @@ module Nars = struct
         fun writer -> deserialize writer
       
     end
+    and ValueUpdate : sig
+      val name': unit -> string
+      type t = { value: Value.t option; toValue: Adaptable.t option } 
+      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
+      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+    end = struct 
+      let name' () = "Nars_animated.nars.animated.ValueUpdate"
+      type t = { value: Value.t option; toValue: Adaptable.t option } 
+      let to_proto = 
+        let apply = fun ~f:f' { value; toValue } -> f' value toValue in
+        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Value.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
+        fun t -> apply ~f:(serialize ()) t
+      
+      let from_proto = 
+        let constructor = fun value toValue -> { value; toValue } in
+        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Value.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
+        fun writer -> deserialize writer
+      
+    end
   end
 end

@@ -14,7 +14,7 @@ let encoder =
     (
       ~key,
       ~props as Instance.Props(props),
-      ~registerCallback as _,
+      ~bridge as {Instance.updateAnimatedValue},
       ~children,
     ) => {
   let props = props_unsafe_cast(props);
@@ -22,7 +22,11 @@ let encoder =
     key,
     value:
       `AnimatedText({
-        style: ProtoEncoders.encodeAnimatedStyleOptional(props),
+        style:
+          ProtoEncoders.encodeAnimatedStyleOptional(
+            ~updateAnimatedValue,
+            props,
+          ),
         children: Array.to_list(children),
       }),
   };

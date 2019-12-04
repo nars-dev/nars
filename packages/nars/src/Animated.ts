@@ -80,13 +80,14 @@ export function not(value: Adaptable<any>): AnimatedNode<0 | 1> {
     AnimatedGen.not_(toAdaptable(value, idGenerator))
   );
 }
+
 export function set<T extends Value>(
   valueToBeUpdated: AnimatedValue<T>,
   sourceNode: Adaptable<T>
 ): AnimatedNode<T> {
   return new AnimatedNode(idGenerator =>
     AnimatedGen.set_(
-      valueToBeUpdated.value(idGenerator),
+      valueToBeUpdated.encodeValue(idGenerator),
       toAdaptable(sourceNode, idGenerator)
     )
   );
@@ -136,7 +137,7 @@ export function debug<T>(
   value: AnimatedNode<T>
 ): AnimatedNode<T> {
   return new AnimatedNode(idGenerator =>
-    AnimatedGen.debug(message, value.node(idGenerator))
+    AnimatedGen.debug(message, value.encode(idGenerator))
   );
 }
 
@@ -166,17 +167,17 @@ export function interpolate(
 
 export function startClock(clock: AnimatedClock): AnimatedNode<0> {
   return new AnimatedNode(idGenerator =>
-    AnimatedGen.startClock(clock.clock(idGenerator))
+    AnimatedGen.startClock(clock.encodeClock(idGenerator))
   );
 }
 export function stopClock(clock: AnimatedClock): AnimatedNode<0> {
   return new AnimatedNode(idGenerator =>
-    AnimatedGen.stopClock(clock.clock(idGenerator))
+    AnimatedGen.stopClock(clock.encodeClock(idGenerator))
   );
 }
 export function clockRunning(clock: AnimatedClock): AnimatedNode<0 | 1> {
   return new AnimatedNode(idGenerator =>
-    AnimatedGen.clockRunning(clock.clock(idGenerator))
+    AnimatedGen.clockRunning(clock.encodeClock(idGenerator))
   );
 }
 
@@ -229,7 +230,7 @@ export function decay(
 ): AnimatedNode<number> {
   return new AnimatedNode(idGenerator =>
     AnimatedGen.decay(
-      clock.clock(idGenerator),
+      clock.encodeClock(idGenerator),
       physicsStateToAnimatedValues(state, idGenerator),
       toAdaptable(config.deceleration, idGenerator)
     )
@@ -245,13 +246,13 @@ export function timing(
   const { easing: _, ...rest } = config;
   return new AnimatedNode(idGenerator =>
     AnimatedGen.timing(
-      clock.clock(idGenerator),
+      clock.encodeClock(idGenerator),
       {
         animationState: objectFieldsToAnimatedValues(
           animationState,
           idGenerator
         ),
-        frameTime: frameTime.value(idGenerator),
+        frameTime: frameTime.encodeValue(idGenerator),
       },
       objectFieldsToAdaptables(rest, idGenerator)
     )
@@ -264,7 +265,7 @@ export function spring(
 ): AnimatedNode<number> {
   return new AnimatedNode(idGenerator =>
     AnimatedGen.spring(
-      clock.clock(idGenerator),
+      clock.encodeClock(idGenerator),
       physicsStateToAnimatedValues(state, idGenerator),
       objectFieldsToAdaptables(config, idGenerator)
     )

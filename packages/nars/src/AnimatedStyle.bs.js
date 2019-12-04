@@ -5,15 +5,16 @@ var $$Array = require("bs-platform/lib/js/array.js");
 var Block = require("bs-platform/lib/js/block.js");
 var Curry = require("bs-platform/lib/js/curry.js");
 var Js_dict = require("bs-platform/lib/js/js_dict.js");
+var Caml_obj = require("bs-platform/lib/js/caml_obj.js");
 var ReasonAnimatedUtils = require("./ReasonAnimatedUtils");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
-function isAnimatedNode(prim) {
-  return ReasonAnimatedUtils.isAnimatedNode(prim);
+function getAnimatedValue(prim) {
+  return ReasonAnimatedUtils.getAnimatedValue(prim);
 }
 
-function getProtobufNode(prim, prim$1) {
-  return ReasonAnimatedUtils.getProtobufNode(prim, prim$1);
+function getAnimatedNode(prim) {
+  return ReasonAnimatedUtils.getAnimatedNode(prim);
 }
 
 function classify(x) {
@@ -29,10 +30,16 @@ function classify(x) {
         if (x !== null) {
           if (Array.isArray(x)) {
             return /* Array */Block.__(1, [x]);
-          } else if (ReasonAnimatedUtils.isAnimatedNode(x)) {
-            return /* Animated */Block.__(6, [x]);
           } else {
-            return /* Object */Block.__(0, [x]);
+            var match$1 = ReasonAnimatedUtils.getAnimatedValue(x);
+            var match$2 = ReasonAnimatedUtils.getAnimatedNode(x);
+            if (match$1 !== undefined) {
+              return /* AnimatedValue */Block.__(6, [match$1]);
+            } else if (match$2 !== undefined) {
+              return /* AnimatedNode */Block.__(7, [match$2]);
+            } else {
+              return /* Object */Block.__(0, [x]);
+            }
           }
         } else {
           return /* Null */0;
@@ -46,23 +53,41 @@ function classify(x) {
             Caml_builtin_exceptions.assert_failure,
             /* tuple */[
               "AnimatedStyle.re",
-              59,
+              61,
               9
             ]
           ];
   }
 }
 
-function dictToStruct(idGenerator, dict) {
+function dictToStruct(idGenerator, updater, dict) {
   return $$Array.to_list(Js_dict.entries(dict).map((function (param) {
                     return /* tuple */[
                             param[0],
-                            toValue(idGenerator, param[1])
+                            toValue(idGenerator, updater, param[1])
                           ];
                   })));
 }
 
-function toValue(idGenerator, t) {
+function toValue(idGenerator, updater, t) {
+  var bridge = [];
+  Caml_obj.caml_update_dummy(bridge, {
+        updateValue: (function (value, toValue) {
+            var value$1 = Curry._1(value, {
+                  idGenerator: idGenerator,
+                  bridge: bridge
+                });
+            var toValue$1 = Curry._1(toValue, {
+                  idGenerator: idGenerator,
+                  bridge: bridge
+                });
+            return Curry._2(updater, value$1, toValue$1);
+          })
+      });
+  var encodingContext = {
+    idGenerator: idGenerator,
+    bridge: bridge
+  };
   var match = classify(t);
   if (typeof match === "number") {
     if (match === /* Null */0) {
@@ -81,13 +106,13 @@ function toValue(idGenerator, t) {
       case /* Object */0 :
           return /* `Style_value */[
                   -724205949,
-                  dictToStruct(idGenerator, match[0])
+                  dictToStruct(idGenerator, updater, match[0])
                 ];
       case /* Array */1 :
           return /* `List_value */[
                   -769490512,
                   $$Array.to_list(match[0].map((function (param) {
-                              return toValue(idGenerator, param);
+                              return toValue(idGenerator, updater, param);
                             })))
                 ];
       case /* String */2 :
@@ -110,15 +135,27 @@ function toValue(idGenerator, t) {
                 Caml_builtin_exceptions.assert_failure,
                 /* tuple */[
                   "AnimatedStyle.re",
-                  80,
+                  92,
                   19
                 ]
               ];
-      case /* Animated */6 :
+      case /* AnimatedValue */6 :
+          var value = Curry._1(match[0].getValue, encodingContext);
           return /* `Node */[
                   870528546,
                   {
-                    node: ReasonAnimatedUtils.getProtobufNode(idGenerator, match[0]),
+                    node: /* `Value */[
+                      -991563951,
+                      value
+                    ],
+                    __nodeID: Curry._1(idGenerator, /* () */0)
+                  }
+                ];
+      case /* AnimatedNode */7 :
+          return /* `Node */[
+                  870528546,
+                  {
+                    node: Curry._1(match[0].getNode, encodingContext),
                     __nodeID: Curry._1(idGenerator, /* () */0)
                   }
                 ];
@@ -127,7 +164,67 @@ function toValue(idGenerator, t) {
   }
 }
 
-var tToStruct = dictToStruct;
+function concatStyle(styleDict, value) {
+  if (typeof value === "number") {
+    throw [
+          Caml_builtin_exceptions.assert_failure,
+          /* tuple */[
+            "AnimatedStyle.re",
+            111,
+            9
+          ]
+        ];
+  } else if (value.tag) {
+    throw [
+          Caml_builtin_exceptions.assert_failure,
+          /* tuple */[
+            "AnimatedStyle.re",
+            111,
+            9
+          ]
+        ];
+  } else {
+    Js_dict.entries(value[0]).forEach((function (param) {
+            styleDict[param[0]] = param[1];
+            return /* () */0;
+          }));
+    return /* () */0;
+  }
+}
+
+function tToStruct(idGenerator, updater, t) {
+  var match = classify(t);
+  if (typeof match === "number") {
+    throw [
+          Caml_builtin_exceptions.assert_failure,
+          /* tuple */[
+            "AnimatedStyle.re",
+            122,
+            9
+          ]
+        ];
+  } else {
+    switch (match.tag | 0) {
+      case /* Object */0 :
+          return dictToStruct(idGenerator, updater, match[0]);
+      case /* Array */1 :
+          var styles = { };
+          match[0].map(classify).forEach((function (param) {
+                  return concatStyle(styles, param);
+                }));
+          return dictToStruct(idGenerator, updater, styles);
+      default:
+        throw [
+              Caml_builtin_exceptions.assert_failure,
+              /* tuple */[
+                "AnimatedStyle.re",
+                122,
+                9
+              ]
+            ];
+    }
+  }
+}
 
 var ProtobufAnimated = 0;
 
@@ -144,10 +241,11 @@ exports.Style = Style;
 exports.Value = Value;
 exports.Struct = Struct;
 exports.$$Node = $$Node;
-exports.isAnimatedNode = isAnimatedNode;
-exports.getProtobufNode = getProtobufNode;
+exports.getAnimatedValue = getAnimatedValue;
+exports.getAnimatedNode = getAnimatedNode;
 exports.classify = classify;
 exports.dictToStruct = dictToStruct;
 exports.toValue = toValue;
+exports.concatStyle = concatStyle;
 exports.tToStruct = tToStruct;
 /* ./ReasonAnimatedUtils Not a pure module */

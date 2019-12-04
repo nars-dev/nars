@@ -4,7 +4,7 @@ import Animated from "react-native-reanimated";
 import { config } from "nars-examples-common";
 import * as Nars from "nars-client";
 
-import { green } from "./Colors";
+import { lightGreen } from "./Colors";
 
 const RemoteComponent = Nars.createRemoteComponent(
   "ws://localhost:9000",
@@ -30,8 +30,8 @@ const styles = StyleSheet.create({
 });
 
 export default {
-  primaryColor: green,
-  name: "ProgressBar",
+  primaryColor: lightGreen,
+  name: "Progress bar",
   render: (animationProgress: Animated.Node<number>) => (
     <Component animationProgress={animationProgress} />
   ),

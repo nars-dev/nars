@@ -142,7 +142,68 @@ function structToDict(structDict) {
   return result;
 }
 
+function tToStruct(t) {
+  var match = classify(t);
+  if (typeof match === "number") {
+    throw [
+          Caml_builtin_exceptions.assert_failure,
+          /* tuple */[
+            "JsValue.re",
+            109,
+            9
+          ]
+        ];
+  } else {
+    switch (match.tag | 0) {
+      case /* Object */0 :
+          return dictToStruct(match[0]);
+      case /* Array */1 :
+          var styles = { };
+          match[0].map(classify).forEach((function (param) {
+                  var styleDict = styles;
+                  var value = param;
+                  if (typeof value === "number") {
+                    throw [
+                          Caml_builtin_exceptions.assert_failure,
+                          /* tuple */[
+                            "JsValue.re",
+                            97,
+                            9
+                          ]
+                        ];
+                  } else if (value.tag) {
+                    throw [
+                          Caml_builtin_exceptions.assert_failure,
+                          /* tuple */[
+                            "JsValue.re",
+                            97,
+                            9
+                          ]
+                        ];
+                  } else {
+                    Js_dict.entries(value[0]).forEach((function (param) {
+                            styleDict[param[0]] = param[1];
+                            return /* () */0;
+                          }));
+                    return /* () */0;
+                  }
+                }));
+          return dictToStruct(styles);
+      default:
+        throw [
+              Caml_builtin_exceptions.assert_failure,
+              /* tuple */[
+                "JsValue.re",
+                109,
+                9
+              ]
+            ];
+    }
+  }
+}
+
 exports.toValue = toValue;
 exports.dictToStruct = dictToStruct;
+exports.tToStruct = tToStruct;
 exports.structToDict = structToDict;
 /* No side effect */

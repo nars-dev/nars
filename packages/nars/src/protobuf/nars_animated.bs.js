@@ -876,6 +876,25 @@ var Style = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
+var ValueUpdate = Caml_module.init_mod(/* tuple */[
+      "nars_animated.ml",
+      1043,
+      10
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]));
+
 function to_int(param) {
   return param;
 }
@@ -4614,6 +4633,72 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
       from_proto: from_proto$40
     });
 
+function name$prime$41(param) {
+  return "Nars_animated.nars.animated.ValueUpdate";
+}
+
+var spec$82 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                  return Curry._1(Value.to_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                      return Curry._1(Adaptable.to_proto, t);
+                    }))
+            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+
+var serialize$41 = Serialize$Ocamlprotocplugin.serialize(spec$82);
+
+function to_proto$41(t) {
+  var f$prime = Curry._1(serialize$41, /* () */0);
+  var param = t;
+  return Curry._2(f$prime, param.value, param.toValue);
+}
+
+function constructor$40(value, toValue) {
+  return {
+          value: value,
+          toValue: toValue
+        };
+}
+
+var spec$83 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                  return Curry._1(Value.from_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                      return Curry._1(Adaptable.from_proto, t);
+                    }))
+            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+
+var deserialize$41 = Deserialize$Ocamlprotocplugin.deserialize(spec$83, constructor$40);
+
+var from_proto$41 = Curry.__1(deserialize$41);
+
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            0,
+            "name'"
+          ],
+          /* tuple */[
+            0,
+            "to_proto"
+          ],
+          /* tuple */[
+            0,
+            "from_proto"
+          ]
+        ]]), ValueUpdate, {
+      name$prime: name$prime$41,
+      to_proto: to_proto$41,
+      from_proto: from_proto$41
+    });
+
 var Animated = {
   UnaryOperatorType: UnaryOperatorType,
   MultiOperatorType: MultiOperatorType,
@@ -4660,7 +4745,8 @@ var Animated = {
   ListValue: ListValue,
   TopLevelNode: TopLevelNode,
   ValueOrAnimatedNode: ValueOrAnimatedNode,
-  Style: Style
+  Style: Style,
+  ValueUpdate: ValueUpdate
 };
 
 var Nars = {

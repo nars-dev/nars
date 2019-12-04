@@ -5,7 +5,7 @@ import {
   AnimatedNode,
   PhysicsAnimationState,
   toAdaptable,
-  IdGenerator,
+  EncodingContext,
   Value,
 } from "./AnimatedBase";
 
@@ -24,25 +24,25 @@ export const wrapMultiToVariadic = <T = number>(
   f: AnimatedGen.multiOperator
 ): MultiOperator<T> => {
   return (a, b, ...others) =>
-    new AnimatedNode(idGenerator =>
+    new AnimatedNode(encodingContext =>
       f(
-        toAdaptable(a, idGenerator),
-        toAdaptable(b, idGenerator),
-        others.map(x => toAdaptable(x, idGenerator))
+        toAdaptable(a, encodingContext),
+        toAdaptable(b, encodingContext),
+        others.map(x => toAdaptable(x, encodingContext))
       )
     );
 };
 
 export const wrapUnary = (f: AnimatedGen.unaryOperator): UnaryOperator => {
-  return a => new AnimatedNode(idGenerator => f(toAdaptable(a, idGenerator)));
+  return a => new AnimatedNode(encodingContext => f(toAdaptable(a, encodingContext)));
 };
 
 export const wrapBinary = <T>(
   f: AnimatedGen.binaryOperator
 ): BinaryOperator<T> => {
   return (a, b) =>
-    new AnimatedNode(idGenerator =>
-      f(toAdaptable(a, idGenerator), toAdaptable(b, idGenerator))
+    new AnimatedNode(encodingContext =>
+      f(toAdaptable(a, encodingContext), toAdaptable(b, encodingContext))
     );
 };
 
@@ -54,11 +54,11 @@ export type AdaptableRecordInternal<K extends Key> = {
 
 export const objectFieldsToAdaptables = <K extends Key>(
   object: Record<K, Adaptable<Value>>,
-  idGenerator: IdGenerator
+  encodingContext: EncodingContext
 ): AdaptableRecordInternal<K> => {
   let result = {} as AdaptableRecordInternal<K>;
   for (const key in object) {
-    result[key] = toAdaptable(object[key], idGenerator);
+    result[key] = toAdaptable(object[key], encodingContext);
   }
   return result;
 };
@@ -69,22 +69,22 @@ export type AnimatedValueRecordInternal<K extends Key> = {
 
 export const objectFieldsToAnimatedValues = <K extends Key>(
   object: Record<K, AnimatedValue<Value>>,
-  idGenerator: IdGenerator
+  encodingContext: EncodingContext
 ): AnimatedValueRecordInternal<K> => {
   let result = {} as AnimatedValueRecordInternal<K>;
   for (const key in object) {
-    result[key] = object[key].value(idGenerator);
+    result[key] = object[key].encodeValue(encodingContext);
   }
   return result;
 };
 
 export const physicsStateToAnimatedValues = (
   state: PhysicsAnimationState,
-  idGenerator: IdGenerator
+  encodingContext: EncodingContext
 ) => {
   const { velocity, ...animationState } = state;
   return {
-    velocity: velocity.value(idGenerator),
-    animationState: objectFieldsToAnimatedValues(animationState, idGenerator),
+    velocity: velocity.encodeValue(encodingContext),
+    animationState: objectFieldsToAnimatedValues(animationState, encodingContext),
   };
 };

@@ -130,6 +130,11 @@ message ServerToClient {
   oneof value {
     Error error = 2;
     Update update = 3;
+    /* Temporary solution for setting animated values imperatively
+     * In the future there'll be a more generic mechanism to update
+     * any subset of the tree
+     */
+    nars.animated.ValueUpdate animatedValueUpdate = 4;
   }
 };
 

@@ -1381,6 +1381,34 @@ export namespace Style {
   }
 }
 
+export class ValueUpdate extends jspb.Message {
+  hasValue(): boolean;
+  clearValue(): void;
+  getValue(): Value | undefined;
+  setValue(value?: Value): void;
+
+  hasTovalue(): boolean;
+  clearTovalue(): void;
+  getTovalue(): Adaptable | undefined;
+  setTovalue(value?: Adaptable): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): ValueUpdate.AsObject;
+  static toObject(includeInstance: boolean, msg: ValueUpdate): ValueUpdate.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: ValueUpdate, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): ValueUpdate;
+  static deserializeBinaryFromReader(message: ValueUpdate, reader: jspb.BinaryReader): ValueUpdate;
+}
+
+export namespace ValueUpdate {
+  export type AsObject = {
+    value?: Value.AsObject,
+    tovalue?: Adaptable.AsObject,
+  }
+}
+
 export interface UnaryOperatorTypeMap {
   SQRT: 0;
   LOG: 1;

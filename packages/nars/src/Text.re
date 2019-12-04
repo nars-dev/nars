@@ -10,7 +10,7 @@ let encoder =
     (
       ~key,
       ~props as Instance.Props(props),
-      ~registerCallback as _,
+      ~bridge as _,
       ~children,
     ) =>
   Schema.ReactElement.{

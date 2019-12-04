@@ -13,7 +13,7 @@ function encoder(key, param, param$1, param$2) {
           value: /* `AnimatedImage */[
             1034091928,
             {
-              style: ProtoEncoders.encodeAnimatedStyleOptional(props),
+              style: ProtoEncoders.encodeAnimatedStyleOptional(param$1.updateAnimatedValue, props),
               sourceURLString: props.source
             }
           ]

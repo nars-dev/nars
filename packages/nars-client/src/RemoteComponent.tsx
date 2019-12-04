@@ -2,7 +2,7 @@ import * as React from "react";
 import { toStruct } from "./StructCoders";
 import { ofEncodedReactElement } from "./DecodeElement";
 import Animated from "react-native-reanimated";
-import { RetainedInstances } from "./AnimatedCoders";
+import { RetainedInstances, updateAnimatedValue } from "./AnimatedCoders";
 import {
   ServerToClient,
   ClientToServer,
@@ -145,6 +145,12 @@ export const useNars = (
                 )
               ),
           });
+        } else if (message.hasAnimatedvalueupdate()) {
+                console.log("UPDATEP");
+          const update = message.getAnimatedvalueupdate()!;
+          const value = update.getValue();
+          const toValue = update.getTovalue();
+          updateAnimatedValue(value, toValue, retainedInstances);
         }
       }
     });

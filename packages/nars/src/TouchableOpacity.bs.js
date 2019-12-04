@@ -7,9 +7,9 @@ var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
 var name = "TouchableOpacity";
 
-function encoder(key, param, registerCallback, children) {
+function encoder(key, param, bridge, children) {
   var props = param[0];
-  var onPress = ProtoEncoders.encodeArityZeroCallbackOptional(registerCallback, props.onPress);
+  var onPress = ProtoEncoders.encodeArityZeroCallbackOptional(bridge.registerCallback, props.onPress);
   return {
           key: key,
           value: /* `TouchableOpacity */[

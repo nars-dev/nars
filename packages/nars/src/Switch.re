@@ -17,7 +17,7 @@ let encoder =
     (
       ~key,
       ~props as Instance.Props(props),
-      ~registerCallback,
+      ~bridge,
       ~children as _,
     ) => {
   let props = toProps(props);
@@ -30,7 +30,7 @@ let encoder =
         onValueChange:
           Some(
             ProtoEncoders.encodeCallback(
-              ~registerCallback,
+              ~registerCallback=bridge.Instance.registerCallback,
               ~callback=args => {
                 let callback = props##onValueChange;
                 callback(

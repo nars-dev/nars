@@ -4797,7 +4797,7 @@ if (goog.DEBUG && !COMPILED) {
  * @private {!Array<!Array<number>>}
  * @const
  */
-proto.ServerToClient.oneofGroups_ = [[2,3]];
+proto.ServerToClient.oneofGroups_ = [[2,3,4]];
 
 /**
  * @enum {number}
@@ -4805,7 +4805,8 @@ proto.ServerToClient.oneofGroups_ = [[2,3]];
 proto.ServerToClient.ValueCase = {
   VALUE_NOT_SET: 0,
   ERROR: 2,
-  UPDATE: 3
+  UPDATE: 3,
+  ANIMATEDVALUEUPDATE: 4
 };
 
 /**
@@ -4846,7 +4847,8 @@ proto.ServerToClient.toObject = function(includeInstance, msg) {
   var f, obj = {
     rootid: jspb.Message.getFieldWithDefault(msg, 1, 0),
     error: (f = msg.getError()) && proto.Error.toObject(includeInstance, f),
-    update: (f = msg.getUpdate()) && proto.Update.toObject(includeInstance, f)
+    update: (f = msg.getUpdate()) && proto.Update.toObject(includeInstance, f),
+    animatedvalueupdate: (f = msg.getAnimatedvalueupdate()) && nars_animated_pb.ValueUpdate.toObject(includeInstance, f)
   };
 
   if (includeInstance) {
@@ -4896,6 +4898,11 @@ proto.ServerToClient.deserializeBinaryFromReader = function(msg, reader) {
       var value = new proto.Update;
       reader.readMessage(value,proto.Update.deserializeBinaryFromReader);
       msg.setUpdate(value);
+      break;
+    case 4:
+      var value = new nars_animated_pb.ValueUpdate;
+      reader.readMessage(value,nars_animated_pb.ValueUpdate.deserializeBinaryFromReader);
+      msg.setAnimatedvalueupdate(value);
       break;
     default:
       reader.skipField();
@@ -4947,6 +4954,14 @@ proto.ServerToClient.serializeBinaryToWriter = function(message, writer) {
       3,
       f,
       proto.Update.serializeBinaryToWriter
+    );
+  }
+  f = message.getAnimatedvalueupdate();
+  if (f != null) {
+    writer.writeMessage(
+      4,
+      f,
+      nars_animated_pb.ValueUpdate.serializeBinaryToWriter
     );
   }
 };
@@ -5024,6 +5039,36 @@ proto.ServerToClient.prototype.clearUpdate = function() {
  */
 proto.ServerToClient.prototype.hasUpdate = function() {
   return jspb.Message.getField(this, 3) != null;
+};
+
+
+/**
+ * optional nars.animated.ValueUpdate animatedValueUpdate = 4;
+ * @return {?proto.nars.animated.ValueUpdate}
+ */
+proto.ServerToClient.prototype.getAnimatedvalueupdate = function() {
+  return /** @type{?proto.nars.animated.ValueUpdate} */ (
+    jspb.Message.getWrapperField(this, nars_animated_pb.ValueUpdate, 4));
+};
+
+
+/** @param {?proto.nars.animated.ValueUpdate|undefined} value */
+proto.ServerToClient.prototype.setAnimatedvalueupdate = function(value) {
+  jspb.Message.setOneofWrapperField(this, 4, proto.ServerToClient.oneofGroups_[0], value);
+};
+
+
+proto.ServerToClient.prototype.clearAnimatedvalueupdate = function() {
+  this.setAnimatedvalueupdate(undefined);
+};
+
+
+/**
+ * Returns whether this field is set.
+ * @return {!boolean}
+ */
+proto.ServerToClient.prototype.hasAnimatedvalueupdate = function() {
+  return jspb.Message.getField(this, 4) != null;
 };
 
 

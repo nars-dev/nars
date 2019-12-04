@@ -4,10 +4,5 @@
 
 import {AnyAnimatedStyleProp as $$t} from './StyleSheet';
 
-import {nodeClass as $$animatedNode} from './ReasonAnimatedUtils';
-
 // tslint:disable-next-line:interface-over-type-literal
 export type t = $$t;
-
-// tslint:disable-next-line:interface-over-type-literal
-export type animatedNode = $$animatedNode;

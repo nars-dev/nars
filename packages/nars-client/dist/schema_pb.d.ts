@@ -682,6 +682,11 @@ export class ServerToClient extends jspb.Message {
   getUpdate(): Update | undefined;
   setUpdate(value?: Update): void;
 
+  hasAnimatedvalueupdate(): boolean;
+  clearAnimatedvalueupdate(): void;
+  getAnimatedvalueupdate(): nars_animated_pb.ValueUpdate | undefined;
+  setAnimatedvalueupdate(value?: nars_animated_pb.ValueUpdate): void;
+
   getValueCase(): ServerToClient.ValueCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): ServerToClient.AsObject;
@@ -698,12 +703,14 @@ export namespace ServerToClient {
     rootid: number,
     error?: Error.AsObject,
     update?: Update.AsObject,
+    animatedvalueupdate?: nars_animated_pb.ValueUpdate.AsObject,
   }
 
   export enum ValueCase {
     VALUE_NOT_SET = 0,
     ERROR = 2,
     UPDATE = 3,
+    ANIMATEDVALUEUPDATE = 4,
   }
 }
 

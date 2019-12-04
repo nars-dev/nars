@@ -5,7 +5,7 @@ let name = "AnimatedView";
 type props = {
   .
   "style": option(AnimatedStyle.t),
-  "idGenerator": (unit) => int
+  "idGenerator": unit => int,
 };
 
 external props_unsafe_cast: Js.t('a) => props = "%identity";
@@ -14,7 +14,7 @@ let encoder =
     (
       ~key,
       ~props as Instance.Props(props),
-      ~registerCallback as _,
+      ~bridge as {Instance.updateAnimatedValue},
       ~children,
     ) => {
   let props = props_unsafe_cast(props);
@@ -23,7 +23,11 @@ let encoder =
     value:
       `AnimatedView(
         Schema.AnimatedView.{
-          style: ProtoEncoders.encodeAnimatedStyleOptional(props),
+          style:
+            ProtoEncoders.encodeAnimatedStyleOptional(
+              ~updateAnimatedValue,
+              props,
+            ),
           children: Array.to_list(children),
         },
       ),
