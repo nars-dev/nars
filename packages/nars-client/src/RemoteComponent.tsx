@@ -107,12 +107,9 @@ export const useNars = (
   };
   React.useEffect(() => {
     const ws = websocket();
-    ws.addEventListener("message", event => {
-      if (typeof event.data !== "string") {
-        throw "Bad binary format";
-      }
-      const message = Schema.ServerToClient.decode(
-        Uint8Array.from(event.data, x => x.charCodeAt(0))
+    ws.addEventListener("message", (event: { data: ArrayBuffer }) => {
+      const message = ServerToClient.deserializeBinary(
+        new Uint8Array(event.data)
       );
       if (message.getRootid() === instanceId) {
         if (message.hasError()) {

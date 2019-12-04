@@ -4,8 +4,7 @@ module NodeBuffer = Node.Buffer;
 
 module Socket = {
   type data;
-  external stringToData: string => data = "%identity";
-  external arrayBufferToData: Uint8Array.t => data = "%identity";
+  external arrayBufferToData: ArrayBuffer.t => data = "%identity";
   external data_to_array_buffer: data => ArrayBuffer.t = "%identity";
   [@genType]
   type t = {
@@ -40,6 +39,17 @@ external uint8ArrayAsArray: Uint8Array.t => Js.Array.t(Uint8Array.elt) =
 
 module ContainerMap = Belt_HashMapInt;
 
+external nodeBufferToArrayLike:
+  Node.Buffer.t => Js.Typed_array.array_like(Uint8Array.elt) =
+  "%identity";
+
+let stringToArrayBuffer = str => {
+  Uint8Array.from(
+    Node.Buffer.fromStringWithEncoding(str, `ascii) |> nodeBufferToArrayLike,
+  )
+  |> Uint8Array.buffer;
+};
+
 let sendViewUpdates = (~socket, ~rootId, reactElements) => {
   let message =
     Schema.ServerToClient.{
@@ -48,7 +58,8 @@ let sendViewUpdates = (~socket, ~rootId, reactElements) => {
     }
     |> Schema.ServerToClient.to_proto
     |> Ocaml_protoc_plugin.Writer.contents;
-  socket##send(Socket.stringToData(message));
+  let msg = stringToArrayBuffer(message) |> Socket.arrayBufferToData;
+  socket##send(msg);
 };
 
 [@genType]

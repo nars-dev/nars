@@ -22,6 +22,10 @@ var Socket = { };
 
 var Server = { };
 
+function stringToArrayBuffer(str) {
+  return Uint8Array.from(Buffer.from(str, "ascii")).buffer;
+}
+
 function sendViewUpdates(socket, rootId, reactElements) {
   var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
             rootId: rootId,
@@ -30,7 +34,8 @@ function sendViewUpdates(socket, rootId, reactElements) {
               $$Array.to_list(reactElements)
             ]
           }));
-  return socket.send(message);
+  var msg = stringToArrayBuffer(message);
+  return socket.send(msg);
 }
 
 function startListening(server, render) {
@@ -124,6 +129,7 @@ exports.NodeBuffer = NodeBuffer;
 exports.Socket = Socket;
 exports.Server = Server;
 exports.ContainerMap = ContainerMap;
+exports.stringToArrayBuffer = stringToArrayBuffer;
 exports.sendViewUpdates = sendViewUpdates;
 exports.startListening = startListening;
 /* Schema Not a pure module */
