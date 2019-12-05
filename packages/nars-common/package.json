@@ -1,9 +1,12 @@
 {
   "name": "nars-common",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Package for nars code shared between client and server",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "repository": "https://github.com/nars-dev/nars",
   "author": "Wojtek Czekalski <wojtek@nars.dev>",
   "license": "MIT",

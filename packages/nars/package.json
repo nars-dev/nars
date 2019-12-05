@@ -1,10 +1,13 @@
 {
   "name": "nars",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "Server Rendered React Native",
   "main": "dist/index.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "repository": "https://github.com/nars-dev/nars",
   "author": "Wojtek Czekalski <wojtek@nars.dev>",
   "license": "MIT",
