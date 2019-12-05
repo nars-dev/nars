@@ -6,24 +6,28 @@
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "bsconfig.json",
+    "tsconfig.json"
   ],
   "repository": "https://github.com/nars-dev/nars",
   "author": "Wojtek Czekalski <wojtek@nars.dev>",
   "license": "MIT",
   "private": false,
   "scripts": {
+    "postinstall": "bsb -clean-world -make-world",
     "build": "bsb -make-world && tsc && mkdir -p dist && cp ./src/*.bs.js ./dist/ && cp ./src/protobuf/*.bs.js ./dist/protobuf/"
   },
-  "postinstall": "bsb -clean-world -make-world",
   "dependencies": {
     "analytics-node": "^3.4.0-beta.1",
     "bs-platform": "7.0.0-dev.1",
     "nars-common": "1.0.0-alpha.2",
     "node-machine-id": "^1.1.12",
-    "ocaml-protoc-plugin-runtime-bs": "2.0.1",
+    "ocaml-protoc-plugin-runtime-bs": "2.0.2",
     "reason-react-reconciler": "~0.21.0000",
-    "uuid": "^3.3.3"
+    "uuid": "^3.3.3",
+    "gentype": "^3.4.0"
   },
   "devDependencies": {
     "@types/analytics-node": "^3.1.1",
@@ -31,7 +35,6 @@
     "@types/scheduler": "^0.12.1",
     "@types/uuid": "^3.4.5",
     "@types/ws": "^6.0.3",
-    "gentype": "^3.4.0",
     "prettier": "^1.18.2",
     "typescript": "~3.5.0"
   }
