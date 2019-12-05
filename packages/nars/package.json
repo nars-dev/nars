@@ -1,6 +1,6 @@
 {
   "name": "nars",
-  "version": "0.0.2",
+  "version": "1.0.0-alpha.1",
   "description": "Server Rendered React Native",
   "main": "dist/index.js",
   "source": "src/index.ts",
