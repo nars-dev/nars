@@ -6315,9 +6315,10 @@ object.values@^1.1.0:
     function-bind "^1.1.1"
     has "^1.0.3"
 
-"ocaml-protoc-plugin-runtime-bs@git://github.com/issuu/ocaml-protoc-plugin#1252fb0ab444e6b7d75a4a02f1756704eb0114e8":
-  version "0.0.1"
-  resolved "git://github.com/issuu/ocaml-protoc-plugin#1252fb0ab444e6b7d75a4a02f1756704eb0114e8"
+ocaml-protoc-plugin-runtime-bs@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ocaml-protoc-plugin-runtime-bs/-/ocaml-protoc-plugin-runtime-bs-2.0.2.tgz#9a0cac5dc26012cbc8ee8512fbb01279de456a03"
+  integrity sha512-fVVT8U566eHwVjqW0QYE0AOV4uW+gOifbUypdIdJaSLU8hU0CSUL14NFdIn2QLaFE1yuPDr4Ni3yB0ffa4rWRA==
 
 on-finished@~2.3.0:
   version "2.3.0"

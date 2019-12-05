@@ -25,5 +25,6 @@
       "ReactReconciler": "ReactReconciler"
     }
   },
+  "bsc-flags": [ "-w", "-44"],
   "refmt": 3
 }
