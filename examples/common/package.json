@@ -4,7 +4,7 @@
   "private": true,
   "main": "./src/Config.ts",
   "dependencies": {
-    "nars-common": "~0.0.0"
+    "nars-common": "1.0.0-alpha.2"
   },
   "devDependencies": {
     "typescript": "^3.5.3"
