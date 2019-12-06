@@ -25,7 +25,7 @@ function encode(instance, registerCallback, updateAnimatedValue) {
   }
 }
 
-var Struct = 0;
+var Struct = /* alias */0;
 
 exports.Struct = Struct;
 exports.encode = encode;

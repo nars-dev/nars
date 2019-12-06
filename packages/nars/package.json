@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "analytics-node": "^3.4.0-beta.1",
-    "bs-platform": "7.0.0-dev.1",
+    "bs-platform": "7.0.0",
     "nars-common": "1.0.0-alpha.2",
     "node-machine-id": "^1.1.12",
     "ocaml-protoc-plugin-runtime-bs": "2.0.2",

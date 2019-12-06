@@ -2170,10 +2170,10 @@ bs-platform@6.1.0:
   resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-6.1.0.tgz#dc4cbde176222b887eb140528c8f9f885a3cc0fa"
   integrity sha512-4EFTVU75qznEOkFEsZ+BF1U57j7N0qO0mNsva0OSwnxJpae4SBPq8r3Sf8mlzBKYXmdyCFXYL9Q/eTUj0ExaFg==
 
-bs-platform@7.0.0-dev.1:
-  version "7.0.0-dev.1"
-  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.0-dev.1.tgz#e9f2b05c68b16e325fc9a284ca529bb84fd5509b"
-  integrity sha512-nXxk3oUBvp2o0D8Qc2JOKNeeYNg/wPVYj+eu4vPbWzR/dbhfc4bRG/QkU6z6DuV1aiDzGnKIBY06azYPuw4a+g==
+bs-platform@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/bs-platform/-/bs-platform-7.0.0.tgz#6d1b0dd0d53f16f5b7fb2656ccae58c71ec988dc"
+  integrity sha512-3cPwrt/1hGjXuGS2HfVyd6oc6p/YpDOQIoLiFLRgrrB7/bnDNvbJn4XhO1PUyuRL4e7fc24R3xvA08BFDHZ6Gw==
 
 bser@^2.0.0:
   version "2.1.1"
@@ -5982,7 +5982,7 @@ nars-common@0.0.0, nars-common@~0.0.0:
   resolved "https://registry.yarnpkg.com/nars-common/-/nars-common-0.0.0.tgz#70f628b9dddc72ce9f92173351fffe06761d593c"
   integrity sha512-7A3puTDSULIYmSq63pbTgyS5+jPTsbaxbsfiAN4ctYRGyJKOiH9pe2aTrTAz/vK5SNK/fObF1/V8ETJA7SM7/Q==
 
-nars@^0.0.2, nars@~0.0.0:
+nars@~0.0.0:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/nars/-/nars-0.0.2.tgz#f898d82c68d1dc9a5239560705b84bfcb44d8c03"
   integrity sha512-zJhOLvQ5HNf/ePAtCLj2VW9lvnDzRp0WiCEIqxqUYb+WDTSzaKbty5juu4LpF/lJu+kkHAt4KJu6c3i7/czlJQ==

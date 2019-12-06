@@ -14,11 +14,11 @@ var UndefinedValue = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -29,11 +29,11 @@ var NullValue = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -46,30 +46,30 @@ var Struct = Caml_module.init_mod(/* tuple */[
           /* tuple */[
             /* Module */Block.__(0, [/* array */[
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "name'"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "to_proto"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "from_proto"
                   ]
                 ]]),
             "FieldsEntry"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -80,15 +80,15 @@ var Value = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -99,15 +99,15 @@ var ListValue = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -129,11 +129,11 @@ function from_int(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), UndefinedValue, {
@@ -158,11 +158,11 @@ function from_int$1(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), NullValue, {
@@ -176,15 +176,15 @@ var FieldsEntry = Caml_module.init_mod(/* tuple */[
       12
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -236,15 +236,15 @@ var from_proto = Curry.__1(deserialize);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), FieldsEntry, {
@@ -291,30 +291,30 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
             /* Module */Block.__(0, [/* array */[
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "name'"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "to_proto"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "from_proto"
                   ]
                 ]]),
             "FieldsEntry"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Struct, {
@@ -491,15 +491,15 @@ var from_proto$2 = Curry.__1(deserialize$2);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Value, {
@@ -544,15 +544,15 @@ var from_proto$3 = Curry.__1(deserialize$3);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), ListValue, {

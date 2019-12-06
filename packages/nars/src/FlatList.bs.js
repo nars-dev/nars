@@ -37,7 +37,7 @@ function encoder(key, param, bridge, children) {
 
 ComponentRegistry.add(name, encoder);
 
-var FL = 0;
+var FL = /* alias */0;
 
 var opt_map = Js_option.map;
 

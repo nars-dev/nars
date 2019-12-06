@@ -2,19 +2,19 @@
 'use strict';
 
 
-var Serialize = 0;
+var Serialize = /* alias */0;
 
-var Deserialize = 0;
+var Deserialize = /* alias */0;
 
-var Spec = 0;
+var Spec = /* alias */0;
 
-var Reader = 0;
+var Reader = /* alias */0;
 
-var Writer = 0;
+var Writer = /* alias */0;
 
-var Service = 0;
+var Service = /* alias */0;
 
-var Result = 0;
+var Result = /* alias */0;
 
 exports.Serialize = Serialize;
 exports.Deserialize = Deserialize;

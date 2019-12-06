@@ -70,7 +70,7 @@ function dictToStruct(idGenerator, updater, dict) {
 }
 
 function toValue(idGenerator, updater, t) {
-  var bridge = [];
+  var bridge = { };
   Caml_obj.caml_update_dummy(bridge, {
         updateValue: (function (value, toValue) {
             var value$1 = Curry._1(value, {
@@ -226,15 +226,15 @@ function tToStruct(idGenerator, updater, t) {
   }
 }
 
-var ProtobufAnimated = 0;
+var ProtobufAnimated = /* alias */0;
 
-var Style = 0;
+var Style = /* alias */0;
 
-var Value = 0;
+var Value = /* alias */0;
 
-var Struct = 0;
+var Struct = /* alias */0;
 
-var $$Node = 0;
+var $$Node = /* alias */0;
 
 exports.ProtobufAnimated = ProtobufAnimated;
 exports.Style = Style;

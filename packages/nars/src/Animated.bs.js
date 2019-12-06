@@ -541,7 +541,7 @@ var TimingAnimation = {
   animation: animation$2
 };
 
-var Schema = 0;
+var Schema = /* alias */0;
 
 var decay = animation$1;
 

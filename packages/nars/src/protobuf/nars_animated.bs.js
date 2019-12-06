@@ -15,11 +15,11 @@ var UnaryOperatorType = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -30,11 +30,11 @@ var MultiOperatorType = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -45,11 +45,11 @@ var UnaryDerivedOperatorType = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -60,11 +60,11 @@ var BinaryOperatorType = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -75,11 +75,11 @@ var ExtrapolateType = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -90,11 +90,11 @@ var ClockOperationType = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]));
@@ -105,15 +105,15 @@ var EasingCustom = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -124,15 +124,15 @@ var EasingStatic = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -143,15 +143,15 @@ var EasingFunction = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -162,15 +162,15 @@ var UnaryOperator = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -181,15 +181,15 @@ var MultiOperator = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -200,15 +200,15 @@ var Condition = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -219,15 +219,15 @@ var Value = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -238,15 +238,15 @@ var Setter = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -257,15 +257,15 @@ var UnaryDerivedOperator = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -276,15 +276,15 @@ var BinaryOperator = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -295,15 +295,15 @@ var Color = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -314,15 +314,15 @@ var DiffClamp = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -333,15 +333,15 @@ var Extrapolate = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -352,15 +352,15 @@ var InterpolationConfig = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -371,15 +371,15 @@ var Interpolate = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -390,15 +390,15 @@ var Block$1 = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -409,15 +409,15 @@ var Concat = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -428,15 +428,15 @@ var $$Node = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -447,15 +447,15 @@ var ValueArgument = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -466,15 +466,15 @@ var Primitive = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -485,15 +485,15 @@ var Adaptable = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -504,15 +504,15 @@ var Call = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -523,15 +523,15 @@ var Debug = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -542,15 +542,15 @@ var OnChange = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -561,15 +561,15 @@ var Clock = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -580,15 +580,15 @@ var ClockOperation = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -599,15 +599,15 @@ var AnimationState = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -618,15 +618,15 @@ var PhysicsAnimationState = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -637,15 +637,15 @@ var DecayConfig = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -656,15 +656,15 @@ var DecayAnimation = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -675,15 +675,15 @@ var TimingState = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -694,15 +694,15 @@ var TimingConfig = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -713,15 +713,15 @@ var TimingAnimation = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -732,15 +732,15 @@ var SpringConfig = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -751,15 +751,15 @@ var SpringAnimation = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -770,15 +770,15 @@ var Animation = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -789,15 +789,15 @@ var ListValue = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -808,15 +808,15 @@ var TopLevelNode = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -827,15 +827,15 @@ var ValueOrAnimatedNode = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -848,30 +848,30 @@ var Style = Caml_module.init_mod(/* tuple */[
           /* tuple */[
             /* Module */Block.__(0, [/* array */[
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "name'"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "to_proto"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "from_proto"
                   ]
                 ]]),
             "FieldsEntry"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -882,15 +882,15 @@ var ValueUpdate = Caml_module.init_mod(/* tuple */[
       10
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -939,11 +939,11 @@ function from_int(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), UnaryOperatorType, {
@@ -983,11 +983,11 @@ function from_int$1(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), MultiOperatorType, {
@@ -1017,11 +1017,11 @@ function from_int$2(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), UnaryDerivedOperatorType, {
@@ -1061,11 +1061,11 @@ function from_int$3(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), BinaryOperatorType, {
@@ -1095,11 +1095,11 @@ function from_int$4(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), ExtrapolateType, {
@@ -1129,11 +1129,11 @@ function from_int$5(n) {
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "to_int"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_int"
           ]
         ]]), ClockOperationType, {
@@ -1175,15 +1175,15 @@ var from_proto = Curry.__1(deserialize);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), EasingCustom, {
@@ -1212,15 +1212,15 @@ var from_proto$1 = Curry.__1(deserialize$1);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), EasingStatic, {
@@ -1299,15 +1299,15 @@ var from_proto$2 = Curry.__1(deserialize$2);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), EasingFunction, {
@@ -1363,15 +1363,15 @@ var from_proto$3 = Curry.__1(deserialize$3);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), UnaryOperator, {
@@ -1451,15 +1451,15 @@ var from_proto$4 = Curry.__1(deserialize$4);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), MultiOperator, {
@@ -1528,15 +1528,15 @@ var from_proto$5 = Curry.__1(deserialize$5);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Condition, {
@@ -1641,15 +1641,15 @@ var from_proto$6 = Curry.__1(deserialize$6);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Value, {
@@ -1707,15 +1707,15 @@ var from_proto$7 = Curry.__1(deserialize$7);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Setter, {
@@ -1771,15 +1771,15 @@ var from_proto$8 = Curry.__1(deserialize$8);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), UnaryDerivedOperator, {
@@ -1846,15 +1846,15 @@ var from_proto$9 = Curry.__1(deserialize$9);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), BinaryOperator, {
@@ -1934,15 +1934,15 @@ var from_proto$10 = Curry.__1(deserialize$10);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Color, {
@@ -2011,15 +2011,15 @@ var from_proto$11 = Curry.__1(deserialize$11);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), DiffClamp, {
@@ -2060,15 +2060,15 @@ var from_proto$12 = Curry.__1(deserialize$12);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Extrapolate, {
@@ -2163,15 +2163,15 @@ var from_proto$13 = Curry.__1(deserialize$13);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), InterpolationConfig, {
@@ -2229,15 +2229,15 @@ var from_proto$14 = Curry.__1(deserialize$14);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Interpolate, {
@@ -2282,15 +2282,15 @@ var from_proto$15 = Curry.__1(deserialize$15);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Block$1, {
@@ -2335,15 +2335,15 @@ var from_proto$16 = Curry.__1(deserialize$16);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Concat, {
@@ -2793,15 +2793,15 @@ var from_proto$17 = Curry.__1(deserialize$17);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), $$Node, {
@@ -2842,15 +2842,15 @@ var from_proto$18 = Curry.__1(deserialize$18);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), ValueArgument, {
@@ -2942,15 +2942,15 @@ var from_proto$19 = Curry.__1(deserialize$19);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Primitive, {
@@ -3029,15 +3029,15 @@ var from_proto$20 = Curry.__1(deserialize$20);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Adaptable, {
@@ -3095,15 +3095,15 @@ var from_proto$21 = Curry.__1(deserialize$21);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Call, {
@@ -3159,15 +3159,15 @@ var from_proto$22 = Curry.__1(deserialize$22);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Debug, {
@@ -3225,15 +3225,15 @@ var from_proto$23 = Curry.__1(deserialize$23);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), OnChange, {
@@ -3274,15 +3274,15 @@ var from_proto$24 = Curry.__1(deserialize$24);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Clock, {
@@ -3338,15 +3338,15 @@ var from_proto$25 = Curry.__1(deserialize$25);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), ClockOperation, {
@@ -3415,15 +3415,15 @@ var from_proto$26 = Curry.__1(deserialize$26);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), AnimationState, {
@@ -3481,15 +3481,15 @@ var from_proto$27 = Curry.__1(deserialize$27);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), PhysicsAnimationState, {
@@ -3532,15 +3532,15 @@ var from_proto$28 = Curry.__1(deserialize$28);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), DecayConfig, {
@@ -3609,15 +3609,15 @@ var from_proto$29 = Curry.__1(deserialize$29);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), DecayAnimation, {
@@ -3675,15 +3675,15 @@ var from_proto$30 = Curry.__1(deserialize$30);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), TimingState, {
@@ -3752,15 +3752,15 @@ var from_proto$31 = Curry.__1(deserialize$31);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), TimingConfig, {
@@ -3829,15 +3829,15 @@ var from_proto$32 = Curry.__1(deserialize$32);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), TimingAnimation, {
@@ -3950,15 +3950,15 @@ var from_proto$33 = Curry.__1(deserialize$33);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), SpringConfig, {
@@ -4027,15 +4027,15 @@ var from_proto$34 = Curry.__1(deserialize$34);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), SpringAnimation, {
@@ -4139,15 +4139,15 @@ var from_proto$35 = Curry.__1(deserialize$35);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Animation, {
@@ -4192,15 +4192,15 @@ var from_proto$36 = Curry.__1(deserialize$36);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), ListValue, {
@@ -4256,15 +4256,15 @@ var from_proto$37 = Curry.__1(deserialize$37);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), TopLevelNode, {
@@ -4462,15 +4462,15 @@ var from_proto$38 = Curry.__1(deserialize$38);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), ValueOrAnimatedNode, {
@@ -4485,15 +4485,15 @@ var FieldsEntry = Caml_module.init_mod(/* tuple */[
       12
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]));
@@ -4545,15 +4545,15 @@ var from_proto$39 = Curry.__1(deserialize$39);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), FieldsEntry, {
@@ -4600,30 +4600,30 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
             /* Module */Block.__(0, [/* array */[
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "name'"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "to_proto"
                   ],
                   /* tuple */[
-                    0,
+                    /* Function */0,
                     "from_proto"
                   ]
                 ]]),
             "FieldsEntry"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), Style, {
@@ -4682,15 +4682,15 @@ var from_proto$41 = Curry.__1(deserialize$41);
 
 Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
           /* tuple */[
-            0,
+            /* Function */0,
             "name'"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "to_proto"
           ],
           /* tuple */[
-            0,
+            /* Function */0,
             "from_proto"
           ]
         ]]), ValueUpdate, {
