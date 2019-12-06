@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "nars-examples-common": "^0.0.0",
-    "nars": "1.0.0-alpha.6",
+    "nars": "*",
     "ws": "^7.1.2"
   },
   "devDependencies": {
