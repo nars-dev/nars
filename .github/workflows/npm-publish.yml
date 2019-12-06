@@ -34,7 +34,8 @@ jobs:
 
           ROOT=$(pwd)
 
-          npm run build
+          yarn
+          yarn build
 
           for PACKAGE_PATH in "./packages/nars" "./packages/nars-client" "./packages/nars-common"
           do
