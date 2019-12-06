@@ -34,6 +34,8 @@ jobs:
 
           ROOT=$(pwd)
 
+          npm run build
+
           for PACKAGE_PATH in "./packages/nars" "./packages/nars-client" "./packages/nars-common"
           do
             cd "$PACKAGE_PATH"
