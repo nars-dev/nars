@@ -17,7 +17,7 @@
   "private": false,
   "scripts": {
     "postinstall": "bsb -clean-world -make-world",
-    "build": "bsb -make-world && tsc && mkdir -p dist && cp ./src/*.bs.js ./dist/ && cp ./src/protobuf/*.bs.js ./dist/protobuf/"
+    "build": "bsb -make-world && tsc && mkdir -p ./dist/protobuf && cp ./src/*.bs.js ./dist/ && cp ./src/protobuf/*.bs.js ./dist/protobuf/"
   },
   "dependencies": {
     "analytics-node": "^3.4.0-beta.1",
