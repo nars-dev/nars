@@ -19,7 +19,7 @@
     "react-native-reanimated": "1.x.x"
   },
   "dependencies": {
-    "nars-common": "0.0.0"
+    "nars-common": "1.0.0-alpha.2"
   },
   "devDependencies": {
     "@types/google-protobuf": "^3.7.2",
