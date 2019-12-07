@@ -5969,7 +5969,7 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-nars-client@~0.0.0:
+nars-client@*, nars-client@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/nars-client/-/nars-client-0.0.0.tgz#86c9e163084135e8cea95b7bb0afea76650d67d0"
   integrity sha512-/RUOf7wJh8EKgIm6Xq50AZ5UZyxSx+H567DVZqw0DTsQfxgRLTuYJMOHzCoHxrIpK8zjs/QJkbHZYQKaEgX1Vw==
@@ -5977,12 +5977,12 @@ nars-client@~0.0.0:
     nars-common "0.0.0"
     protobufjs "^6.8.8"
 
-nars-common@0.0.0, nars-common@~0.0.0:
+nars-common@*, nars-common@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/nars-common/-/nars-common-0.0.0.tgz#70f628b9dddc72ce9f92173351fffe06761d593c"
   integrity sha512-7A3puTDSULIYmSq63pbTgyS5+jPTsbaxbsfiAN4ctYRGyJKOiH9pe2aTrTAz/vK5SNK/fObF1/V8ETJA7SM7/Q==
 
-nars@~0.0.0:
+nars@*, nars@~0.0.0:
   version "0.0.2"
   resolved "https://registry.yarnpkg.com/nars/-/nars-0.0.2.tgz#f898d82c68d1dc9a5239560705b84bfcb44d8c03"
   integrity sha512-zJhOLvQ5HNf/ePAtCLj2VW9lvnDzRp0WiCEIqxqUYb+WDTSzaKbty5juu4LpF/lJu+kkHAt4KJu6c3i7/czlJQ==
@@ -7534,6 +7534,13 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
+reason-react-reconciler@~0.21.0000:
+  version "0.21.0"
+  resolved "https://registry.yarnpkg.com/reason-react-reconciler/-/reason-react-reconciler-0.21.0.tgz#1c00fa866c6fedfb058b644cac6f0e1e86381b41"
+  integrity sha512-EZ5JHBYm7l1oLtAAbytjHmqtu+VApaWmKxgBOtHMnPl2a/21yZLH5ns/s09syMmT9B5tEVxgLyjj+deihr0dRQ==
+  dependencies:
+    react-reconciler "0.21.0"
+
 regenerate-unicode-properties@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.1.0.tgz#ef51e0f0ea4ad424b77bf7cb41f3e015c70a3f0e"
@@ -7888,9 +7895,9 @@ serialize-error@^2.1.0:
   integrity sha1-ULZ51WNc34Rme9yOWa9OW4HV9go=
 
 serialize-to-js@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.yarnpkg.com/serialize-to-js/-/serialize-to-js-3.0.0.tgz#1fd8736744819a4df29dc85e9d04a44a4984edc3"
-  integrity sha512-WdGgi0jGnWCQXph2p3vkxceDnTfvfyXfYxherQMRcZjSaJzMQdMBAW6i0nojsBKIZ3fFOztZKKVbbm05VbIdRA==
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/serialize-to-js/-/serialize-to-js-3.0.1.tgz#7bece9cb910c5ee1433f56500db4a5303bca6a02"
+  integrity sha512-TokHD6rY0yQxMmZCjeL8Oj+XuQK6uEx8JnBjt7PuqwWa2qY79Wb/KyhEDduTUC8Gl3S7c40jefWve7f5t4L8Lw==
 
 serve-static@^1.12.4, serve-static@^1.13.1:
   version "1.14.1"
