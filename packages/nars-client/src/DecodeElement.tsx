@@ -160,7 +160,6 @@ export const ofEncodedReactElement = (
     const av = element.getAnimatedview()!;
     if (av.hasStyle()) {
       props.style = decodeAnimatedStyle(av.getStyle(), retainedInstances);
-      console.log(props.style);
     }
     const children = getChildren(av);
     props.children = children;
