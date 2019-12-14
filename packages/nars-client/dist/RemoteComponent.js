@@ -112,6 +112,7 @@ exports.useNars = (wsOrAddress, name, props, localPropsOptional) => {
                     });
                 }
                 else if (message.hasAnimatedvalueupdate()) {
+                    console.log("UPDATEP");
                     const update = message.getAnimatedvalueupdate();
                     const value = update.getValue();
                     const toValue = update.getTovalue();

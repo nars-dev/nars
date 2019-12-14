@@ -6,8 +6,8 @@
     "start": "parcel build --target node index.tsx && node dist/index.js"
   },
   "dependencies": {
-    "nars-examples-common": "^0.0.0",
-    "nars": "*",
+    "nars-examples-common": "*",
+    "nars": "1.0.0-alpha.7",
     "ws": "^7.1.2"
   },
   "devDependencies": {

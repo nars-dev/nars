@@ -149,6 +149,7 @@ exports.ofEncodedReactElement = (rpcCall, getLocalProp, element, retainedInstanc
         const av = element.getAnimatedview();
         if (av.hasStyle()) {
             props.style = AnimatedCoders_1.decodeAnimatedStyle(av.getStyle(), retainedInstances);
+            console.log(props.style);
         }
         const children = getChildren(av);
         props.children = children;

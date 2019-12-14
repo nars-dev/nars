@@ -5977,7 +5977,7 @@ nars-client@~0.0.0:
     nars-common "0.0.0"
     protobufjs "^6.8.8"
 
-nars-common@0.0.0, nars-common@~0.0.0:
+nars-common@*, nars-common@0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/nars-common/-/nars-common-0.0.0.tgz#70f628b9dddc72ce9f92173351fffe06761d593c"
   integrity sha512-7A3puTDSULIYmSq63pbTgyS5+jPTsbaxbsfiAN4ctYRGyJKOiH9pe2aTrTAz/vK5SNK/fObF1/V8ETJA7SM7/Q==
