@@ -5,4 +5,5 @@ packages/nars-client/dist/* linguist-generated=true
 packages/nars/dist/* linguist-generated=true
 packages/nars-common/dist/* linguist-generated=true
 *.bs.js linguist-generated=true
-
+*.re linguist-vendored=true
+*.rei linguist-vendored=true
