@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "faker": "^4.1.0",
-    "nars-client": "1.0.0-alpha.4",
+    "nars-client": "1.0.0-alpha.5",
     "nars-common": "1.0.0-alpha.2",
     "nars-examples-common": "*",
     "react": "16.9.0",
