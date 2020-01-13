@@ -6,7 +6,7 @@ import {
   PropTypes,
   LocalPropRequired,
 } from "nars-common";
-import { RemoteComponent } from "./RemoteComponent";
+import { RemoteComponent, useWebSocket, SocketLike } from "./RemoteComponent";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 
 type ExtractLocalProp<
@@ -113,11 +113,15 @@ function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
 }
 
 export function createRemoteComponent<T extends ComponentConfig>(
-  webSocket: WebSocket | string,
+  socketLikeOrUrl: SocketLike | string,
   config: T
 ) {
   const encoders = createEncoders(config);
-
+  const useSocketLikeOrUrl = () => {
+    return typeof socketLikeOrUrl === "string"
+      ? useWebSocket(socketLikeOrUrl, true)
+      : () => socketLikeOrUrl;
+  };
   return ({
     name,
     props,
@@ -130,10 +134,10 @@ export function createRemoteComponent<T extends ComponentConfig>(
     const encoded = React.useMemo(() => {
       return encoders[name](props);
     }, [name, props]);
+    const webSocket = useSocketLikeOrUrl();
 
     const encodedProps = encoded.props;
     const localProps = encoded.localProps;
-
     return (
       <RemoteComponent
         webSocket={webSocket}

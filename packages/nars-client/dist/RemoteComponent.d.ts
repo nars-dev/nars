@@ -11,11 +11,15 @@ export interface SocketLike {
     addEventListener<K extends keyof WebSocketEventMap>(type: K, listener: (this: SocketLike, ev: WebSocketEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof WebSocketEventMap>(type: K, listener: (this: SocketLike, ev: WebSocketEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
 }
-export declare const useNars: (wsOrAddress: string | SocketLike, name: string, props: object, localPropsOptional?: {
+declare type LocalProps = {
     [k: string]: unknown;
-} | undefined) => State;
+};
+export declare const useNars: (webSocket: () => SocketLike, name: string, props: object, localPropsOptional?: LocalProps | undefined) => State;
+export interface Lazy<T> {
+    (): T;
+}
 declare type Props = {
-    webSocket: SocketLike | string;
+    webSocket: SocketLike | Lazy<SocketLike>;
     name: string;
     props: {
         [k: string]: unknown;
@@ -26,6 +30,7 @@ declare type Props = {
     renderError?: () => React.ReactElement<any>;
     renderLoading?: () => React.ReactElement<any>;
 };
+export declare const useWebSocket: (url: string, shouldReconnect?: boolean | undefined) => Lazy<WebSocket>;
 export declare const RemoteComponent: (props: Props) => React.ReactElement<any, string | ((props: any) => React.ReactElement<any, string | any | (new (props: any) => React.Component<any, any, any>)> | null) | (new (props: any) => React.Component<any, any, any>)> | React.FunctionComponentElement<{}> | null;
 export {};
 //# sourceMappingURL=RemoteComponent.d.ts.map

@@ -76,117 +76,261 @@ const createRetainedInstanceContainer = (): RetainedInstances => {
     setNode: (n, value: Animated.Node<any>) => {
       nodes.set(n.getNodeid(), value);
     },
+    clear: () => {
+      nodes.clear();
+      values.clear();
+      clocks.clear();
+    },
   };
 };
 
-export const useNars = (
-  wsOrAddress: SocketLike | string,
-  name: string,
-  props: object,
-  localPropsOptional?: { [k: string]: unknown }
+const reactElementFromMessage = (
+  message: ServerToClient,
+  localProps: LocalProps,
+  instanceId: number,
+  ws: SocketLike,
+  retainedInstances: RetainedInstances
 ) => {
-  const [renderedElement, setRenderedElement] = React.useState<State>(
-    "Loading"
-  );
-  const localProps = localPropsOptional ? localPropsOptional : {};
-  const [instanceId] = React.useState(() => instanceCounter.next());
-  const [retainedInstances] = React.useState(() =>
-    createRetainedInstanceContainer()
-  );
-  const ws = React.useRef<SocketLike | null>(null);
-  const websocket = () => {
-    if (ws.current) {
-      return ws.current;
-    } else if (typeof wsOrAddress === "string") {
-      ws.current = new WebSocket(wsOrAddress);
-      ws.current.binaryType = "arraybuffer";
-      return ws.current;
-    } else {
-      return wsOrAddress;
+  return message
+    .getUpdate()!
+    .getElementList()
+    .map(elem =>
+      ofEncodedReactElement(
+        (messageId, args) => {
+          const msg = new ClientToServer();
+          const call = new Call();
+          call.setMessageid(messageId);
+          call.setArgs(args);
+          msg.setCall(call);
+          msg.setRootid(instanceId);
+          ws.send(msg.serializeBinary());
+        },
+        key => {
+          return localProps[key];
+        },
+        elem,
+        retainedInstances
+      )
+    );
+};
+
+const connect = (
+  ws: SocketLike,
+  instanceId: number,
+  onMessage: (message: ServerToClient) => void
+) => {
+  const eventListener = (event: { data: ArrayBuffer }) => {
+    const message = ServerToClient.deserializeBinary(
+      new Uint8Array(event.data)
+    );
+    if (message.getRootid() === instanceId) {
+      onMessage(message);
     }
   };
-  React.useEffect(() => {
-    const ws = websocket();
-    ws.addEventListener("message", (event: { data: ArrayBuffer }) => {
-      const message = ServerToClient.deserializeBinary(
-        new Uint8Array(event.data)
-      );
-      if (message.getRootid() === instanceId) {
-        if (message.hasError()) {
-          setRenderedElement(currentValue => {
-            if (currentValue === "Loading") {
-              return "Error";
-            } else {
-              return currentValue;
-            }
-          });
-        } else if (message.hasUpdate()) {
-          setRenderedElement({
-            type: "Rendered",
-            element: message
-              .getUpdate()!
-              .getElementList()
-              .map(elem =>
-                ofEncodedReactElement(
-                  (messageId, args) => {
-                    const msg = new ClientToServer();
-                    const call = new Call();
-                    call.setMessageid(messageId);
-                    call.setArgs(args);
-                    msg.setCall(call);
-                    msg.setRootid(instanceId);
-                    ws.send(msg.serializeBinary());
-                  },
-                  key => {
-                    return localProps[key];
-                  },
-                  elem,
-                  retainedInstances
-                )
-              ),
-          });
-        } else if (message.hasAnimatedvalueupdate()) {
-          const update = message.getAnimatedvalueupdate()!;
-          const value = update.getValue();
-          const toValue = update.getTovalue();
-          updateAnimatedValue(value, toValue, retainedInstances);
-        }
-      }
-    });
-    return () => {
-      instanceCounter.free(instanceId);
+  ws.addEventListener("message", eventListener);
+  return () => {
+    if (ws.readyState === WebSocket.OPEN) {
       const msg = new ClientToServer();
       msg.setUnmount(new Unmount());
       msg.setRootid(instanceId);
       ws.send(msg.serializeBinary());
+    }
+    if (eventListener) {
+      ws.removeEventListener("message", eventListener);
+    }
+  };
+};
+
+const useInstanceId = () => {
+  const instanceId = React.useRef(0);
+  React.useEffect(() => {
+    instanceId.current = instanceCounter.next();
+    return () => {
+      instanceCounter.free(instanceId.current);
     };
   }, []);
-  React.useEffect(() => {
-    const ws = websocket();
-    const msg = new ClientToServer();
-    const payload = new Render();
-    payload.setName(name);
-    payload.setProps(toStruct(props));
-    payload.setLocalpropsList(Object.keys(localProps));
-    msg.setRootid(instanceId);
-    msg.setRender(payload);
-    const renderMessage = msg.serializeBinary();
-    if (ws.readyState === WebSocket.OPEN) {
-      ws.send(renderMessage);
-    } else {
-      const handler = () => {
-        ws.send(renderMessage);
-        ws.removeEventListener("open", handler);
-      };
-      ws.addEventListener("open", handler);
-    }
-  }, [name, props, localProps]);
+  return () => instanceId.current;
+};
 
+const useLocalPropsRef = (localProps: { [k: string]: unknown } | undefined) => {
+  const props = localProps ? localProps : {};
+  const ref = React.useRef(props);
+  React.useEffect(() => {
+    ref.current = props;
+  }, [localProps]);
+  return ref;
+};
+
+const sendRender = (
+  ws: SocketLike,
+  name: string,
+  props: object,
+  localProps: LocalProps,
+  instanceId: number
+) => {
+  const msg = new ClientToServer();
+  const payload = new Render();
+  payload.setName(name);
+  payload.setProps(toStruct(props));
+  payload.setLocalpropsList(Object.keys(localProps));
+  msg.setRootid(instanceId);
+  msg.setRender(payload);
+  const renderMessage = msg.serializeBinary();
+  if (ws.readyState === WebSocket.OPEN) {
+    ws.send(renderMessage);
+  } else {
+    const handler = () => {
+      ws.send(renderMessage);
+      ws.removeEventListener("open", handler);
+    };
+    ws.addEventListener("open", handler);
+  }
+};
+
+type UpdateKind =
+  | { type: "RemoteRender" }
+  | { type: "LocalReRender" }
+  | { type: "Reconnect"; oldWs: SocketLike | undefined }
+  | undefined;
+
+const useRemoteUpdateState = () => {
+  const updateKind = React.useRef<UpdateKind>(undefined);
+  const memoizedWebSocket = React.useRef<SocketLike | undefined>(undefined);
+  return {
+    updateWebsocket(ws: SocketLike) {
+      if (memoizedWebSocket.current !== ws) {
+        updateKind.current = {
+          type: "Reconnect",
+          oldWs: memoizedWebSocket.current,
+        };
+        memoizedWebSocket.current = ws;
+      }
+    },
+    updatedParams() {
+      if (!(updateKind.current && updateKind.current.type == "Reconnect")) {
+        updateKind.current = { type: "RemoteRender" };
+      }
+    },
+    updatedLocalProps() {
+      if (!updateKind.current) {
+        updateKind.current = { type: "LocalReRender" };
+      }
+    },
+    flush: () => {
+      const ret = updateKind.current;
+      updateKind.current = undefined;
+      return ret;
+    },
+  };
+};
+
+type LocalProps = { [k: string]: unknown };
+
+export const useNars = (
+  webSocket: () => SocketLike,
+  name: string,
+  props: object,
+  localPropsOptional?: LocalProps
+) => {
+  const instanceId = useInstanceId();
+  const [renderedElement, updateRenderedElement] = React.useState<State>(
+    "Loading"
+  );
+  const [retainedInstances] = React.useState(() =>
+    createRetainedInstanceContainer()
+  );
+  const remoteUpdateState = useRemoteUpdateState();
+  React.useEffect(() => {
+    remoteUpdateState.updatedParams();
+  }, [name, props]);
+  React.useEffect(() => {
+    remoteUpdateState.updatedLocalProps();
+  }, [localPropsOptional]);
+
+  const localPropsRef = useLocalPropsRef(localPropsOptional);
+  const disconnect = React.useRef<(() => void) | undefined>(undefined);
+  const lastRenderMessage = React.useRef<ServerToClient | undefined>(undefined);
+  React.useEffect(() => {
+    const ws = webSocket();
+    remoteUpdateState.updateWebsocket(ws);
+    const update = remoteUpdateState.flush();
+    if (update) {
+      switch (update.type) {
+        case "RemoteRender":
+          sendRender(ws, name, props, localPropsRef.current, instanceId());
+          break;
+        case "Reconnect":
+          if (disconnect.current) {
+            disconnect.current();
+            retainedInstances.clear();
+          }
+          disconnect.current = connect(
+            ws,
+            instanceId(),
+            message => {
+              if (message.hasError()) {
+                updateRenderedElement(currentValue => {
+                  if (currentValue === "Loading") {
+                    return "Error";
+                  } else {
+                    return currentValue;
+                  }
+                });
+              } else if (message.hasUpdate()) {
+                updateRenderedElement({
+                  type: "Rendered",
+                  element: reactElementFromMessage(
+                    message,
+                    localPropsRef.current,
+                    instanceId(),
+                    ws,
+                    retainedInstances
+                  ),
+                });
+                lastRenderMessage.current = message;
+              } else if (message.hasAnimatedvalueupdate()) {
+                const update = message.getAnimatedvalueupdate()!;
+                const value = update.getValue();
+                const toValue = update.getTovalue();
+                updateAnimatedValue(value, toValue, retainedInstances);
+              }
+            }
+          );
+          sendRender(ws, name, props, localPropsRef.current, instanceId());
+          break;
+        case "LocalReRender":
+          if (lastRenderMessage.current) {
+            updateRenderedElement({
+              type: "Rendered",
+              element: reactElementFromMessage(
+                lastRenderMessage.current,
+                localPropsRef.current,
+                instanceId(),
+                ws,
+                retainedInstances
+              ),
+            });
+          }
+          break;
+      }
+    }
+  });
+  React.useEffect(() => {
+    return () => {
+      if (disconnect.current) {
+        disconnect.current();
+      }
+    };
+  }, []);
   return renderedElement;
 };
 
+export interface Lazy<T> {
+  (): T;
+}
+
 type Props = {
-  webSocket: SocketLike | string;
+  webSocket: SocketLike | Lazy<SocketLike>;
   name: string;
   props: { [k: string]: unknown };
   localProps?: { [k: string]: unknown };
@@ -194,9 +338,42 @@ type Props = {
   renderLoading?: () => React.ReactElement<any>;
 };
 
+export const useWebSocket = (
+  url: string,
+  shouldReconnect?: boolean
+): Lazy<WebSocket> => {
+  const [ref, setRef] = React.useState<
+    React.MutableRefObject<WebSocket | null>
+  >({ current: null });
+  const removeErrorListenerRef = React.useRef<(() => void) | undefined>();
+  return () => {
+    if (ref.current) {
+      return ref.current;
+    } else {
+      const ws = new WebSocket(url);
+      if (shouldReconnect) {
+        const handler = () => {
+          setTimeout(function() {
+            setRef(x => (x.current === ws ? { current: null } : x));
+          }, 200);
+        };
+        ws.addEventListener("close", handler);
+        removeErrorListenerRef.current = () => {
+          ws.removeEventListener("close", handler);
+        }
+      } else if (removeErrorListenerRef.current) {
+        removeErrorListenerRef.current();
+      }
+      ref.current = ws;
+      return ws;
+    }
+  };
+};
+
 export const RemoteComponent = (props: Props) => {
+  const ws = props.webSocket;
   const renderedElement = useNars(
-    props.webSocket,
+    typeof ws === "function" ? ws : () => ws,
     props.name,
     props.props,
     props.localProps

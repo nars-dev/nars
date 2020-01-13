@@ -40,8 +40,13 @@ function createEncoders(config) {
     }
     return res;
 }
-function createRemoteComponent(webSocket, config) {
+function createRemoteComponent(socketLikeOrUrl, config) {
     const encoders = createEncoders(config);
+    const useSocketLikeOrUrl = () => {
+        return typeof socketLikeOrUrl === "string"
+            ? RemoteComponent_1.useWebSocket(socketLikeOrUrl, true)
+            : () => socketLikeOrUrl;
+    };
     return ({ name, props, LoadingComponent, ErrorComponent, }) => {
         if (!(name in encoders)) {
             throw `Unknown component <${name} />`;
@@ -49,6 +54,7 @@ function createRemoteComponent(webSocket, config) {
         const encoded = React.useMemo(() => {
             return encoders[name](props);
         }, [name, props]);
+        const webSocket = useSocketLikeOrUrl();
         const encodedProps = encoded.props;
         const localProps = encoded.localProps;
         return (React.createElement(RemoteComponent_1.RemoteComponent, { webSocket: webSocket, name: name, props: encodedProps, localProps: localProps, renderLoading: LoadingComponent ? () => React.createElement(LoadingComponent, null) : undefined, renderError: ErrorComponent ? () => React.createElement(ErrorComponent, null) : undefined }));
