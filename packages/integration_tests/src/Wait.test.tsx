@@ -99,7 +99,6 @@ const runTest = (name: keyof typeof components) => {
   expect(sendCounter).toEqual(2);
   expect(counter).toEqual(1);
 
-  /*
   act(() => {
     rendered.update(
       <RemoteComponent
@@ -130,7 +129,6 @@ const runTest = (name: keyof typeof components) => {
   // With a new socket it sends an unmount and render messages
   expect(sendCounter).toEqual(4);
   expect(counter).toEqual(2);
-   */
 };
 
 describe("Updates", () => {

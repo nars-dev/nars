@@ -94,8 +94,8 @@ const reactElementFromMessage = (
   return message
     .getUpdate()!
     .getElementList()
-    .map(elem => {
-      const x = ofEncodedReactElement(
+    .map(elem =>
+      ofEncodedReactElement(
         (messageId, args) => {
           const msg = new ClientToServer();
           const call = new Call();
@@ -110,12 +110,8 @@ const reactElementFromMessage = (
         },
         elem,
         retainedInstances
-      );
-      if (x && x.hasOwnProperty("type") && (x as React.ReactElement).type === undefined) {
-              console.log(elem)
-      };
-      return x;
-});
+      )
+    );
 };
 
 const connect = (
@@ -366,7 +362,7 @@ export const useWebSocket = (
         ws.addEventListener("close", handler);
         removeErrorListenerRef.current = () => {
           ws.removeEventListener("close", handler);
-        }
+        };
       } else if (removeErrorListenerRef.current) {
         removeErrorListenerRef.current();
       }

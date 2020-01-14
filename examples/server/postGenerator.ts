@@ -32,5 +32,5 @@ export const generatePosts = (): Post[] => {
     ](),
   });
 
-  return Array.from({ length: 1 }).map(getRandomPost);
+  return Array.from({ length: 7 }).map(getRandomPost);
 };
