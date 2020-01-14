@@ -137,7 +137,7 @@ function commitMount(param, param$1, param$2, param$3) {
 
 function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
   if (typeof instance === "number") {
-    return Pervasives.invalid_arg("Cannot update component type " + instance_type);
+    return /* () */0;
   } else if (instance.tag) {
     instance[0].props = /* Props */[props];
     return /* () */0;

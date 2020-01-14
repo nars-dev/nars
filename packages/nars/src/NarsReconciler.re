@@ -135,6 +135,7 @@ let commitUpdate =
     (instance, _, instance_type, ~oldProps as _, ~newProps as props, _) => {
   switch (instance) {
   | Instance.Component(inst) => inst.props = Props(props)
+  | Wait => ()
   | _ => invalid_arg("Cannot update component type " ++ instance_type)
   };
 };
