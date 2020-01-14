@@ -51,12 +51,11 @@ export const testSocketWithMessageSpy = (
   eventHandlerSpy: (ev: MessageEvent) => any,
   messageSendSpy: (m: unknown) => void
 ): TestSocketLike => {
-  const handler = socket.clientSocketIn;
   return {
     ...socket,
     clientSocketIn: () => ev => {
       eventHandlerSpy(ev);
-      return handler()(ev);
+      return socket.clientSocketIn()(ev);
     },
     send(d) {
       messageSendSpy(d);

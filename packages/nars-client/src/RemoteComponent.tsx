@@ -135,9 +135,7 @@ const connect = (
       msg.setRootid(instanceId);
       ws.send(msg.serializeBinary());
     }
-    if (eventListener) {
-      ws.removeEventListener("message", eventListener);
-    }
+    ws.removeEventListener("message", eventListener);
   };
 };
 
@@ -194,12 +192,12 @@ type UpdateKind =
   | undefined;
 
 const useRemoteUpdateState = () => {
-  const updateKind = React.useRef<UpdateKind>(undefined);
+  let updateKind: UpdateKind | undefined = undefined;
   const memoizedWebSocket = React.useRef<SocketLike | undefined>(undefined);
   return {
     updateWebsocket(ws: SocketLike) {
       if (memoizedWebSocket.current !== ws) {
-        updateKind.current = {
+        updateKind = {
           type: "Reconnect",
           oldWs: memoizedWebSocket.current,
         };
@@ -207,20 +205,16 @@ const useRemoteUpdateState = () => {
       }
     },
     updatedParams() {
-      if (!(updateKind.current && updateKind.current.type == "Reconnect")) {
-        updateKind.current = { type: "RemoteRender" };
+      if (!(updateKind && updateKind.type == "Reconnect")) {
+        updateKind = { type: "RemoteRender" };
       }
     },
     updatedLocalProps() {
-      if (!updateKind.current) {
-        updateKind.current = { type: "LocalReRender" };
+      if (!updateKind) {
+        updateKind = { type: "LocalReRender" };
       }
     },
-    flush: () => {
-      const ret = updateKind.current;
-      updateKind.current = undefined;
-      return ret;
-    },
+    updateKind: () => updateKind,
   };
 };
 
@@ -239,6 +233,10 @@ export const useNars = (
   const [retainedInstances] = React.useState(() =>
     createRetainedInstanceContainer()
   );
+
+  // It internally stores the latest reference to webSocket
+  // So that we can determine if the webSocket we're using
+  // has changed.
   const remoteUpdateState = useRemoteUpdateState();
   React.useEffect(() => {
     remoteUpdateState.updatedParams();
@@ -247,13 +245,16 @@ export const useNars = (
     remoteUpdateState.updatedLocalProps();
   }, [localPropsOptional]);
 
+  // A ref is used so that the asynchrnous callbacks from the server
+  // use the latest localProps (it happens when the state updates on
+  // the server but there were no state transitions on the client.
   const localPropsRef = useLocalPropsRef(localPropsOptional);
   const disconnect = React.useRef<(() => void) | undefined>(undefined);
   const lastRenderMessage = React.useRef<ServerToClient | undefined>(undefined);
   React.useEffect(() => {
     const ws = webSocket();
     remoteUpdateState.updateWebsocket(ws);
-    const update = remoteUpdateState.flush();
+    const update = remoteUpdateState.updateKind();
     if (update) {
       switch (update.type) {
         case "RemoteRender":
@@ -316,6 +317,7 @@ export const useNars = (
     }
   });
   React.useEffect(() => {
+    // Disconnect on unmount
     return () => {
       if (disconnect.current) {
         disconnect.current();
