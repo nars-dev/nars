@@ -26,33 +26,33 @@ function stringToArrayBuffer(str) {
   return Uint8Array.from(Buffer.from(str, "ascii")).buffer;
 }
 
-function send(socket, message) {
-  return socket.send(stringToArrayBuffer(message));
+function send(socket, value, rootId, containers) {
+  if (Belt_HashMapInt.has(containers, rootId)) {
+    var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
+              rootId: rootId,
+              value: value
+            }));
+    return socket.send(stringToArrayBuffer(message));
+  } else {
+    return 0;
+  }
 }
 
-function sendViewUpdates(socket, rootId, reactElements) {
-  var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
-            rootId: rootId,
-            value: /* `Update */[
+function sendViewUpdates(socket, rootId, containers, reactElements) {
+  return send(socket, /* `Update */[
               999946793,
               $$Array.to_list(reactElements)
-            ]
-          }));
-  return send(socket, message);
+            ], rootId, containers);
 }
 
-function updateAnimatedValue(socket, rootId, value, toValue) {
-  var message = Writer$Ocamlprotocplugin.contents(Curry._1(Schema.ServerToClient.to_proto, {
-            rootId: rootId,
-            value: /* `AnimatedValueUpdate */[
+function updateAnimatedValue(socket, rootId, containers, value, toValue) {
+  return send(socket, /* `AnimatedValueUpdate */[
               -20525481,
               {
                 value: value,
                 toValue: toValue
               }
-            ]
-          }));
-  return send(socket, message);
+            ], rootId, containers);
 }
 
 function startListening(server, render) {
@@ -99,9 +99,9 @@ function startListening(server, render) {
                                       container = Caml_option.valFromOption(match$1);
                                     } else {
                                       var container$1 = NarsReconciler.createContainer((function (param) {
-                                              return sendViewUpdates(socket, rootId, param);
+                                              return sendViewUpdates(socket, rootId, containers, param);
                                             }), (function (param, param$1) {
-                                              return updateAnimatedValue(socket, rootId, param, param$1);
+                                              return updateAnimatedValue(socket, rootId, containers, param, param$1);
                                             }));
                                       Belt_HashMapInt.set(containers, rootId, container$1);
                                       container = container$1;

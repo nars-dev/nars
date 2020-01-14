@@ -1,5 +1,6 @@
 import * as React from "react";
 import { ComponentConfig, ExtractInputPropType, LocalPropKey, PropTypes, LocalPropRequired } from "nars-common";
+import { SocketLike } from "./RemoteComponent";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 declare type ExtractLocalProp<Component, Key, IsRequired extends LocalPropRequired> = Component extends keyof LocalPropTypes ? Key extends keyof LocalPropTypes[Component] ? IsRequired extends "optional" ? LocalPropTypes[Component][Key] | undefined : LocalPropTypes[Component][Key] : never : never;
 export declare type ExtractLocalPropKeys<T extends PropTypes> = {
@@ -16,6 +17,10 @@ export interface RemoteComponentProps<T extends ComponentConfig, P extends keyof
     ErrorComponent?: React.ComponentType;
 }
 export declare type Client<T extends ComponentConfig> = React.ComponentType<RemoteComponentProps<T, keyof T>>;
-export declare function createRemoteComponent<T extends ComponentConfig>(webSocket: WebSocket | string, config: T): ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>) => JSX.Element;
+export declare function createRemoteComponentWithUrl<T extends ComponentConfig>(url: string, config: T): ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>) => JSX.Element;
+export declare function createRemoteComponentWithWebSocket<T extends ComponentConfig>(webSocket: SocketLike, config: T): ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>) => JSX.Element;
+export declare function createRemoteComponent<T extends ComponentConfig>(config: T): ({ name, props, LoadingComponent, ErrorComponent, webSocket, }: RemoteComponentProps<T, keyof T> & {
+    webSocket: SocketLike;
+}) => JSX.Element;
 export {};
 //# sourceMappingURL=Client.d.ts.map

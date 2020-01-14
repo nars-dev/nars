@@ -144,6 +144,7 @@ export interface RetainedInstances {
   setValue(node: Value, value: Animated.Value<any>): void;
   getNode(node: TopLevelNode): Animated.Node<AnyAnimatedPrimitive> | undefined;
   setNode(node: TopLevelNode, value: Animated.Node<any>): void;
+  clear(): void
 }
 
 const decodeValue = <T extends AnyAnimatedPrimitive>(

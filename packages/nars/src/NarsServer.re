@@ -50,31 +50,32 @@ let stringToArrayBuffer = str => {
   |> Uint8Array.buffer;
 };
 
-let send = (socket, message) => {
-  socket##send(stringToArrayBuffer(message) |> Socket.arrayBufferToData);
+let send = (~socket, ~message as value, ~rootId, ~containers) =>
+  if (ContainerMap.has(containers, rootId)) {
+    let message =
+      Schema.ServerToClient.{rootId, value}
+      |> Schema.ServerToClient.to_proto
+      |> Ocaml_protoc_plugin.Writer.contents;
+    socket##send(stringToArrayBuffer(message) |> Socket.arrayBufferToData);
+  };
+
+let sendViewUpdates = (~socket, ~rootId, ~containers, reactElements) => {
+  send(
+    ~socket,
+    ~message=`Update(reactElements |> Array.to_list),
+    ~rootId,
+    ~containers,
+  );
 };
 
-let sendViewUpdates = (~socket, ~rootId, reactElements) => {
-  let message =
-    Schema.ServerToClient.{
-      rootId,
-      value: `Update(reactElements |> Array.to_list),
-    }
-    |> Schema.ServerToClient.to_proto
-    |> Ocaml_protoc_plugin.Writer.contents;
-  send(socket, message);
-};
-
-let updateAnimatedValue = (~socket, ~rootId, ~value, ~toValue) => {
-  let message =
-    Schema.ServerToClient.{
-      rootId,
-      value:
+let updateAnimatedValue = (~socket, ~rootId, ~containers, ~value, ~toValue) => {
+  send(
+    ~socket,
+    ~message=
         `AnimatedValueUpdate({value: Some(value), toValue: Some(toValue)}),
-    }
-    |> Schema.ServerToClient.to_proto
-    |> Ocaml_protoc_plugin.Writer.contents;
-  send(socket, message);
+    ~rootId,
+    ~containers,
+  );
 };
 
 [@genType]
@@ -113,8 +114,8 @@ let startListening = (server: server, render) => {
             | None =>
               let container =
                 NarsReconciler.createContainer(
-                  ~flushUpdates=sendViewUpdates(~socket, ~rootId),
-                  ~updateAnimatedValue=updateAnimatedValue(~socket, ~rootId),
+                  ~flushUpdates=sendViewUpdates(~socket, ~rootId, ~containers),
+                  ~updateAnimatedValue=updateAnimatedValue(~socket, ~rootId, ~containers),
                 );
               ContainerMap.set(containers, rootId, container);
               container;

@@ -6,7 +6,7 @@ import {
   PropTypes,
   LocalPropRequired,
 } from "nars-common";
-import { RemoteComponent } from "./RemoteComponent";
+import { RemoteComponent, useWebSocket, SocketLike } from "./RemoteComponent";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 
 type ExtractLocalProp<
@@ -67,6 +67,7 @@ type EncodedProps<T extends PropTypes> = {
 
 type Encoder<T extends ComponentConfig> = {
   readonly [P in keyof T]: (
+    oldProps: EncodedProps<any> | undefined,
     props: ExtractPropTypes<T[P]>
   ) => EncodedProps<T[P]>;
 };
@@ -78,7 +79,9 @@ function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
   for (const component in config) {
     type ComponentProps = T[Extract<keyof T, string>] & PropTypes;
     const definition: ComponentProps = config[component];
-    res[component] = propsIn => {
+    res[component] = (prevProps, propsIn) => {
+      let propsChanged = prevProps === undefined;
+      let localPropsChanged = prevProps === undefined;
       let encodedProps = { props: {}, localProps: {} } as EncodedProps<
         ComponentProps
       >;
@@ -86,10 +89,14 @@ function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
         const propDefinition = definition[propKey];
         const prop = propsIn[propKey];
         if (!("local" in propDefinition)) {
-          if (!prop && !propDefinition.optional) {
-            throw `Prop '${propKey}' has not been passed to <${component} />`;
+          if (!propsIn.hasOwnProperty(propKey) && !propDefinition.optional) {
+            throw `Required prop '${propKey}' has not been passed to <${component} />`;
           }
           encodedProps.props[propKey] = propDefinition.encode(prop);
+          if (!propsChanged && prevProps) {
+            propsChanged =
+              prevProps.props[propKey] !== encodedProps.props[propKey];
+          }
         } else {
           if (
             propDefinition.isRequired !== "optional" &&
@@ -103,37 +110,102 @@ function createEncoders<T extends ComponentConfig>(config: T): Encoder<T> {
             encodedProps.localProps[
               localPropKey
             ] = (prop as unknown) as NonNullable<typeof prop>;
+            if (!localPropsChanged && prevProps) {
+              localPropsChanged =
+                localPropsChanged[localPropKey] !==
+                encodedProps.localProps[localPropKey];
+            }
           }
         }
       }
-      return encodedProps;
+      return {
+        props: propsChanged ? encodedProps.props : prevProps!.props,
+        localProps: localPropsChanged
+          ? encodedProps.localProps
+          : prevProps!.localProps,
+      };
     };
   }
   return res;
 }
 
-export function createRemoteComponent<T extends ComponentConfig>(
-  webSocket: WebSocket | string,
+function useMemoizedProps<T extends ComponentConfig>(
+  name: RemoteComponentProps<T>["name"],
+  encoders: Encoder<T>,
+  props: RemoteComponentProps<T>["props"]
+) {
+  if (!(name in encoders)) {
+    throw `Unknown component <${name} />`;
+  }
+  const prevEncodedProps = React.useRef<any>(undefined);
+  const encoded = encoders[name](prevEncodedProps.current, props);
+  React.useEffect(() => {
+    prevEncodedProps.current = encoded;
+  });
+  return encoded;
+}
+
+function createRemoteComponentWithSocketLikeOrUrl<T extends ComponentConfig>(
+  socketLikeOrUrl: SocketLike | string,
   config: T
 ) {
   const encoders = createEncoders(config);
-
+  const useSocketLikeOrUrl = () => {
+    return typeof socketLikeOrUrl === "string"
+      ? useWebSocket(socketLikeOrUrl, true)
+      : () => socketLikeOrUrl;
+  };
   return ({
     name,
     props,
     LoadingComponent,
     ErrorComponent,
   }: RemoteComponentProps<T>) => {
-    if (!(name in encoders)) {
-      throw `Unknown component <${name} />`;
-    }
-    const encoded = React.useMemo(() => {
-      return encoders[name](props);
-    }, [name, props]);
+    const webSocket = useSocketLikeOrUrl();
+    const encoded = useMemoizedProps(name, encoders, props);
+
+    return (
+      <RemoteComponent
+        webSocket={webSocket}
+        name={name}
+        props={encoded.props}
+        localProps={encoded.localProps}
+        renderLoading={
+          LoadingComponent ? () => <LoadingComponent /> : undefined
+        }
+        renderError={ErrorComponent ? () => <ErrorComponent /> : undefined}
+      />
+    );
+  };
+}
+
+export function createRemoteComponentWithUrl<T extends ComponentConfig>(
+  url: string,
+  config: T
+) {
+  return createRemoteComponentWithSocketLikeOrUrl(url, config);
+}
+
+export function createRemoteComponentWithWebSocket<T extends ComponentConfig>(
+  webSocket: SocketLike,
+  config: T
+) {
+  return createRemoteComponentWithSocketLikeOrUrl(webSocket, config);
+}
+
+export function createRemoteComponent<T extends ComponentConfig>(config: T) {
+  const encoders = createEncoders(config);
+  return ({
+    name,
+    props,
+    LoadingComponent,
+    ErrorComponent,
+    webSocket,
+  }: RemoteComponentProps<T> & { webSocket: SocketLike }) => {
+    const encoded = useMemoizedProps(name, encoders, props);
 
     const encodedProps = encoded.props;
     const localProps = encoded.localProps;
-
     return (
       <RemoteComponent
         webSocket={webSocket}

@@ -2,14 +2,17 @@ jest.mock("react-native", () => ({
   FlatList: "FlatList",
   TouchableOpacity: "TouchableOpacity",
 }));
-jest.mock("react-native-reanimated", () => ({
-}));
+jest.mock("react-native-reanimated", () => ({}));
 
 import * as React from "react";
 import { ReactTestInstance } from "react-test-renderer";
 import { TouchableOpacity, FlatList, LocalProp } from "nars";
 import { localProp } from "nars-common";
-import { createRemoteComponent, render, getChildren } from "./TestRenderer";
+import {
+  createRemoteComponentWithDefaultSocket,
+  render,
+  getChildren,
+} from "./TestRenderer";
 
 const config = {
   TouchableOpacityTest: {
@@ -36,7 +39,10 @@ const components = {
   },
 };
 
-const RemoteComponent = createRemoteComponent(config, components);
+const RemoteComponent = createRemoteComponentWithDefaultSocket(
+  config,
+  components
+);
 
 describe("RemoteComponent Local Props", () => {
   it("TouhcableOpacity has onPress set to submit", () => {
