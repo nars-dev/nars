@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RemoteComponent = Nars.createRemoteComponent(
+const RemoteComponent = Nars.createRemoteComponentWithUrl(
   "ws://localhost:9000",
   config
 );
