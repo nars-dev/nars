@@ -7,6 +7,7 @@ export { StyleSheet };
 export { default as TextInput } from "./TextInput";
 export { default as Switch } from "./Switch";
 export { default as TouchableOpacity } from "./TouchableOpacity";
+export { default as Wait } from "./Wait";
 import * as Static from "./Static";
 import * as Server from "./NarsServer.gen";
 export { Static, Server };

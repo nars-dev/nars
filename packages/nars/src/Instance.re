@@ -33,21 +33,47 @@ type componentInstance = {
 }
 and t =
   | RawText(string)
-  | Component(componentInstance);
+  | Component(componentInstance)
+  | Wait;
+
+type result('a) =
+  | Suspended
+  | Encoded('a);
 
 let rec encode = (instance, ~registerCallback, ~updateAnimatedValue) => {
   switch (instance) {
-  | RawText(string) => {
-      Schema.ReactElement.value: `RawText(string),
-      key: None,
-    }
+  | RawText(string) =>
+    Encoded({Schema.ReactElement.value: `RawText(string), key: None})
   | Component(inst) =>
-    let bridge = {registerCallback, updateAnimatedValue};
     let children =
-      Js.Array.map(
-        encode(~registerCallback, ~updateAnimatedValue),
-        inst.children,
+      encodeArray(inst.children, ~registerCallback, ~updateAnimatedValue);
+    switch (children) {
+    | Encoded(children) =>
+      let bridge = {registerCallback, updateAnimatedValue};
+      Encoded(
+        inst.encode(~key=inst.key, ~props=inst.props, ~bridge, ~children),
       );
-    inst.encode(~key=inst.key, ~props=inst.props, ~bridge, ~children);
+    | Suspended => Suspended
+    };
+  | Wait => Suspended
   };
+}
+and encodeArray = (instances, ~registerCallback, ~updateAnimatedValue) => {
+  let length = Js.Array.length(instances);
+  let resultArray = Belt.Array.makeUninitializedUnsafe(length);
+  let rec aux = (index, tail) =>
+    if (index === length) {
+      Encoded(resultArray);
+    } else {
+      let current = instances[index];
+      switch (encode(current, ~registerCallback, ~updateAnimatedValue)) {
+      | Encoded(encoded) =>
+        resultArray[index] = encoded;
+        aux(index + 1, tail);
+      | Suspended => Suspended
+      };
+    };
+  aux(0, instances);
 };
+
+let waitComponentName = "Wait";

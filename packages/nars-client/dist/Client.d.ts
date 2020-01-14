@@ -17,10 +17,19 @@ export interface RemoteComponentProps<T extends ComponentConfig, P extends keyof
     ErrorComponent?: React.ComponentType;
 }
 export declare type Client<T extends ComponentConfig> = React.ComponentType<RemoteComponentProps<T, keyof T>>;
-export declare function createRemoteComponentWithUrl<T extends ComponentConfig>(url: string, config: T): ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>) => JSX.Element;
-export declare function createRemoteComponentWithWebSocket<T extends ComponentConfig>(webSocket: SocketLike, config: T): ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>) => JSX.Element;
-export declare function createRemoteComponent<T extends ComponentConfig>(config: T): ({ name, props, LoadingComponent, ErrorComponent, webSocket, }: RemoteComponentProps<T, keyof T> & {
-    webSocket: SocketLike;
-}) => JSX.Element;
+export declare function createRemoteComponentWithUrl<T extends ComponentConfig>(url: string, config: T): {
+    ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>): JSX.Element;
+    displayName: string;
+};
+export declare function createRemoteComponentWithWebSocket<T extends ComponentConfig>(webSocket: SocketLike, config: T): {
+    ({ name, props, LoadingComponent, ErrorComponent, }: RemoteComponentProps<T, keyof T>): JSX.Element;
+    displayName: string;
+};
+export declare function createRemoteComponent<T extends ComponentConfig>(config: T): {
+    ({ name, props, LoadingComponent, ErrorComponent, webSocket, }: RemoteComponentProps<T, keyof T> & {
+        webSocket: SocketLike;
+    }): JSX.Element;
+    displayName: string;
+};
 export {};
 //# sourceMappingURL=Client.d.ts.map

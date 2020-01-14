@@ -39,22 +39,22 @@ let resetAfterCommit = (container: containerInfo) => {
     id;
   };
   let children =
-    Js.Array.map(
-      inst =>
-        Instance.encode(
-          ~registerCallback,
-          ~updateAnimatedValue=container.updateAnimatedValue,
-          inst,
-        ),
+    Instance.encodeArray(
+      ~registerCallback,
+      ~updateAnimatedValue=container.updateAnimatedValue,
       container.children,
     );
-  container.flushUpdates(children);
-  ();
+  switch (children) {
+  | Instance.Encoded(children) => container.flushUpdates(children)
+  // Skip the update if any child in the tree rendered <Wait />
+  | Suspended => ()
+  };
 };
 
 let assertComponentInstance = (instance, f) => {
   switch (instance) {
-  | Instance.RawText(_) => invalid_arg("Cannot append children to RawText")
+  | Instance.RawText(_)
+  | Wait => invalid_arg("Cannot append children to RawText")
   | Component(parentInstance) => f(parentInstance)
   };
 };

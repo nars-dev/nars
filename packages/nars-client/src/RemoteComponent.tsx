@@ -94,8 +94,8 @@ const reactElementFromMessage = (
   return message
     .getUpdate()!
     .getElementList()
-    .map(elem =>
-      ofEncodedReactElement(
+    .map(elem => {
+      const x = ofEncodedReactElement(
         (messageId, args) => {
           const msg = new ClientToServer();
           const call = new Call();
@@ -110,8 +110,12 @@ const reactElementFromMessage = (
         },
         elem,
         retainedInstances
-      )
-    );
+      );
+      if (x && x.hasOwnProperty("type") && (x as React.ReactElement).type === undefined) {
+              console.log(elem)
+      };
+      return x;
+});
 };
 
 const connect = (

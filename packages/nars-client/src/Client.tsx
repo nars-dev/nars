@@ -155,7 +155,7 @@ function createRemoteComponentWithSocketLikeOrUrl<T extends ComponentConfig>(
       ? useWebSocket(socketLikeOrUrl, true)
       : () => socketLikeOrUrl;
   };
-  return ({
+  const comp = ({
     name,
     props,
     LoadingComponent,
@@ -177,6 +177,8 @@ function createRemoteComponentWithSocketLikeOrUrl<T extends ComponentConfig>(
       />
     );
   };
+  comp.displayName = "RemoteComponent";
+  return comp;
 }
 
 export function createRemoteComponentWithUrl<T extends ComponentConfig>(
@@ -195,7 +197,7 @@ export function createRemoteComponentWithWebSocket<T extends ComponentConfig>(
 
 export function createRemoteComponent<T extends ComponentConfig>(config: T) {
   const encoders = createEncoders(config);
-  return ({
+  const comp = ({
     name,
     props,
     LoadingComponent,
@@ -219,4 +221,6 @@ export function createRemoteComponent<T extends ComponentConfig>(config: T) {
       />
     );
   };
+  comp.displayName = "RemoteComponent";
+  return comp;
 }

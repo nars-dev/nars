@@ -2,6 +2,7 @@
 'use strict';
 
 var Block = require("bs-platform/lib/js/block.js");
+var Instance = require("./Instance.bs.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Belt_HashMapString = require("bs-platform/lib/js/belt_HashMapString.js");
 var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
@@ -9,6 +10,12 @@ var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exception
 var registry = Belt_HashMapString.make(6);
 
 function add(name, encoder) {
+  if (name === Instance.waitComponentName) {
+    throw [
+          Caml_builtin_exceptions.invalid_argument,
+          "\'" + (String(name) + "\' is a special component name used for suspended rendering")
+        ];
+  }
   if (Belt_HashMapString.has(registry, name)) {
     throw [
           Caml_builtin_exceptions.invalid_argument,
@@ -20,16 +27,20 @@ function add(name, encoder) {
 }
 
 function createInstance(name, key, props) {
-  var match = Belt_HashMapString.get(registry, name);
-  if (match !== undefined) {
-    return /* Component */Block.__(1, [{
-                props: /* Props */[props],
-                encode: match,
-                children: /* array */[],
-                key: key
-              }]);
+  if (name === Instance.waitComponentName) {
+    return /* Wait */0;
   } else {
-    return Pervasives.invalid_arg("Unknown primitive component with name " + name);
+    var match = Belt_HashMapString.get(registry, name);
+    if (match !== undefined) {
+      return /* Component */Block.__(1, [{
+                  props: /* Props */[props],
+                  encode: match,
+                  children: /* array */[],
+                  key: key
+                }]);
+    } else {
+      return Pervasives.invalid_arg("Unknown primitive component with name " + name);
+    }
   }
 }
 

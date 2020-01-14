@@ -44,18 +44,19 @@ function resetAfterCommit(container) {
     Belt_HashMapInt.set(container.callbackRegistry, id, callback);
     return id;
   };
-  var children = container.children.map((function (inst) {
-          return Instance.encode(inst, registerCallback, container.updateAnimatedValue);
-        }));
-  Curry._1(container.flushUpdates, children);
-  return /* () */0;
+  var children = Instance.encodeArray(container.children, registerCallback, container.updateAnimatedValue);
+  if (children) {
+    return Curry._1(container.flushUpdates, children[0]);
+  } else {
+    return /* () */0;
+  }
 }
 
 function assertComponentInstance(instance, f) {
-  if (instance.tag) {
-    return Curry._1(f, instance[0]);
-  } else {
+  if (typeof instance === "number" || !instance.tag) {
     return Pervasives.invalid_arg("Cannot append children to RawText");
+  } else {
+    return Curry._1(f, instance[0]);
   }
 }
 
@@ -135,7 +136,9 @@ function commitMount(param, param$1, param$2, param$3) {
 }
 
 function commitUpdate(instance, param, instance_type, param$1, props, param$2) {
-  if (instance.tag) {
+  if (typeof instance === "number") {
+    return Pervasives.invalid_arg("Cannot update component type " + instance_type);
+  } else if (instance.tag) {
     instance[0].props = /* Props */[props];
     return /* () */0;
   } else {

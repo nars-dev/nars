@@ -74,11 +74,13 @@ function createRemoteComponentWithSocketLikeOrUrl(socketLikeOrUrl, config) {
             ? RemoteComponent_1.useWebSocket(socketLikeOrUrl, true)
             : () => socketLikeOrUrl;
     };
-    return ({ name, props, LoadingComponent, ErrorComponent, }) => {
+    const comp = ({ name, props, LoadingComponent, ErrorComponent, }) => {
         const webSocket = useSocketLikeOrUrl();
         const encoded = useMemoizedProps(name, encoders, props);
         return (React.createElement(RemoteComponent_1.RemoteComponent, { webSocket: webSocket, name: name, props: encoded.props, localProps: encoded.localProps, renderLoading: LoadingComponent ? () => React.createElement(LoadingComponent, null) : undefined, renderError: ErrorComponent ? () => React.createElement(ErrorComponent, null) : undefined }));
     };
+    comp.displayName = "RemoteComponent";
+    return comp;
 }
 function createRemoteComponentWithUrl(url, config) {
     return createRemoteComponentWithSocketLikeOrUrl(url, config);
@@ -90,11 +92,13 @@ function createRemoteComponentWithWebSocket(webSocket, config) {
 exports.createRemoteComponentWithWebSocket = createRemoteComponentWithWebSocket;
 function createRemoteComponent(config) {
     const encoders = createEncoders(config);
-    return ({ name, props, LoadingComponent, ErrorComponent, webSocket, }) => {
+    const comp = ({ name, props, LoadingComponent, ErrorComponent, webSocket, }) => {
         const encoded = useMemoizedProps(name, encoders, props);
         const encodedProps = encoded.props;
         const localProps = encoded.localProps;
         return (React.createElement(RemoteComponent_1.RemoteComponent, { webSocket: webSocket, name: name, props: encodedProps, localProps: localProps, renderLoading: LoadingComponent ? () => React.createElement(LoadingComponent, null) : undefined, renderError: ErrorComponent ? () => React.createElement(ErrorComponent, null) : undefined }));
     };
+    comp.displayName = "RemoteComponent";
+    return comp;
 }
 exports.createRemoteComponent = createRemoteComponent;
