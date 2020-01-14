@@ -23,8 +23,8 @@ function createDecoders(config) {
                     if (prop) {
                         parsedProps[propKey] = decoder.decode(prop);
                     }
-                    else if (!decoder.optional) {
-                        throw `Required prop: ${propKey} has not been passed to component ${component}`;
+                    else if (!propsIn.hasOwnProperty(propKey) && !decoder.optional) {
+                        throw `Required prop: '${propKey}' has not been passed to component <${component} />`;
                     }
                 }
                 else {

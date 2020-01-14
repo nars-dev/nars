@@ -10,7 +10,11 @@ jest.mock("react-native-reanimated", () => ({
 import * as React from "react";
 import { ReactTestInstance } from "react-test-renderer";
 import { Text, InputProp } from "nars";
-import { createRemoteComponent, render, getChildren } from "./TestRenderer";
+import {
+  createRemoteComponentWithDefaultSocket,
+  render,
+  getChildren,
+} from "./TestRenderer";
 
 const config = {
   Test: {
@@ -26,7 +30,10 @@ const components = {
   ),
 };
 
-const RemoteComponent = createRemoteComponent(config, components);
+const RemoteComponent = createRemoteComponentWithDefaultSocket(
+  config,
+  components
+);
 
 describe("Props", () => {
   it("handles optional props", () => {
@@ -65,13 +72,13 @@ describe("Props", () => {
       render(
         <RemoteComponent
           name="Test"
+          // @ts-ignore
           props={{
-            // @ts-ignore
-            text: undefined,
+            number: 0,
             textOptional: undefined,
           }}
         />
       )
-    ).toThrow("Prop 'text' has not been passed to <Test />");
+    ).toThrow("Required prop 'text' has not been passed to <Test />");
   });
 });

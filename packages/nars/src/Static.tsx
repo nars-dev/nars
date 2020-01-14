@@ -48,8 +48,8 @@ function createDecoders<T extends ComponentConfig>(config: T): Decoder<T> {
         if (!("local" in decoder)) {
           if (prop) {
             parsedProps[propKey as keyof Props] = decoder.decode(prop);
-          } else if (!decoder.optional) {
-            throw `Required prop: ${propKey} has not been passed to component ${component}`;
+          } else if (!propsIn.hasOwnProperty(propKey) && !decoder.optional) {
+            throw `Required prop: '${propKey}' has not been passed to component <${component} />`;
           }
         } else {
           const index = localPropKeys.indexOf(propKey);
