@@ -8,13 +8,15 @@ var ComponentRegistry = require("./ComponentRegistry.bs.js");
 var name = "Text";
 
 function encoder(key, param, param$1, children) {
+  var props = param[0];
   return {
           key: key,
           value: /* `Text */[
             936573133,
             {
-              style: ProtoEncoders.encodeStyleOptional(param[0]),
-              children: $$Array.to_list(children)
+              style: ProtoEncoders.encodeStyleOptional(props),
+              children: $$Array.to_list(children),
+              numberOfLines: props.numberOfLines
             }
           ]
         };

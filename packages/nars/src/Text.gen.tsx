@@ -8,6 +8,6 @@ const TextBS = require('./Text.bs');
 import {t as Style_t} from './Style.gen';
 
 // tslint:disable-next-line:interface-over-type-literal
-export type props = { readonly style?: Style_t };
+export type props = { readonly numberOfLines?: number; readonly style?: Style_t };
 
 export const name: string = TextBS.name;

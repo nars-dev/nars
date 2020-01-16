@@ -58,6 +58,7 @@ message RawText {
 message Text {
   google_mirror.protobuf.Struct style = 1;
   repeated ReactElement children = 2;
+  Int32Value numberOfLines = 3;
 };
 
 message TextInput {

@@ -148,6 +148,7 @@ let startListening = (server: server, render) => {
           NarsReconciler.invokeCallback(~container, ~messageId, ~args)
         | (`Unmount(_), None)
         | (`Call(_), None) => ()
+        | (`not_set, _) => ()
         }
       | Error(error) =>
         Ocaml_protoc_plugin.Result.show_error(error) |> Js.Console.error

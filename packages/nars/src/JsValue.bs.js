@@ -108,23 +108,27 @@ function toValue(t) {
 }
 
 function valueToT(value) {
-  var variant = value[0];
-  if (variant >= -654604135) {
-    if (variant >= 258787964) {
-      if (variant >= 629889314) {
-        return undefined;
-      } else {
-        return value[1];
-      }
-    } else if (variant >= -483181849) {
-      return structToDict(value[1]);
-    } else {
-      return null;
-    }
-  } else if (variant !== -769490512) {
-    return value[1];
+  if (typeof value === "number") {
+    return undefined;
   } else {
-    return $$Array.of_list(List.map(valueToT, value[1]));
+    var variant = value[0];
+    if (variant >= -654604135) {
+      if (variant >= 258787964) {
+        if (variant >= 629889314) {
+          return undefined;
+        } else {
+          return value[1];
+        }
+      } else if (variant >= -483181849) {
+        return structToDict(value[1]);
+      } else {
+        return null;
+      }
+    } else if (variant !== -769490512) {
+      return value[1];
+    } else {
+      return $$Array.of_list(List.map(valueToT, value[1]));
+    }
   }
 }
 
@@ -149,7 +153,7 @@ function tToStruct(t) {
           Caml_builtin_exceptions.assert_failure,
           /* tuple */[
             "JsValue.re",
-            109,
+            110,
             9
           ]
         ];
@@ -167,7 +171,7 @@ function tToStruct(t) {
                           Caml_builtin_exceptions.assert_failure,
                           /* tuple */[
                             "JsValue.re",
-                            97,
+                            98,
                             9
                           ]
                         ];
@@ -176,7 +180,7 @@ function tToStruct(t) {
                           Caml_builtin_exceptions.assert_failure,
                           /* tuple */[
                             "JsValue.re",
-                            97,
+                            98,
                             9
                           ]
                         ];
@@ -194,7 +198,7 @@ function tToStruct(t) {
               Caml_builtin_exceptions.assert_failure,
               /* tuple */[
                 "JsValue.re",
-                109,
+                110,
                 9
               ]
             ];

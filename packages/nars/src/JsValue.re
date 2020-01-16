@@ -74,6 +74,7 @@ let rec valueToT = (value: Value.t) =>
   | `Undefined_value(_) => undefined
   | `Struct_value(s) => dictToT(structToDict(s))
   | `List_value(l) => arrayToT(List.map(valueToT, l) |> Array.of_list)
+  | `not_set => undefined
   }
 and structToDict = structDict => {
   let result = Js.Dict.empty();

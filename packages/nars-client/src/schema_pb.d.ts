@@ -274,6 +274,11 @@ export class Text extends jspb.Message {
   setChildrenList(value: Array<ReactElement>): void;
   addChildren(value?: ReactElement, index?: number): ReactElement;
 
+  hasNumberoflines(): boolean;
+  clearNumberoflines(): void;
+  getNumberoflines(): Int32Value | undefined;
+  setNumberoflines(value?: Int32Value): void;
+
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Text.AsObject;
   static toObject(includeInstance: boolean, msg: Text): Text.AsObject;
@@ -288,6 +293,7 @@ export namespace Text {
   export type AsObject = {
     style?: struct_pb.Struct.AsObject,
     childrenList: Array<ReactElement.AsObject>,
+    numberoflines?: Int32Value.AsObject,
   }
 }
 

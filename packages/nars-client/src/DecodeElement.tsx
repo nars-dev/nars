@@ -62,6 +62,9 @@ export const ofEncodedReactElement = (
     if (text.hasStyle()) {
       props.style = ofStruct(text.getStyle()!);
     }
+    if (text.hasNumberoflines()) {
+      props.numberOfLines = text.getNumberoflines()!.getValue();
+    }
     const children = getChildren(text);
     props.children = children;
     return React.createElement(Text, props, ...children);
