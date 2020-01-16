@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "dependencies": {
-    "nars": "1.0.0-alpha.8",
+    "nars": "1.0.0-alpha.9",
     "nars-client": "1.0.0-alpha.5"
   },
   "devDependencies": {
