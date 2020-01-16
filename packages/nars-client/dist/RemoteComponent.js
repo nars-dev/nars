@@ -67,17 +67,24 @@ const reactElementFromMessage = (message, localProps, instanceId, ws, retainedIn
     return message
         .getUpdate()
         .getElementList()
-        .map(elem => DecodeElement_1.ofEncodedReactElement((messageId, args) => {
-        const msg = new schema_pb_1.ClientToServer();
-        const call = new schema_pb_1.Call();
-        call.setMessageid(messageId);
-        call.setArgs(args);
-        msg.setCall(call);
-        msg.setRootid(instanceId);
-        ws.send(msg.serializeBinary());
-    }, key => {
-        return localProps[key];
-    }, elem, retainedInstances));
+        .map(elem => {
+        const x = DecodeElement_1.ofEncodedReactElement((messageId, args) => {
+            const msg = new schema_pb_1.ClientToServer();
+            const call = new schema_pb_1.Call();
+            call.setMessageid(messageId);
+            call.setArgs(args);
+            msg.setCall(call);
+            msg.setRootid(instanceId);
+            ws.send(msg.serializeBinary());
+        }, key => {
+            return localProps[key];
+        }, elem, retainedInstances);
+        if (x && x.hasOwnProperty("type") && x.type === undefined) {
+            console.log(elem);
+        }
+        ;
+        return x;
+    });
 };
 const connect = (ws, instanceId, onMessage) => {
     const eventListener = (event) => {

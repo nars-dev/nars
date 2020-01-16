@@ -6,7 +6,7 @@ import * as Nars from "nars-client";
 
 import { green } from "./Colors";
 
-const RemoteComponent = Nars.createRemoteComponent(
+const RemoteComponent = Nars.createRemoteComponentWithUrl(
   "ws://localhost:9000",
   config
 );

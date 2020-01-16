@@ -362,7 +362,7 @@ export const useWebSocket = (
         ws.addEventListener("close", handler);
         removeErrorListenerRef.current = () => {
           ws.removeEventListener("close", handler);
-        }
+        };
       } else if (removeErrorListenerRef.current) {
         removeErrorListenerRef.current();
       }
