@@ -22,6 +22,9 @@ const config = {
   TestComponentWithNestedWait: {
     waiting: InputProp.boolean,
   },
+  TestComponentWithSuspense: {
+    waiting: InputProp.boolean,
+  },
 };
 
 const WaitingComponent = (props: { waiting: boolean }) => {
@@ -39,6 +42,7 @@ const TestComponent = (props: { waiting: boolean }) => {
     return <TouchableOpacity />;
   }
 };
+
 const TestComponentWithNestedWait = (props: { waiting: boolean }) => {
   return (
     <View>
@@ -46,9 +50,36 @@ const TestComponentWithNestedWait = (props: { waiting: boolean }) => {
     </View>
   );
 };
+
+const SuspenseWaitingComponent = (props: { waiting: boolean }) => {
+  const resolver = React.useRef<(() => void) | undefined>(undefined);
+  React.useEffect(() => {
+    if (!props.waiting && resolver.current) {
+      resolver.current();
+      resolver.current = undefined;
+    }
+  }, [props.waiting]);
+
+  if (!resolver.current && props.waiting) {
+    throw new Promise(resolve => {
+      resolver.current = resolve;
+    });
+  }
+  return <TouchableOpacity />;
+};
+
+const TestComponentWithSuspense = (props: { waiting: boolean }) => {
+  return (
+    <React.Suspense fallback={<Wait />}>
+      <SuspenseWaitingComponent waiting={props.waiting} />
+    </React.Suspense>
+  );
+};
+
 const components = {
   TestComponent,
   TestComponentWithNestedWait,
+  TestComponentWithSuspense,
 };
 
 const [RemoteComponent, createServer] = createRemoteComponent(
@@ -139,6 +170,9 @@ describe("Updates", () => {
       });
       test("Nested", () => {
         runTest("TestComponentWithNestedWait");
+      });
+      test("Suspense", () => {
+        runTest("TestComponentWithSuspense");
       });
     });
   });
