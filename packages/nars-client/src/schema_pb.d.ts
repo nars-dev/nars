@@ -45,10 +45,44 @@ export namespace Int32Value {
   }
 }
 
-export class Callback extends jspb.Message {
-  getCallid(): number;
-  setCallid(value: number): void;
+export class LocalCallback extends jspb.Message {
+  getLocalkey(): string;
+  setLocalkey(value: string): void;
 
+  hasArgs(): boolean;
+  clearArgs(): void;
+  getArgs(): struct_pb.Struct | undefined;
+  setArgs(value?: struct_pb.Struct): void;
+
+  serializeBinary(): Uint8Array;
+  toObject(includeInstance?: boolean): LocalCallback.AsObject;
+  static toObject(includeInstance: boolean, msg: LocalCallback): LocalCallback.AsObject;
+  static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
+  static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
+  static serializeBinaryToWriter(message: LocalCallback, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): LocalCallback;
+  static deserializeBinaryFromReader(message: LocalCallback, reader: jspb.BinaryReader): LocalCallback;
+}
+
+export namespace LocalCallback {
+  export type AsObject = {
+    localkey: string,
+    args?: struct_pb.Struct.AsObject,
+  }
+}
+
+export class Callback extends jspb.Message {
+  hasRemote(): boolean;
+  clearRemote(): void;
+  getRemote(): number;
+  setRemote(value: number): void;
+
+  hasLocal(): boolean;
+  clearLocal(): void;
+  getLocal(): LocalCallback | undefined;
+  setLocal(value?: LocalCallback): void;
+
+  getValueCase(): Callback.ValueCase;
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): Callback.AsObject;
   static toObject(includeInstance: boolean, msg: Callback): Callback.AsObject;
@@ -61,7 +95,14 @@ export class Callback extends jspb.Message {
 
 export namespace Callback {
   export type AsObject = {
-    callid: number,
+    remote: number,
+    local?: LocalCallback.AsObject,
+  }
+
+  export enum ValueCase {
+    VALUE_NOT_SET = 0,
+    REMOTE = 1,
+    LOCAL = 2,
   }
 }
 
@@ -688,6 +729,11 @@ export class ServerToClient extends jspb.Message {
   getUpdate(): Update | undefined;
   setUpdate(value?: Update): void;
 
+  hasCall(): boolean;
+  clearCall(): void;
+  getCall(): Call | undefined;
+  setCall(value?: Call): void;
+
   hasAnimatedvalueupdate(): boolean;
   clearAnimatedvalueupdate(): void;
   getAnimatedvalueupdate(): nars_animated_pb.ValueUpdate | undefined;
@@ -709,6 +755,7 @@ export namespace ServerToClient {
     rootid: number,
     error?: Error.AsObject,
     update?: Update.AsObject,
+    call?: Call.AsObject,
     animatedvalueupdate?: nars_animated_pb.ValueUpdate.AsObject,
   }
 
@@ -716,6 +763,7 @@ export namespace ServerToClient {
     VALUE_NOT_SET = 0,
     ERROR = 2,
     UPDATE = 3,
+    CALL = 5,
     ANIMATEDVALUEUPDATE = 4,
   }
 }

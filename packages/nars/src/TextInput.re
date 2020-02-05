@@ -8,7 +8,7 @@ type props = {
   "placeholderTextColor": option(Js.null(string)),
   "placeholder": option(string),
   "value": string,
-  "onValueChange": option(string => unit),
+  "onValueChange": option(Callback.t(string)),
 };
 
 external props_unsafe_cast: Js.t('a) => props = "%identity";
@@ -31,12 +31,13 @@ let encoder =
           onValueChange:
             encodeOptional(props##onValueChange, callback =>
               encodeCallback(
-                ~registerCallback=bridge.Instance.registerCallback,
-                ~callback=args => {
-                callback(
-                  StructDecoders.(getFieldExn("value", args, getString)),
-                )
-              })
+                ~bridge,
+                ~callback=
+                  Callback.map(
+                    ~f=StructDecoders.(getValueField(getString)),
+                    callback,
+                  ),
+              )
             ),
           localProps: [],
         },

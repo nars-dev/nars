@@ -55,7 +55,7 @@ var Int32Value = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var Callback = Caml_module.init_mod(/* tuple */[
+var LocalCallback = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       74,
       6
@@ -74,7 +74,7 @@ var Callback = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var LocalProp = Caml_module.init_mod(/* tuple */[
+var Callback = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       95,
       6
@@ -93,7 +93,7 @@ var LocalProp = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var FloatValue = Caml_module.init_mod(/* tuple */[
+var LocalProp = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       116,
       6
@@ -112,7 +112,7 @@ var FloatValue = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var CustomComponent = Caml_module.init_mod(/* tuple */[
+var FloatValue = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       137,
       6
@@ -131,7 +131,7 @@ var CustomComponent = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var View = Caml_module.init_mod(/* tuple */[
+var CustomComponent = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       158,
       6
@@ -150,7 +150,7 @@ var View = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var FlatList = Caml_module.init_mod(/* tuple */[
+var View = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       179,
       6
@@ -169,7 +169,7 @@ var FlatList = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var TouchableOpacity = Caml_module.init_mod(/* tuple */[
+var FlatList = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       200,
       6
@@ -188,7 +188,7 @@ var TouchableOpacity = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var RawText = Caml_module.init_mod(/* tuple */[
+var TouchableOpacity = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       221,
       6
@@ -207,7 +207,7 @@ var RawText = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var $$Text = Caml_module.init_mod(/* tuple */[
+var RawText = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       242,
       6
@@ -226,7 +226,7 @@ var $$Text = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var TextInput = Caml_module.init_mod(/* tuple */[
+var $$Text = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       263,
       6
@@ -245,7 +245,7 @@ var TextInput = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var Switch = Caml_module.init_mod(/* tuple */[
+var TextInput = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       284,
       6
@@ -264,7 +264,7 @@ var Switch = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var $$Image = Caml_module.init_mod(/* tuple */[
+var Switch = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       305,
       6
@@ -283,7 +283,7 @@ var $$Image = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var ReactElement = Caml_module.init_mod(/* tuple */[
+var $$Image = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       326,
       6
@@ -302,7 +302,7 @@ var ReactElement = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var Unmount = Caml_module.init_mod(/* tuple */[
+var ReactElement = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       347,
       6
@@ -321,7 +321,7 @@ var Unmount = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var Render = Caml_module.init_mod(/* tuple */[
+var Unmount = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       368,
       6
@@ -340,7 +340,7 @@ var Render = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var Call = Caml_module.init_mod(/* tuple */[
+var Render = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       389,
       6
@@ -359,7 +359,7 @@ var Call = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var ClientToServer = Caml_module.init_mod(/* tuple */[
+var Call = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       410,
       6
@@ -378,7 +378,7 @@ var ClientToServer = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var $$Error = Caml_module.init_mod(/* tuple */[
+var ClientToServer = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       431,
       6
@@ -397,7 +397,7 @@ var $$Error = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var Update = Caml_module.init_mod(/* tuple */[
+var $$Error = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       452,
       6
@@ -416,7 +416,7 @@ var Update = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var ServerToClient = Caml_module.init_mod(/* tuple */[
+var Update = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       473,
       6
@@ -435,7 +435,7 @@ var ServerToClient = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var AnimatedView = Caml_module.init_mod(/* tuple */[
+var ServerToClient = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       494,
       6
@@ -454,7 +454,7 @@ var AnimatedView = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var AnimatedText = Caml_module.init_mod(/* tuple */[
+var AnimatedView = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       515,
       6
@@ -473,9 +473,28 @@ var AnimatedText = Caml_module.init_mod(/* tuple */[
           ]
         ]]));
 
-var AnimatedImage = Caml_module.init_mod(/* tuple */[
+var AnimatedText = Caml_module.init_mod(/* tuple */[
       "schema.ml",
       536,
+      6
+    ], /* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Function */0,
+            "name'"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "to_proto"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "from_proto"
+          ]
+        ]]));
+
+var AnimatedImage = Caml_module.init_mod(/* tuple */[
+      "schema.ml",
+      557,
       6
     ], /* Module */Block.__(0, [/* array */[
           /* tuple */[
@@ -595,30 +614,45 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
     });
 
 function name$prime$2(param) {
-  return "schema.Callback";
+  return "schema.LocalCallback";
 }
 
 var spec$4 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Serialize.C.int32_int,
+          Spec$Ocamlprotocplugin.Serialize.C.string,
           Spec$Ocamlprotocplugin.Serialize.C.proto3
-        ]), Spec$Ocamlprotocplugin.Serialize.C.nil);
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                      return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
+                    }))
+            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
 
 var serialize$2 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$4);
 
 function to_proto$2(t) {
-  return Curry._2(serialize$2, /* [] */0, t);
+  var f$prime = serialize$2;
+  var param = t;
+  return Curry._3(f$prime, /* [] */0, param.localKey, param.args);
 }
 
-function constructor$2(_extensions, a) {
-  return a;
+function constructor$2(_extensions, localKey, args) {
+  return {
+          localKey: localKey,
+          args: args
+        };
 }
 
 var spec$5 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Deserialize.C.int32_int,
+          Spec$Ocamlprotocplugin.Deserialize.C.string,
           Spec$Ocamlprotocplugin.Deserialize.C.proto3
-        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                      return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
+                    }))
+            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 
 var deserialize$2 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$5, constructor$2);
 
@@ -639,50 +673,73 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), Callback, {
+        ]]), LocalCallback, {
       name$prime: name$prime$2,
       to_proto: to_proto$2,
       from_proto: from_proto$2
     });
 
 function name$prime$3(param) {
-  return "schema.LocalProp";
+  return "schema.Callback";
 }
 
-var spec$6 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
-          1,
-          Spec$Ocamlprotocplugin.Serialize.C.string,
-          Spec$Ocamlprotocplugin.Serialize.C.proto3
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
-              2,
-              Spec$Ocamlprotocplugin.Serialize.C.string,
-              Spec$Ocamlprotocplugin.Serialize.C.proto3
-            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+var spec$6 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof, (function (param) {
+            if (typeof param === "number") {
+              return Pervasives.failwith("This case should never _ever_ happen");
+            } else if (param[0] >= 958205606) {
+              return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                          1,
+                          Spec$Ocamlprotocplugin.Serialize.C.int32_int,
+                          param[1]
+                        ]);
+            } else {
+              return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                          2,
+                          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                                  return Curry._1(LocalCallback.to_proto, t);
+                                })),
+                          param[1]
+                        ]);
+            }
+          })), Spec$Ocamlprotocplugin.Serialize.C.nil);
 
 var serialize$3 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$6);
 
 function to_proto$3(t) {
-  var f$prime = serialize$3;
-  var param = t;
-  return Curry._3(f$prime, /* [] */0, param.localKey, param.propKey);
+  return Curry._2(serialize$3, /* [] */0, t);
 }
 
-function constructor$3(_extensions, localKey, propKey) {
-  return {
-          localKey: localKey,
-          propKey: propKey
-        };
+function constructor$3(_extensions, a) {
+  return a;
 }
 
-var spec$7 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
-          1,
-          Spec$Ocamlprotocplugin.Deserialize.C.string,
-          Spec$Ocamlprotocplugin.Deserialize.C.proto3
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
-              2,
-              Spec$Ocamlprotocplugin.Deserialize.C.string,
-              Spec$Ocamlprotocplugin.Deserialize.C.proto3
-            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+var spec$7 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.oneof, /* :: */[
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.oneof_elem, /* tuple */[
+                1,
+                Spec$Ocamlprotocplugin.Deserialize.C.int32_int,
+                (function (v) {
+                    return /* `Remote */[
+                            958205606,
+                            v
+                          ];
+                  })
+              ]),
+          /* :: */[
+            Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.oneof_elem, /* tuple */[
+                  2,
+                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                          return Curry._1(LocalCallback.from_proto, t);
+                        })),
+                  (function (v) {
+                      return /* `Local */[
+                              203307339,
+                              v
+                            ];
+                    })
+                ]),
+            /* [] */0
+          ]
+        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
 
 var deserialize$3 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$7, constructor$3);
 
@@ -703,37 +760,50 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), LocalProp, {
+        ]]), Callback, {
       name$prime: name$prime$3,
       to_proto: to_proto$3,
       from_proto: from_proto$3
     });
 
 function name$prime$4(param) {
-  return "schema.FloatValue";
+  return "schema.LocalProp";
 }
 
 var spec$8 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Serialize.C.$$float,
+          Spec$Ocamlprotocplugin.Serialize.C.string,
           Spec$Ocamlprotocplugin.Serialize.C.proto3
-        ]), Spec$Ocamlprotocplugin.Serialize.C.nil);
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
+              2,
+              Spec$Ocamlprotocplugin.Serialize.C.string,
+              Spec$Ocamlprotocplugin.Serialize.C.proto3
+            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
 
 var serialize$4 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$8);
 
 function to_proto$4(t) {
-  return Curry._2(serialize$4, /* [] */0, t);
+  var f$prime = serialize$4;
+  var param = t;
+  return Curry._3(f$prime, /* [] */0, param.localKey, param.propKey);
 }
 
-function constructor$4(_extensions, a) {
-  return a;
+function constructor$4(_extensions, localKey, propKey) {
+  return {
+          localKey: localKey,
+          propKey: propKey
+        };
 }
 
 var spec$9 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Deserialize.C.$$float,
+          Spec$Ocamlprotocplugin.Deserialize.C.string,
           Spec$Ocamlprotocplugin.Deserialize.C.proto3
-        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+              2,
+              Spec$Ocamlprotocplugin.Deserialize.C.string,
+              Spec$Ocamlprotocplugin.Deserialize.C.proto3
+            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 
 var deserialize$4 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$9, constructor$4);
 
@@ -754,50 +824,37 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), FloatValue, {
+        ]]), LocalProp, {
       name$prime: name$prime$4,
       to_proto: to_proto$4,
       from_proto: from_proto$4
     });
 
 function name$prime$5(param) {
-  return "schema.CustomComponent";
+  return "schema.FloatValue";
 }
 
 var spec$10 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Serialize.C.string,
+          Spec$Ocamlprotocplugin.Serialize.C.$$float,
           Spec$Ocamlprotocplugin.Serialize.C.proto3
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
-              2,
-              Spec$Ocamlprotocplugin.Serialize.C.bytes,
-              Spec$Ocamlprotocplugin.Serialize.C.proto3
-            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+        ]), Spec$Ocamlprotocplugin.Serialize.C.nil);
 
 var serialize$5 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$10);
 
 function to_proto$5(t) {
-  var f$prime = serialize$5;
-  var param = t;
-  return Curry._3(f$prime, /* [] */0, param.type_id, param.contents);
+  return Curry._2(serialize$5, /* [] */0, t);
 }
 
-function constructor$5(_extensions, type_id, contents) {
-  return {
-          type_id: type_id,
-          contents: contents
-        };
+function constructor$5(_extensions, a) {
+  return a;
 }
 
 var spec$11 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Deserialize.C.string,
+          Spec$Ocamlprotocplugin.Deserialize.C.$$float,
           Spec$Ocamlprotocplugin.Deserialize.C.proto3
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
-              2,
-              Spec$Ocamlprotocplugin.Deserialize.C.bytes,
-              Spec$Ocamlprotocplugin.Deserialize.C.proto3
-            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
 
 var deserialize$5 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$11, constructor$5);
 
@@ -818,27 +875,24 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), CustomComponent, {
+        ]]), FloatValue, {
       name$prime: name$prime$5,
       to_proto: to_proto$5,
       from_proto: from_proto$5
     });
 
 function name$prime$6(param) {
-  return "schema.View";
+  return "schema.CustomComponent";
 }
 
-var spec$12 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+var spec$12 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
-          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
+          Spec$Ocamlprotocplugin.Serialize.C.string,
+          Spec$Ocamlprotocplugin.Serialize.C.proto3
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
               2,
-              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.to_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Serialize.C.not_packed
+              Spec$Ocamlprotocplugin.Serialize.C.bytes,
+              Spec$Ocamlprotocplugin.Serialize.C.proto3
             ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
 
 var serialize$6 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$12);
@@ -846,27 +900,24 @@ var serialize$6 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$12);
 function to_proto$6(t) {
   var f$prime = serialize$6;
   var param = t;
-  return Curry._3(f$prime, /* [] */0, param.style, param.children);
+  return Curry._3(f$prime, /* [] */0, param.type_id, param.contents);
 }
 
-function constructor$6(_extensions, style, children) {
+function constructor$6(_extensions, type_id, contents) {
   return {
-          style: style,
-          children: children
+          type_id: type_id,
+          contents: contents
         };
 }
 
-var spec$13 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+var spec$13 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
-          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
+          Spec$Ocamlprotocplugin.Deserialize.C.string,
+          Spec$Ocamlprotocplugin.Deserialize.C.proto3
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
               2,
-              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.from_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
+              Spec$Ocamlprotocplugin.Deserialize.C.bytes,
+              Spec$Ocamlprotocplugin.Deserialize.C.proto3
             ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 
 var deserialize$6 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$13, constructor$6);
@@ -888,17 +939,87 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), View, {
+        ]]), CustomComponent, {
       name$prime: name$prime$6,
       to_proto: to_proto$6,
       from_proto: from_proto$6
     });
 
 function name$prime$7(param) {
-  return "schema.FlatList";
+  return "schema.View";
 }
 
 var spec$14 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.to_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Serialize.C.not_packed
+            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+
+var serialize$7 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$14);
+
+function to_proto$7(t) {
+  var f$prime = serialize$7;
+  var param = t;
+  return Curry._3(f$prime, /* [] */0, param.style, param.children);
+}
+
+function constructor$7(_extensions, style, children) {
+  return {
+          style: style,
+          children: children
+        };
+}
+
+var spec$15 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.from_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
+            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+
+var deserialize$7 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$15, constructor$7);
+
+function from_proto$7(writer) {
+  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$7, writer));
+}
+
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Function */0,
+            "name'"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "to_proto"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "from_proto"
+          ]
+        ]]), View, {
+      name$prime: name$prime$7,
+      to_proto: to_proto$7,
+      from_proto: from_proto$7
+    });
+
+function name$prime$8(param) {
+  return "schema.FlatList";
+}
+
+var spec$16 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
           1,
           Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
                   return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
@@ -927,15 +1048,15 @@ var spec$14 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                           Spec$Ocamlprotocplugin.Serialize.C.not_packed
                         ]), Spec$Ocamlprotocplugin.Serialize.C.nil)))));
 
-var serialize$7 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$14);
+var serialize$8 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$16);
 
-function to_proto$7(t) {
-  var f$prime = serialize$7;
+function to_proto$8(t) {
+  var f$prime = serialize$8;
   var param = t;
   return Curry._6(f$prime, /* [] */0, param.style, param.onEndReached, param.onEndReachedThreshold, param.children, param.localProps);
 }
 
-function constructor$7(_extensions, style, onEndReached, onEndReachedThreshold, children, localProps) {
+function constructor$8(_extensions, style, onEndReached, onEndReachedThreshold, children, localProps) {
   return {
           style: style,
           onEndReached: onEndReached,
@@ -945,7 +1066,7 @@ function constructor$7(_extensions, style, onEndReached, onEndReachedThreshold, 
         };
 }
 
-var spec$15 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+var spec$17 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
           1,
           Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
                   return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
@@ -974,89 +1095,6 @@ var spec$15 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
                           Spec$Ocamlprotocplugin.Deserialize.C.not_packed
                         ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)))));
 
-var deserialize$7 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$15, constructor$7);
-
-function from_proto$7(writer) {
-  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$7, writer));
-}
-
-Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
-          /* tuple */[
-            /* Function */0,
-            "name'"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "to_proto"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "from_proto"
-          ]
-        ]]), FlatList, {
-      name$prime: name$prime$7,
-      to_proto: to_proto$7,
-      from_proto: from_proto$7
-    });
-
-function name$prime$8(param) {
-  return "schema.TouchableOpacity";
-}
-
-var spec$16 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                  return Curry._1(Callback.to_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.to_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Serialize.C.not_packed
-            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
-                  3,
-                  Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                          return Curry._1(LocalProp.to_proto, t);
-                        })),
-                  Spec$Ocamlprotocplugin.Serialize.C.not_packed
-                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
-
-var serialize$8 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$16);
-
-function to_proto$8(t) {
-  var f$prime = serialize$8;
-  var param = t;
-  return Curry._4(f$prime, /* [] */0, param.onPress, param.children, param.localProps);
-}
-
-function constructor$8(_extensions, onPress, children, localProps) {
-  return {
-          onPress: onPress,
-          children: children,
-          localProps: localProps
-        };
-}
-
-var spec$17 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                  return Curry._1(Callback.from_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.from_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
-            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
-                  3,
-                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                          return Curry._1(LocalProp.from_proto, t);
-                        })),
-                  Spec$Ocamlprotocplugin.Deserialize.C.not_packed
-                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
-
 var deserialize$8 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$17, constructor$8);
 
 function from_proto$8(writer) {
@@ -1076,37 +1114,69 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), TouchableOpacity, {
+        ]]), FlatList, {
       name$prime: name$prime$8,
       to_proto: to_proto$8,
       from_proto: from_proto$8
     });
 
 function name$prime$9(param) {
-  return "schema.RawText";
+  return "schema.TouchableOpacity";
 }
 
-var spec$18 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
+var spec$18 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Serialize.C.string,
-          Spec$Ocamlprotocplugin.Serialize.C.proto3
-        ]), Spec$Ocamlprotocplugin.Serialize.C.nil);
+          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                  return Curry._1(Callback.to_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.to_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Serialize.C.not_packed
+            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
+                  3,
+                  Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                          return Curry._1(LocalProp.to_proto, t);
+                        })),
+                  Spec$Ocamlprotocplugin.Serialize.C.not_packed
+                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
 
 var serialize$9 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$18);
 
 function to_proto$9(t) {
-  return Curry._2(serialize$9, /* [] */0, t);
+  var f$prime = serialize$9;
+  var param = t;
+  return Curry._4(f$prime, /* [] */0, param.onPress, param.children, param.localProps);
 }
 
-function constructor$9(_extensions, a) {
-  return a;
+function constructor$9(_extensions, onPress, children, localProps) {
+  return {
+          onPress: onPress,
+          children: children,
+          localProps: localProps
+        };
 }
 
-var spec$19 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+var spec$19 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Deserialize.C.string,
-          Spec$Ocamlprotocplugin.Deserialize.C.proto3
-        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                  return Curry._1(Callback.from_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.from_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
+            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
+                  3,
+                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                          return Curry._1(LocalProp.from_proto, t);
+                        })),
+                  Spec$Ocamlprotocplugin.Deserialize.C.not_packed
+                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
 
 var deserialize$9 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$19, constructor$9);
 
@@ -1127,67 +1197,37 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), RawText, {
+        ]]), TouchableOpacity, {
       name$prime: name$prime$9,
       to_proto: to_proto$9,
       from_proto: from_proto$9
     });
 
 function name$prime$10(param) {
-  return "schema.Text";
+  return "schema.RawText";
 }
 
-var spec$20 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+var spec$20 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
-          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.to_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Serialize.C.not_packed
-            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
-                  3,
-                  Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                          return Curry._1(Int32Value.to_proto, t);
-                        }))
-                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
+          Spec$Ocamlprotocplugin.Serialize.C.string,
+          Spec$Ocamlprotocplugin.Serialize.C.proto3
+        ]), Spec$Ocamlprotocplugin.Serialize.C.nil);
 
 var serialize$10 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$20);
 
 function to_proto$10(t) {
-  var f$prime = serialize$10;
-  var param = t;
-  return Curry._4(f$prime, /* [] */0, param.style, param.children, param.numberOfLines);
+  return Curry._2(serialize$10, /* [] */0, t);
 }
 
-function constructor$10(_extensions, style, children, numberOfLines) {
-  return {
-          style: style,
-          children: children,
-          numberOfLines: numberOfLines
-        };
+function constructor$10(_extensions, a) {
+  return a;
 }
 
-var spec$21 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+var spec$21 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
-          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.from_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
-            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
-                  3,
-                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                          return Curry._1(Int32Value.from_proto, t);
-                        }))
-                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
+          Spec$Ocamlprotocplugin.Deserialize.C.string,
+          Spec$Ocamlprotocplugin.Deserialize.C.proto3
+        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
 
 var deserialize$10 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$21, constructor$10);
 
@@ -1208,17 +1248,98 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), $$Text, {
+        ]]), RawText, {
       name$prime: name$prime$10,
       to_proto: to_proto$10,
       from_proto: from_proto$10
     });
 
 function name$prime$11(param) {
-  return "schema.TextInput";
+  return "schema.Text";
 }
 
 var spec$22 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.to_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Serialize.C.not_packed
+            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+                  3,
+                  Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                          return Curry._1(Int32Value.to_proto, t);
+                        }))
+                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
+
+var serialize$11 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$22);
+
+function to_proto$11(t) {
+  var f$prime = serialize$11;
+  var param = t;
+  return Curry._4(f$prime, /* [] */0, param.style, param.children, param.numberOfLines);
+}
+
+function constructor$11(_extensions, style, children, numberOfLines) {
+  return {
+          style: style,
+          children: children,
+          numberOfLines: numberOfLines
+        };
+}
+
+var spec$23 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.from_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
+            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+                  3,
+                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                          return Curry._1(Int32Value.from_proto, t);
+                        }))
+                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
+
+var deserialize$11 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$23, constructor$11);
+
+function from_proto$11(writer) {
+  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$11, writer));
+}
+
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Function */0,
+            "name'"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "to_proto"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "from_proto"
+          ]
+        ]]), $$Text, {
+      name$prime: name$prime$11,
+      to_proto: to_proto$11,
+      from_proto: from_proto$11
+    });
+
+function name$prime$12(param) {
+  return "schema.TextInput";
+}
+
+var spec$24 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
           1,
           Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
                   return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
@@ -1250,15 +1371,15 @@ var spec$22 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                                     }))
                             ]), Spec$Ocamlprotocplugin.Serialize.C.nil))))));
 
-var serialize$11 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$22);
+var serialize$12 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$24);
 
-function to_proto$11(t) {
-  var f$prime = serialize$11;
+function to_proto$12(t) {
+  var f$prime = serialize$12;
   var param = t;
   return Curry._7(f$prime, /* [] */0, param.style, param.placeholderTextColor, param.placeholder, param.value, param.localProps, param.onValueChange);
 }
 
-function constructor$11(_extensions, style, placeholderTextColor, placeholder, value, localProps, onValueChange) {
+function constructor$12(_extensions, style, placeholderTextColor, placeholder, value, localProps, onValueChange) {
   return {
           style: style,
           placeholderTextColor: placeholderTextColor,
@@ -1269,7 +1390,7 @@ function constructor$11(_extensions, style, placeholderTextColor, placeholder, v
         };
 }
 
-var spec$23 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+var spec$25 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
           1,
           Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
                   return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
@@ -1301,83 +1422,6 @@ var spec$23 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
                                     }))
                             ]), Spec$Ocamlprotocplugin.Deserialize.C.nil))))));
 
-var deserialize$11 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$23, constructor$11);
-
-function from_proto$11(writer) {
-  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$11, writer));
-}
-
-Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
-          /* tuple */[
-            /* Function */0,
-            "name'"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "to_proto"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "from_proto"
-          ]
-        ]]), TextInput, {
-      name$prime: name$prime$11,
-      to_proto: to_proto$11,
-      from_proto: from_proto$11
-    });
-
-function name$prime$12(param) {
-  return "schema.Switch";
-}
-
-var spec$24 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
-              2,
-              Spec$Ocamlprotocplugin.Serialize.C.bool,
-              Spec$Ocamlprotocplugin.Serialize.C.proto3
-            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
-                  3,
-                  Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                          return Curry._1(Callback.to_proto, t);
-                        }))
-                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
-
-var serialize$12 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$24);
-
-function to_proto$12(t) {
-  var f$prime = serialize$12;
-  var param = t;
-  return Curry._4(f$prime, /* [] */0, param.style, param.value, param.onValueChange);
-}
-
-function constructor$12(_extensions, style, value, onValueChange) {
-  return {
-          style: style,
-          value: value,
-          onValueChange: onValueChange
-        };
-}
-
-var spec$25 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
-              2,
-              Spec$Ocamlprotocplugin.Deserialize.C.bool,
-              Spec$Ocamlprotocplugin.Deserialize.C.proto3
-            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
-                  3,
-                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                          return Curry._1(Callback.from_proto, t);
-                        }))
-                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
-
 var deserialize$12 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$25, constructor$12);
 
 function from_proto$12(writer) {
@@ -1397,14 +1441,14 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), Switch, {
+        ]]), TextInput, {
       name$prime: name$prime$12,
       to_proto: to_proto$12,
       from_proto: from_proto$12
     });
 
 function name$prime$13(param) {
-  return "schema.Image";
+  return "schema.Switch";
 }
 
 var spec$26 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
@@ -1414,22 +1458,28 @@ var spec$26 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                 }))
         ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
               2,
-              Spec$Ocamlprotocplugin.Serialize.C.string,
+              Spec$Ocamlprotocplugin.Serialize.C.bool,
               Spec$Ocamlprotocplugin.Serialize.C.proto3
-            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+                  3,
+                  Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                          return Curry._1(Callback.to_proto, t);
+                        }))
+                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
 
 var serialize$13 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$26);
 
 function to_proto$13(t) {
   var f$prime = serialize$13;
   var param = t;
-  return Curry._3(f$prime, /* [] */0, param.style, param.sourceURLString);
+  return Curry._4(f$prime, /* [] */0, param.style, param.value, param.onValueChange);
 }
 
-function constructor$13(_extensions, style, sourceURLString) {
+function constructor$13(_extensions, style, value, onValueChange) {
   return {
           style: style,
-          sourceURLString: sourceURLString
+          value: value,
+          onValueChange: onValueChange
         };
 }
 
@@ -1440,9 +1490,14 @@ var spec$27 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
                 }))
         ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
               2,
-              Spec$Ocamlprotocplugin.Deserialize.C.string,
+              Spec$Ocamlprotocplugin.Deserialize.C.bool,
               Spec$Ocamlprotocplugin.Deserialize.C.proto3
-            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+                  3,
+                  Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                          return Curry._1(Callback.from_proto, t);
+                        }))
+                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
 
 var deserialize$13 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$27, constructor$13);
 
@@ -1463,17 +1518,83 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), $$Image, {
+        ]]), Switch, {
       name$prime: name$prime$13,
       to_proto: to_proto$13,
       from_proto: from_proto$13
     });
 
 function name$prime$14(param) {
-  return "schema.ReactElement";
+  return "schema.Image";
 }
 
 var spec$28 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
+              2,
+              Spec$Ocamlprotocplugin.Serialize.C.string,
+              Spec$Ocamlprotocplugin.Serialize.C.proto3
+            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+
+var serialize$14 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$28);
+
+function to_proto$14(t) {
+  var f$prime = serialize$14;
+  var param = t;
+  return Curry._3(f$prime, /* [] */0, param.style, param.sourceURLString);
+}
+
+function constructor$14(_extensions, style, sourceURLString) {
+  return {
+          style: style,
+          sourceURLString: sourceURLString
+        };
+}
+
+var spec$29 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                  return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+              2,
+              Spec$Ocamlprotocplugin.Deserialize.C.string,
+              Spec$Ocamlprotocplugin.Deserialize.C.proto3
+            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+
+var deserialize$14 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$29, constructor$14);
+
+function from_proto$14(writer) {
+  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$14, writer));
+}
+
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Function */0,
+            "name'"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "to_proto"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "from_proto"
+          ]
+        ]]), $$Image, {
+      name$prime: name$prime$14,
+      to_proto: to_proto$14,
+      from_proto: from_proto$14
+    });
+
+function name$prime$15(param) {
+  return "schema.ReactElement";
+}
+
+var spec$30 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
           1,
           Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
                   return Curry._1(StringValue.to_proto, t);
@@ -1593,22 +1714,22 @@ var spec$28 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                 }
               })), Spec$Ocamlprotocplugin.Serialize.C.nil));
 
-var serialize$14 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$28);
+var serialize$15 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$30);
 
-function to_proto$14(t) {
-  var f$prime = serialize$14;
+function to_proto$15(t) {
+  var f$prime = serialize$15;
   var param = t;
   return Curry._3(f$prime, /* [] */0, param.key, param.value);
 }
 
-function constructor$14(_extensions, key, value) {
+function constructor$15(_extensions, key, value) {
   return {
           key: key,
           value: value
         };
 }
 
-var spec$29 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+var spec$31 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
           1,
           Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
                   return Curry._1(StringValue.from_proto, t);
@@ -1783,49 +1904,6 @@ var spec$29 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
               ]
             ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 
-var deserialize$14 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$29, constructor$14);
-
-function from_proto$14(writer) {
-  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$14, writer));
-}
-
-Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
-          /* tuple */[
-            /* Function */0,
-            "name'"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "to_proto"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "from_proto"
-          ]
-        ]]), ReactElement, {
-      name$prime: name$prime$14,
-      to_proto: to_proto$14,
-      from_proto: from_proto$14
-    });
-
-function name$prime$15(param) {
-  return "schema.Unmount";
-}
-
-var spec$30 = Spec$Ocamlprotocplugin.Serialize.C.nil;
-
-var serialize$15 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$30);
-
-function to_proto$15(t) {
-  return Curry._1(serialize$15, /* [] */0);
-}
-
-function constructor$15(_extension) {
-  return /* () */0;
-}
-
-var spec$31 = Spec$Ocamlprotocplugin.Deserialize.C.nil;
-
 var deserialize$15 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$31, constructor$15);
 
 function from_proto$15(writer) {
@@ -1845,61 +1923,29 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), Unmount, {
+        ]]), ReactElement, {
       name$prime: name$prime$15,
       to_proto: to_proto$15,
       from_proto: from_proto$15
     });
 
 function name$prime$16(param) {
-  return "schema.Render";
+  return "schema.Unmount";
 }
 
-var spec$32 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
-          1,
-          Spec$Ocamlprotocplugin.Serialize.C.string,
-          Spec$Ocamlprotocplugin.Serialize.C.proto3
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                      return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
-                    }))
-            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
-                  3,
-                  Spec$Ocamlprotocplugin.Serialize.C.string,
-                  Spec$Ocamlprotocplugin.Serialize.C.packed
-                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
+var spec$32 = Spec$Ocamlprotocplugin.Serialize.C.nil;
 
 var serialize$16 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$32);
 
 function to_proto$16(t) {
-  var f$prime = serialize$16;
-  var param = t;
-  return Curry._4(f$prime, /* [] */0, param.name, param.props, param.localProps);
+  return Curry._1(serialize$16, /* [] */0);
 }
 
-function constructor$16(_extensions, name, props, localProps) {
-  return {
-          name: name,
-          props: props,
-          localProps: localProps
-        };
+function constructor$16(_extension) {
+  return /* () */0;
 }
 
-var spec$33 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
-          1,
-          Spec$Ocamlprotocplugin.Deserialize.C.string,
-          Spec$Ocamlprotocplugin.Deserialize.C.proto3
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                      return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
-                    }))
-            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
-                  3,
-                  Spec$Ocamlprotocplugin.Deserialize.C.string,
-                  Spec$Ocamlprotocplugin.Deserialize.C.packed
-                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
+var spec$33 = Spec$Ocamlprotocplugin.Deserialize.C.nil;
 
 var deserialize$16 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$33, constructor$16);
 
@@ -1920,52 +1966,61 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), Render, {
+        ]]), Unmount, {
       name$prime: name$prime$16,
       to_proto: to_proto$16,
       from_proto: from_proto$16
     });
 
 function name$prime$17(param) {
-  return "schema.Call";
+  return "schema.Render";
 }
 
 var spec$34 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Serialize.C.int32_int,
+          Spec$Ocamlprotocplugin.Serialize.C.string,
           Spec$Ocamlprotocplugin.Serialize.C.proto3
         ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
               2,
               Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
                       return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
                     }))
-            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+            ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
+                  3,
+                  Spec$Ocamlprotocplugin.Serialize.C.string,
+                  Spec$Ocamlprotocplugin.Serialize.C.packed
+                ]), Spec$Ocamlprotocplugin.Serialize.C.nil)));
 
 var serialize$17 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$34);
 
 function to_proto$17(t) {
   var f$prime = serialize$17;
   var param = t;
-  return Curry._3(f$prime, /* [] */0, param.messageId, param.args);
+  return Curry._4(f$prime, /* [] */0, param.name, param.props, param.localProps);
 }
 
-function constructor$17(_extensions, messageId, args) {
+function constructor$17(_extensions, name, props, localProps) {
   return {
-          messageId: messageId,
-          args: args
+          name: name,
+          props: props,
+          localProps: localProps
         };
 }
 
 var spec$35 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
-          Spec$Ocamlprotocplugin.Deserialize.C.int32_int,
+          Spec$Ocamlprotocplugin.Deserialize.C.string,
           Spec$Ocamlprotocplugin.Deserialize.C.proto3
         ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
               2,
               Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
                       return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
                     }))
-            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+            ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
+                  3,
+                  Spec$Ocamlprotocplugin.Deserialize.C.string,
+                  Spec$Ocamlprotocplugin.Deserialize.C.packed
+                ]), Spec$Ocamlprotocplugin.Deserialize.C.nil)));
 
 var deserialize$17 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$35, constructor$17);
 
@@ -1986,17 +2041,83 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), Call, {
+        ]]), Render, {
       name$prime: name$prime$17,
       to_proto: to_proto$17,
       from_proto: from_proto$17
     });
 
 function name$prime$18(param) {
-  return "schema.ClientToServer";
+  return "schema.Call";
 }
 
 var spec$36 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
+          1,
+          Spec$Ocamlprotocplugin.Serialize.C.int32_int,
+          Spec$Ocamlprotocplugin.Serialize.C.proto3
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                      return Curry._1(Struct.Google_mirror.Protobuf.Struct.to_proto, t);
+                    }))
+            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+
+var serialize$18 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$36);
+
+function to_proto$18(t) {
+  var f$prime = serialize$18;
+  var param = t;
+  return Curry._3(f$prime, /* [] */0, param.messageId, param.args);
+}
+
+function constructor$18(_extensions, messageId, args) {
+  return {
+          messageId: messageId,
+          args: args
+        };
+}
+
+var spec$37 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+          1,
+          Spec$Ocamlprotocplugin.Deserialize.C.int32_int,
+          Spec$Ocamlprotocplugin.Deserialize.C.proto3
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+              2,
+              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                      return Curry._1(Struct.Google_mirror.Protobuf.Struct.from_proto, t);
+                    }))
+            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+
+var deserialize$18 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$37, constructor$18);
+
+function from_proto$18(writer) {
+  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$18, writer));
+}
+
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Function */0,
+            "name'"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "to_proto"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "from_proto"
+          ]
+        ]]), Call, {
+      name$prime: name$prime$18,
+      to_proto: to_proto$18,
+      from_proto: from_proto$18
+    });
+
+function name$prime$19(param) {
+  return "schema.ClientToServer";
+}
+
+var spec$38 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
           Spec$Ocamlprotocplugin.Serialize.C.int32_int,
           Spec$Ocamlprotocplugin.Serialize.C.proto3
@@ -2035,22 +2156,22 @@ var spec$36 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                 }
               })), Spec$Ocamlprotocplugin.Serialize.C.nil));
 
-var serialize$18 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$36);
+var serialize$19 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$38);
 
-function to_proto$18(t) {
-  var f$prime = serialize$18;
+function to_proto$19(t) {
+  var f$prime = serialize$19;
   var param = t;
   return Curry._3(f$prime, /* [] */0, param.rootId, param.value);
 }
 
-function constructor$18(_extensions, rootId, value) {
+function constructor$19(_extensions, rootId, value) {
   return {
           rootId: rootId,
           value: value
         };
 }
 
-var spec$37 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+var spec$39 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
           Spec$Ocamlprotocplugin.Deserialize.C.int32_int,
           Spec$Ocamlprotocplugin.Deserialize.C.proto3
@@ -2098,49 +2219,6 @@ var spec$37 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
               ]
             ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 
-var deserialize$18 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$37, constructor$18);
-
-function from_proto$18(writer) {
-  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$18, writer));
-}
-
-Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
-          /* tuple */[
-            /* Function */0,
-            "name'"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "to_proto"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "from_proto"
-          ]
-        ]]), ClientToServer, {
-      name$prime: name$prime$18,
-      to_proto: to_proto$18,
-      from_proto: from_proto$18
-    });
-
-function name$prime$19(param) {
-  return "schema.Error";
-}
-
-var spec$38 = Spec$Ocamlprotocplugin.Serialize.C.nil;
-
-var serialize$19 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$38);
-
-function to_proto$19(t) {
-  return Curry._1(serialize$19, /* [] */0);
-}
-
-function constructor$19(_extension) {
-  return /* () */0;
-}
-
-var spec$39 = Spec$Ocamlprotocplugin.Deserialize.C.nil;
-
 var deserialize$19 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$39, constructor$19);
 
 function from_proto$19(writer) {
@@ -2160,41 +2238,29 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), $$Error, {
+        ]]), ClientToServer, {
       name$prime: name$prime$19,
       to_proto: to_proto$19,
       from_proto: from_proto$19
     });
 
 function name$prime$20(param) {
-  return "schema.Update";
+  return "schema.Error";
 }
 
-var spec$40 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                  return Curry._1(ReactElement.to_proto, t);
-                })),
-          Spec$Ocamlprotocplugin.Serialize.C.not_packed
-        ]), Spec$Ocamlprotocplugin.Serialize.C.nil);
+var spec$40 = Spec$Ocamlprotocplugin.Serialize.C.nil;
 
 var serialize$20 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$40);
 
 function to_proto$20(t) {
-  return Curry._2(serialize$20, /* [] */0, t);
+  return Curry._1(serialize$20, /* [] */0);
 }
 
-function constructor$20(_extensions, a) {
-  return a;
+function constructor$20(_extension) {
+  return /* () */0;
 }
 
-var spec$41 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                  return Curry._1(ReactElement.from_proto, t);
-                })),
-          Spec$Ocamlprotocplugin.Deserialize.C.not_packed
-        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
+var spec$41 = Spec$Ocamlprotocplugin.Deserialize.C.nil;
 
 var deserialize$20 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$41, constructor$20);
 
@@ -2215,17 +2281,72 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), Update, {
+        ]]), $$Error, {
       name$prime: name$prime$20,
       to_proto: to_proto$20,
       from_proto: from_proto$20
     });
 
 function name$prime$21(param) {
+  return "schema.Update";
+}
+
+var spec$42 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                  return Curry._1(ReactElement.to_proto, t);
+                })),
+          Spec$Ocamlprotocplugin.Serialize.C.not_packed
+        ]), Spec$Ocamlprotocplugin.Serialize.C.nil);
+
+var serialize$21 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$42);
+
+function to_proto$21(t) {
+  return Curry._2(serialize$21, /* [] */0, t);
+}
+
+function constructor$21(_extensions, a) {
+  return a;
+}
+
+var spec$43 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                  return Curry._1(ReactElement.from_proto, t);
+                })),
+          Spec$Ocamlprotocplugin.Deserialize.C.not_packed
+        ]), Spec$Ocamlprotocplugin.Deserialize.C.nil);
+
+var deserialize$21 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$43, constructor$21);
+
+function from_proto$21(writer) {
+  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$21, writer));
+}
+
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Function */0,
+            "name'"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "to_proto"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "from_proto"
+          ]
+        ]]), Update, {
+      name$prime: name$prime$21,
+      to_proto: to_proto$21,
+      from_proto: from_proto$21
+    });
+
+function name$prime$22(param) {
   return "schema.ServerToClient";
 }
 
-var spec$42 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
+var spec$44 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
           1,
           Spec$Ocamlprotocplugin.Serialize.C.int32_int,
           Spec$Ocamlprotocplugin.Serialize.C.proto3
@@ -2234,7 +2355,7 @@ var spec$42 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                   return Pervasives.failwith("This case should never _ever_ happen");
                 } else {
                   var variant = param[0];
-                  if (variant !== 106380200) {
+                  if (variant >= 747848894) {
                     if (variant >= 999946793) {
                       return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
                                   3,
@@ -2245,14 +2366,14 @@ var spec$42 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                                 ]);
                     } else {
                       return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
-                                  4,
+                                  5,
                                   Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                                          return Curry._1(Nars_animated.Nars.Animated.ValueUpdate.to_proto, t);
+                                          return Curry._1(Call.to_proto, t);
                                         })),
                                   param[1]
                                 ]);
                     }
-                  } else {
+                  } else if (variant >= 106380200) {
                     return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
                                 2,
                                 Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
@@ -2260,26 +2381,34 @@ var spec$42 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
                                       })),
                                 param[1]
                               ]);
+                  } else {
+                    return Curry._1(Spec$Ocamlprotocplugin.Serialize.C.oneof_elem, /* tuple */[
+                                4,
+                                Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                                        return Curry._1(Nars_animated.Nars.Animated.ValueUpdate.to_proto, t);
+                                      })),
+                                param[1]
+                              ]);
                   }
                 }
               })), Spec$Ocamlprotocplugin.Serialize.C.nil));
 
-var serialize$21 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$42);
+var serialize$22 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$44);
 
-function to_proto$21(t) {
-  var f$prime = serialize$21;
+function to_proto$22(t) {
+  var f$prime = serialize$22;
   var param = t;
   return Curry._3(f$prime, /* [] */0, param.rootId, param.value);
 }
 
-function constructor$21(_extensions, rootId, value) {
+function constructor$22(_extensions, rootId, value) {
   return {
           rootId: rootId,
           value: value
         };
 }
 
-var spec$43 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+var spec$45 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
           1,
           Spec$Ocamlprotocplugin.Deserialize.C.int32_int,
           Spec$Ocamlprotocplugin.Deserialize.C.proto3
@@ -2311,90 +2440,34 @@ var spec$43 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
                     ]),
                 /* :: */[
                   Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.oneof_elem, /* tuple */[
-                        4,
+                        5,
                         Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                                return Curry._1(Nars_animated.Nars.Animated.ValueUpdate.from_proto, t);
+                                return Curry._1(Call.from_proto, t);
                               })),
                         (function (v) {
-                            return /* `AnimatedValueUpdate */[
-                                    -20525481,
+                            return /* `Call */[
+                                    747848894,
                                     v
                                   ];
                           })
                       ]),
-                  /* [] */0
+                  /* :: */[
+                    Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.oneof_elem, /* tuple */[
+                          4,
+                          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                                  return Curry._1(Nars_animated.Nars.Animated.ValueUpdate.from_proto, t);
+                                })),
+                          (function (v) {
+                              return /* `AnimatedValueUpdate */[
+                                      -20525481,
+                                      v
+                                    ];
+                            })
+                        ]),
+                    /* [] */0
+                  ]
                 ]
               ]
-            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
-
-var deserialize$21 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$43, constructor$21);
-
-function from_proto$21(writer) {
-  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$21, writer));
-}
-
-Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
-          /* tuple */[
-            /* Function */0,
-            "name'"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "to_proto"
-          ],
-          /* tuple */[
-            /* Function */0,
-            "from_proto"
-          ]
-        ]]), ServerToClient, {
-      name$prime: name$prime$21,
-      to_proto: to_proto$21,
-      from_proto: from_proto$21
-    });
-
-function name$prime$22(param) {
-  return "schema.AnimatedView";
-}
-
-var spec$44 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                  return Curry._1(Nars_animated.Nars.Animated.Style.to_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.to_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Serialize.C.not_packed
-            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
-
-var serialize$22 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$44);
-
-function to_proto$22(t) {
-  var f$prime = serialize$22;
-  var param = t;
-  return Curry._3(f$prime, /* [] */0, param.style, param.children);
-}
-
-function constructor$22(_extensions, style, children) {
-  return {
-          style: style,
-          children: children
-        };
-}
-
-var spec$45 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
-          1,
-          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                  return Curry._1(Nars_animated.Nars.Animated.Style.from_proto, t);
-                }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
-              2,
-              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
-                      return Curry._1(ReactElement.from_proto, t);
-                    })),
-              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
             ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 
 var deserialize$22 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$45, constructor$22);
@@ -2416,14 +2489,14 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), AnimatedView, {
+        ]]), ServerToClient, {
       name$prime: name$prime$22,
       to_proto: to_proto$22,
       from_proto: from_proto$22
     });
 
 function name$prime$23(param) {
-  return "schema.AnimatedText";
+  return "schema.AnimatedView";
 }
 
 var spec$46 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
@@ -2486,14 +2559,14 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), AnimatedText, {
+        ]]), AnimatedView, {
       name$prime: name$prime$23,
       to_proto: to_proto$23,
       from_proto: from_proto$23
     });
 
 function name$prime$24(param) {
-  return "schema.AnimatedImage";
+  return "schema.AnimatedText";
 }
 
 var spec$48 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
@@ -2501,10 +2574,12 @@ var spec$48 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Cu
           Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
                   return Curry._1(Nars_animated.Nars.Animated.Style.to_proto, t);
                 }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.repeated, /* tuple */[
               2,
-              Spec$Ocamlprotocplugin.Serialize.C.string,
-              Spec$Ocamlprotocplugin.Serialize.C.proto3
+              Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.to_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Serialize.C.not_packed
             ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
 
 var serialize$24 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$48);
@@ -2512,13 +2587,13 @@ var serialize$24 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$48);
 function to_proto$24(t) {
   var f$prime = serialize$24;
   var param = t;
-  return Curry._3(f$prime, /* [] */0, param.style, param.sourceURLString);
+  return Curry._3(f$prime, /* [] */0, param.style, param.children);
 }
 
-function constructor$24(_extensions, style, sourceURLString) {
+function constructor$24(_extensions, style, children) {
   return {
           style: style,
-          sourceURLString: sourceURLString
+          children: children
         };
 }
 
@@ -2527,10 +2602,12 @@ var spec$49 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, 
           Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
                   return Curry._1(Nars_animated.Nars.Animated.Style.from_proto, t);
                 }))
-        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.repeated, /* tuple */[
               2,
-              Spec$Ocamlprotocplugin.Deserialize.C.string,
-              Spec$Ocamlprotocplugin.Deserialize.C.proto3
+              Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                      return Curry._1(ReactElement.from_proto, t);
+                    })),
+              Spec$Ocamlprotocplugin.Deserialize.C.not_packed
             ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
 
 var deserialize$24 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$49, constructor$24);
@@ -2552,15 +2629,82 @@ Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
             /* Function */0,
             "from_proto"
           ]
-        ]]), AnimatedImage, {
+        ]]), AnimatedText, {
       name$prime: name$prime$24,
       to_proto: to_proto$24,
       from_proto: from_proto$24
     });
 
+function name$prime$25(param) {
+  return "schema.AnimatedImage";
+}
+
+var spec$50 = Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Serialize.C.message, (function (t) {
+                  return Curry._1(Nars_animated.Nars.Animated.Style.to_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Serialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Serialize.C.basic, /* tuple */[
+              2,
+              Spec$Ocamlprotocplugin.Serialize.C.string,
+              Spec$Ocamlprotocplugin.Serialize.C.proto3
+            ]), Spec$Ocamlprotocplugin.Serialize.C.nil));
+
+var serialize$25 = Serialize$Ocamlprotocplugin.serialize(/* [] */0, spec$50);
+
+function to_proto$25(t) {
+  var f$prime = serialize$25;
+  var param = t;
+  return Curry._3(f$prime, /* [] */0, param.style, param.sourceURLString);
+}
+
+function constructor$25(_extensions, style, sourceURLString) {
+  return {
+          style: style,
+          sourceURLString: sourceURLString
+        };
+}
+
+var spec$51 = Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic_opt, /* tuple */[
+          1,
+          Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.message, (function (t) {
+                  return Curry._1(Nars_animated.Nars.Animated.Style.from_proto, t);
+                }))
+        ]), Curry._2(Spec$Ocamlprotocplugin.Deserialize.C.$caret$colon$colon, Curry._1(Spec$Ocamlprotocplugin.Deserialize.C.basic, /* tuple */[
+              2,
+              Spec$Ocamlprotocplugin.Deserialize.C.string,
+              Spec$Ocamlprotocplugin.Deserialize.C.proto3
+            ]), Spec$Ocamlprotocplugin.Deserialize.C.nil));
+
+var deserialize$25 = Deserialize$Ocamlprotocplugin.deserialize(/* [] */0, spec$51, constructor$25);
+
+function from_proto$25(writer) {
+  return Result$Ocamlprotocplugin.open_error(Curry._1(deserialize$25, writer));
+}
+
+Caml_module.update_mod(/* Module */Block.__(0, [/* array */[
+          /* tuple */[
+            /* Function */0,
+            "name'"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "to_proto"
+          ],
+          /* tuple */[
+            /* Function */0,
+            "from_proto"
+          ]
+        ]]), AnimatedImage, {
+      name$prime: name$prime$25,
+      to_proto: to_proto$25,
+      from_proto: from_proto$25
+    });
+
 exports.Imported$primemodules = Imported$primemodules;
 exports.StringValue = StringValue;
 exports.Int32Value = Int32Value;
+exports.LocalCallback = LocalCallback;
 exports.Callback = Callback;
 exports.LocalProp = LocalProp;
 exports.FloatValue = FloatValue;

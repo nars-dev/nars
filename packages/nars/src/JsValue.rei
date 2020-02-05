@@ -1,4 +1,4 @@
-[@genType]
+[@genType.import ("./TsTypes", "TypeScriptUnknown")]
 type t;
 
 let toValue: t => Struct.Google_mirror.Protobuf.Value.t;

@@ -1,13 +1,11 @@
-module CallbackRegistry = Belt.HashMap.Int;
-
 type instance = Instance.t;
 
-type containerInfo = {
-  flushUpdates: array(Instance.encoded) => unit,
-  updateAnimatedValue:
-    (~value: Animated.animatedValue, ~toValue: Animated.adaptable) => unit,
-  children: array(instance),
-  callbackRegistry: CallbackRegistry.t(Instance.args => unit),
+module ContainerInfo = {
+  type t = {
+    flushUpdates: array(Instance.encoded) => unit,
+    rpcInterface: RpcInterface.t,
+    children: array(instance),
+  };
 };
 
 let createInstance = (instance_type, props, _rootContainer, _context, fiber) => {
@@ -29,19 +27,10 @@ let prepareForCommit = (~containerInfo as _) => {
   ();
 };
 
-let resetAfterCommit = (container: containerInfo) => {
-  CallbackRegistry.clear(container.callbackRegistry);
-  let counter = ref(0);
-  let registerCallback = callback => {
-    let id = counter^;
-    incr(counter);
-    CallbackRegistry.set(container.callbackRegistry, id, callback);
-    id;
-  };
+let resetAfterCommit = (container: ContainerInfo.t) => {
   let children =
     Instance.encodeArray(
-      ~registerCallback,
-      ~updateAnimatedValue=container.updateAnimatedValue,
+      ~rpcInterface=container.rpcInterface,
       container.children,
     );
   switch (children) {
@@ -93,7 +82,7 @@ let prepareUpdate = (_, ~type_ as _, ~oldProps, ~newProps, _, _) => {
 };
 
 let createTextInstance = (text, _, _, _) => {
-  Instance.RawText(text);
+  Instance.RawText(ref(text));
 };
 
 let shouldSetTextContent = (~type_ as _, _props) => false;
@@ -123,8 +112,8 @@ let appendChild = (~parent, ~child) => {
   appendInitialChild(~parentInstance=parent, ~child);
 };
 
-let appendChildToContainer = (container: containerInfo, child: Instance.t) => {
-  Js.Array.push(child, container.children) |> ignore;
+let appendChildToContainer = (container, child: Instance.t) => {
+  Js.Array.push(child, container.ContainerInfo.children) |> ignore;
 };
 
 let commitMount = (_, _, _, _) => {
@@ -158,7 +147,11 @@ let insertBefore = (~parent, ~child, ~beforeChild) => {
 };
 
 let insertInContainerBefore = (container, ~child, ~beforeChild) => {
-  let index = Js.Array.findIndex(x => beforeChild === x, container.children);
+  let index =
+    Js.Array.findIndex(
+      x => beforeChild === x,
+      container.ContainerInfo.children,
+    );
   Js.Array.spliceInPlace(
     ~pos=index,
     ~remove=0,
@@ -180,7 +173,8 @@ let removeChild = (~parent, ~child) => {
 };
 
 let removeChildFromContainer = (parent, child) => {
-  let pos = Js.Array.findIndex(x => child === x, parent.children);
+  let pos =
+    Js.Array.findIndex(x => child === x, parent.ContainerInfo.children);
   Js.Array.spliceInPlace(~pos, ~remove=1, ~add=[||], parent.children)
   |> ignore;
 };
@@ -193,7 +187,11 @@ let unhideInstance = (_, _) => {
   ();
 };
 
-let commitTextUpdate = (_, ~oldText as _, ~newText as _) => {
+let commitTextUpdate = (instance, ~oldText as _, ~newText) => {
+  switch (instance) {
+    | Instance.RawText(string) => string := newText;
+    | _ => invalid_arg("Instance is not a text instance: " ++ Js.String.make(instance))
+  };
   ();
 };
 
@@ -254,38 +252,29 @@ let reconciler =
   |> ReactReconciler.make;
 
 type container = {
-  registry: CallbackRegistry.t(Instance.args => unit),
+  rpcInterface: RpcInterface.t,
   opaqueRoot: ReactReconciler.opaqueRoot,
 };
 
-let createContainer = (~flushUpdates, ~updateAnimatedValue) => {
-  let registry = CallbackRegistry.make(~hintSize=50);
-  let opaqueRoot =
-    ReactReconciler.createContainer(
-      reconciler,
-      {
-        flushUpdates,
-        children: [||],
-        callbackRegistry: registry,
-        updateAnimatedValue,
-      },
-    );
-  {registry, opaqueRoot};
+let createContainer = (~flushUpdates, ~rpcCall, ~updateAnimatedValue) => {
+  let rpcInterface = RpcInterface.make(~rpcCall, ~updateAnimatedValue);
+  let containerInfo = {
+    ContainerInfo.flushUpdates,
+    children: [||],
+    rpcInterface,
+  };
+  let opaqueRoot = ReactReconciler.createContainer(reconciler, containerInfo);
+  {rpcInterface, opaqueRoot};
 };
 let updateContainer = (~element, ~container) =>
   ReactReconciler.updateContainer(
     reconciler,
-    ~element,
+    ~element=element(container.rpcInterface),
     ~container=container.opaqueRoot,
   );
-let unbatchedUpdates = f => ReactReconciler.unbatchedUpdates(reconciler, f);
-let invokeCallback = (~container, ~messageId, ~args) => {
-  switch (CallbackRegistry.get(container.registry, messageId)) {
-  | Some(callback) => callback(args)
-  | None => ()
-  };
-};
+let rpcInterface = (~container) => container.rpcInterface;
 
+let unbatchedUpdates = f => ReactReconciler.unbatchedUpdates(reconciler, f);
 let batchedUpdates = f => ReactReconciler.batchedUpdates(reconciler, f, ());
 let flushPassiveEffects = () =>
   ReactReconciler.flushPassiveEffects(reconciler);

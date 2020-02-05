@@ -5,6 +5,8 @@
 // tslint:disable-next-line:no-var-requires
 const TextInputBS = require('./TextInput.bs');
 
+import {t as Callback_t} from './Callback.gen';
+
 import {t as Style_t} from './Style.gen';
 
 // tslint:disable-next-line:interface-over-type-literal
@@ -13,7 +15,7 @@ export type props = {
   readonly placeholderTextColor?: (null | string); 
   readonly placeholder?: string; 
   readonly value: string; 
-  readonly onValueChange?: (_1:string) => void
+  readonly onValueChange?: Callback_t<string>
 };
 
 export const name: string = TextInputBS.name;

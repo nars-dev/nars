@@ -14,25 +14,28 @@ function encodeOptional(value, decoder) {
   return Js_option.map(Curry.__1(decoder), value);
 }
 
-function encodeArityZeroCallback(registerCallback, callback) {
-  return Curry._1(registerCallback, (function (param) {
-                return Curry._1(callback, /* () */0);
-              }));
+function encodeCallback(bridge, callback) {
+  if (callback.tag) {
+    return /* `Local */[
+            203307339,
+            {
+              localKey: callback[0],
+              args: Curry._1(callback[1], bridge)
+            }
+          ];
+  } else {
+    return /* `Remote */[
+            958205606,
+            Curry._1(bridge.registerCallback, callback[0])
+          ];
+  }
 }
 
-function encodeArityZeroCallbackOptional(registerCallback, callback) {
+function encodeCallbackOptional(bridge, callback) {
   return Js_option.map((function (value) {
                 var callback = value;
-                return Curry._1(registerCallback, (function (param) {
-                              return Curry._1(callback, /* () */0);
-                            }));
+                return encodeCallback(bridge, callback);
               }), callback);
-}
-
-function encodeCallback(registerCallback, callback) {
-  return Curry._1(registerCallback, (function (args) {
-                return Curry._1(callback, Js_option.getExn(args));
-              }));
 }
 
 function encodeLocalProp(localKey, propKey) {
@@ -97,9 +100,8 @@ var opt_map = Js_option.map;
 
 exports.opt_map = opt_map;
 exports.encodeOptional = encodeOptional;
-exports.encodeArityZeroCallback = encodeArityZeroCallback;
-exports.encodeArityZeroCallbackOptional = encodeArityZeroCallbackOptional;
 exports.encodeCallback = encodeCallback;
+exports.encodeCallbackOptional = encodeCallbackOptional;
 exports.encodeLocalProp = encodeLocalProp;
 exports.encodeOptionalLocalProps = encodeOptionalLocalProps;
 exports.encodeStyleOptional = encodeStyleOptional;

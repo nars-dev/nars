@@ -8,18 +8,13 @@ type props = {
   .
   "style": option(Style.t),
   "value": bool,
-  "onValueChange": bool => unit,
+  "onValueChange": Callback.t(bool),
 };
 
 external toProps: Js.t('a) => props = "%identity";
 
 let encoder =
-    (
-      ~key,
-      ~props as Instance.Props(props),
-      ~bridge,
-      ~children as _,
-    ) => {
+    (~key, ~props as Instance.Props(props), ~bridge, ~children as _) => {
   let props = toProps(props);
   {
     key,
@@ -30,13 +25,12 @@ let encoder =
         onValueChange:
           Some(
             ProtoEncoders.encodeCallback(
-              ~registerCallback=bridge.Instance.registerCallback,
-              ~callback=args => {
-                let callback = props##onValueChange;
-                callback(
-                  StructDecoders.(getFieldExn("value", args, getBool)),
-                );
-              },
+              ~bridge=bridge,
+              ~callback=
+                Callback.map(
+                  ~f=(struct_) => StructDecoders.(getValueField(getBool, struct_)),
+                  props##onValueChange,
+                ),
             ),
           ),
       }),

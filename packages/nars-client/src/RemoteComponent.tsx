@@ -1,36 +1,11 @@
 import * as React from "react";
-import { toStruct } from "./StructCoders";
-import { ofEncodedReactElement } from "./DecodeElement";
 import Animated from "react-native-reanimated";
+import { SocketLike } from "./SocketLike";
+import { RpcInterface, useRpcInterface } from "./RpcInterface";
 import { RetainedInstances, updateAnimatedValue } from "./AnimatedCoders";
-import {
-  ServerToClient,
-  ClientToServer,
-  Call,
-  Unmount,
-  Render,
-} from "./schema_pb";
-
-export type State =
-  | "Loading"
-  | "Error"
-  | { type: "Rendered"; element: (React.ReactChild | null)[] };
-
-export interface SocketLike {
-  binaryType: "arraybuffer" | "blob";
-  readyState: number;
-  send(data: string | ArrayBufferLike | Blob | ArrayBufferView): void;
-  addEventListener<K extends keyof WebSocketEventMap>(
-    type: K,
-    listener: (this: SocketLike, ev: WebSocketEventMap[K]) => any,
-    options?: boolean | AddEventListenerOptions
-  ): void;
-  removeEventListener<K extends keyof WebSocketEventMap>(
-    type: K,
-    listener: (this: SocketLike, ev: WebSocketEventMap[K]) => any,
-    options?: boolean | EventListenerOptions
-  ): void;
-}
+import { ServerToClient, ClientToServer, Unmount, Render } from "./schema_pb";
+import { toStruct, ofStruct } from "./StructCoders";
+import { ofEncodedReactElement } from "./DecodeElement";
 
 class InstanceCounter {
   private freed: Array<number> = [];
@@ -86,9 +61,8 @@ const createRetainedInstanceContainer = (): RetainedInstances => {
 
 const reactElementFromMessage = (
   message: ServerToClient,
-  localProps: LocalProps,
-  instanceId: number,
-  ws: SocketLike,
+  localProps: PropsObject,
+  rpc: RpcInterface,
   retainedInstances: RetainedInstances
 ) => {
   return message
@@ -97,13 +71,7 @@ const reactElementFromMessage = (
     .map(elem =>
       ofEncodedReactElement(
         (messageId, args) => {
-          const msg = new ClientToServer();
-          const call = new Call();
-          call.setMessageid(messageId);
-          call.setArgs(args);
-          msg.setCall(call);
-          msg.setRootid(instanceId);
-          ws.send(msg.serializeBinary());
+          rpc.rpcCall(messageId, args ? args : {});
         },
         key => {
           return localProps[key];
@@ -112,6 +80,76 @@ const reactElementFromMessage = (
         retainedInstances
       )
     );
+};
+
+type UpdateKind =
+  | { type: "RemoteRender" }
+  | { type: "LocalReRender" }
+  | { type: "Reconnect"; oldWs: SocketLike | undefined }
+  | undefined;
+
+type ComputedProps = {
+  localPropsRef: { current: PropsObject };
+  inputProps: PropsObject;
+  ws: SocketLike;
+};
+
+const useRemoteUpdateState = (
+  webSocket: Lazy<SocketLike>,
+  name: string,
+  inputProps: PropEncoder,
+  localProps: PropsObject,
+  rpcInterface: RpcInterface
+) => {
+  let updateKind: UpdateKind = undefined;
+  const localPropsRef = React.useRef<{ [k: string]: unknown }>({});
+  const memoizedWebSocket = React.useRef<SocketLike | undefined>(undefined);
+  const memoizedProps = React.useRef<PropsObject>({});
+  React.useEffect(() => {
+    updateKind = { type: "RemoteRender" };
+  }, [name]);
+  React.useEffect(() => {
+    const nextProps = inputProps(rpcInterface);
+    let changed = false;
+    // Poor man's shallow compare
+    const keys = [
+      ...Object.keys(memoizedProps.current),
+      ...Object.keys(nextProps),
+    ];
+    keys.forEach(key => {
+      if (memoizedProps.current[key] !== nextProps[key]) {
+        changed = true;
+      }
+    });
+    if (changed) {
+      updateKind = { type: "RemoteRender" };
+    }
+    memoizedProps.current = nextProps;
+  }, [inputProps]);
+  React.useEffect(() => {
+    localPropsRef.current = localProps;
+    if (!updateKind) {
+      updateKind = { type: "LocalReRender" };
+    }
+  }, [localProps]);
+  React.useEffect(() => {
+    const ws = webSocket();
+    if (memoizedWebSocket.current !== ws) {
+      updateKind = {
+        type: "Reconnect",
+        oldWs: memoizedWebSocket.current,
+      };
+      memoizedWebSocket.current = ws;
+    }
+  });
+  return {
+    updateKind: () => updateKind,
+    computedProps: (): ComputedProps => ({
+      ws: memoizedWebSocket.current!,
+      localPropsRef: localPropsRef,
+      inputProps: memoizedProps.current,
+    }),
+  };
 };
 
 const connect = (
@@ -150,20 +188,11 @@ const useInstanceId = () => {
   return () => instanceId.current;
 };
 
-const useLocalPropsRef = (localProps: { [k: string]: unknown } | undefined) => {
-  const props = localProps ? localProps : {};
-  const ref = React.useRef(props);
-  React.useEffect(() => {
-    ref.current = props;
-  }, [localProps]);
-  return ref;
-};
-
 const sendRender = (
   ws: SocketLike,
   name: string,
   props: object,
-  localProps: LocalProps,
+  localProps: PropsObject,
   instanceId: number
 ) => {
   const msg = new ClientToServer();
@@ -185,80 +214,62 @@ const sendRender = (
   }
 };
 
-type UpdateKind =
-  | { type: "RemoteRender" }
-  | { type: "LocalReRender" }
-  | { type: "Reconnect"; oldWs: SocketLike | undefined }
-  | undefined;
+export type PropsObject = { [k: string]: unknown };
 
-const useRemoteUpdateState = () => {
-  let updateKind: UpdateKind | undefined = undefined;
-  const memoizedWebSocket = React.useRef<SocketLike | undefined>(undefined);
-  return {
-    updateWebsocket(ws: SocketLike) {
-      if (memoizedWebSocket.current !== ws) {
-        updateKind = {
-          type: "Reconnect",
-          oldWs: memoizedWebSocket.current,
-        };
-        memoizedWebSocket.current = ws;
-      }
-    },
-    updatedParams() {
-      if (!(updateKind && updateKind.type == "Reconnect")) {
-        updateKind = { type: "RemoteRender" };
-      }
-    },
-    updatedLocalProps() {
-      if (!updateKind) {
-        updateKind = { type: "LocalReRender" };
-      }
-    },
-    updateKind: () => updateKind,
-  };
-};
+export type PropEncoder = (rpcInterface: RpcInterface) => PropsObject;
 
-type LocalProps = { [k: string]: unknown };
+export type State =
+  | "Loading"
+  | "Error"
+  | { type: "Rendered"; element: (React.ReactChild | null)[] };
+
+export interface Lazy<T> {
+  (): T;
+}
 
 export const useNars = (
-  webSocket: () => SocketLike,
+  webSocket: Lazy<SocketLike>,
   name: string,
-  props: object,
-  localPropsOptional?: LocalProps
-) => {
+  inputProps: PropEncoder,
+  localProps: PropsObject
+): State => {
   const instanceId = useInstanceId();
   const [renderedElement, updateRenderedElement] = React.useState<State>(
     "Loading"
   );
+  const rpcInterface = useRpcInterface(instanceId, webSocket);
   const [retainedInstances] = React.useState(() =>
     createRetainedInstanceContainer()
   );
+  const disconnect = React.useRef<(() => void) | undefined>(undefined);
 
   // It internally stores the latest reference to webSocket
   // So that we can determine if the webSocket we're using
   // has changed.
-  const remoteUpdateState = useRemoteUpdateState();
-  React.useEffect(() => {
-    remoteUpdateState.updatedParams();
-  }, [name, props]);
-  React.useEffect(() => {
-    remoteUpdateState.updatedLocalProps();
-  }, [localPropsOptional]);
-
+  const remoteUpdateState = useRemoteUpdateState(
+    webSocket,
+    name,
+    inputProps,
+    localProps,
+    rpcInterface
+  );
   // A ref is used so that the asynchrnous callbacks from the server
   // use the latest localProps (it happens when the state updates on
   // the server but there were no state transitions on the client.
-  const localPropsRef = useLocalPropsRef(localPropsOptional);
-  const disconnect = React.useRef<(() => void) | undefined>(undefined);
   const lastRenderMessage = React.useRef<ServerToClient | undefined>(undefined);
   React.useEffect(() => {
-    const ws = webSocket();
-    remoteUpdateState.updateWebsocket(ws);
     const update = remoteUpdateState.updateKind();
     if (update) {
+      const props = remoteUpdateState.computedProps();
       switch (update.type) {
         case "RemoteRender":
-          sendRender(ws, name, props, localPropsRef.current, instanceId());
+          sendRender(
+            props.ws,
+            name,
+            props.inputProps,
+            props.localPropsRef.current,
+            instanceId()
+          );
           break;
         case "Reconnect":
           if (disconnect.current) {
@@ -266,7 +277,7 @@ export const useNars = (
             retainedInstances.clear();
           }
           disconnect.current = connect(
-            ws,
+            props.ws,
             instanceId(),
             message => {
               if (message.hasError()) {
@@ -282,9 +293,8 @@ export const useNars = (
                   type: "Rendered",
                   element: reactElementFromMessage(
                     message,
-                    localPropsRef.current,
-                    instanceId(),
-                    ws,
+                    props.localPropsRef.current,
+                    rpcInterface,
                     retainedInstances
                   ),
                 });
@@ -294,10 +304,21 @@ export const useNars = (
                 const value = update.getValue();
                 const toValue = update.getTovalue();
                 updateAnimatedValue(value, toValue, retainedInstances);
+              } else if (message.hasCall()) {
+                const call = message.getCall()!;
+                const messageId = call.getMessageid();
+                const args = call.getArgs();
+                rpcInterface.executeRpcCall(messageId, ofStruct(args));
               }
             }
           );
-          sendRender(ws, name, props, localPropsRef.current, instanceId());
+          sendRender(
+            props.ws,
+            name,
+            props.inputProps,
+            props.localPropsRef.current,
+            instanceId()
+          );
           break;
         case "LocalReRender":
           if (lastRenderMessage.current) {
@@ -305,9 +326,8 @@ export const useNars = (
               type: "Rendered",
               element: reactElementFromMessage(
                 lastRenderMessage.current,
-                localPropsRef.current,
-                instanceId(),
-                ws,
+                props.localPropsRef.current,
+                rpcInterface,
                 retainedInstances
               ),
             });
@@ -327,26 +347,46 @@ export const useNars = (
   return renderedElement;
 };
 
-export interface Lazy<T> {
-  (): T;
-}
-
 type Props = {
   webSocket: SocketLike | Lazy<SocketLike>;
   name: string;
-  props: { [k: string]: unknown };
-  localProps?: { [k: string]: unknown };
+  inputProps: PropEncoder;
+  localProps: PropsObject;
   renderError?: () => React.ReactElement<any>;
   renderLoading?: () => React.ReactElement<any>;
+};
+
+export const RemoteComponent = (props: Props) => {
+  const ws = props.webSocket;
+  const renderedElement: State = useNars(
+    typeof ws === "function" ? ws : () => ws,
+    props.name,
+    props.inputProps,
+    props.localProps
+  );
+  if (renderedElement === "Error" && props.renderError) {
+    return props.renderError();
+  } else if (
+    typeof renderedElement === "object" &&
+    renderedElement.type === "Rendered"
+  ) {
+    return React.createElement(React.Fragment, {}, ...renderedElement.element);
+  } else if (props.renderLoading) {
+    return props.renderLoading();
+  }
+  return null;
 };
 
 export const useWebSocket = (
   url: string,
   shouldReconnect?: boolean
 ): Lazy<WebSocket> => {
-  const [ref, setRef] = React.useState<
+  const [ref, setRef_] = React.useState<
     React.MutableRefObject<WebSocket | null>
   >({ current: null });
+  const setRef: typeof setRef_ = x => {
+    setRef_(x);
+  };
   const removeErrorListenerRef = React.useRef<(() => void) | undefined>();
   return () => {
     if (ref.current) {
@@ -370,25 +410,4 @@ export const useWebSocket = (
       return ws;
     }
   };
-};
-
-export const RemoteComponent = (props: Props) => {
-  const ws = props.webSocket;
-  const renderedElement = useNars(
-    typeof ws === "function" ? ws : () => ws,
-    props.name,
-    props.props,
-    props.localProps
-  );
-  if (renderedElement === "Error" && props.renderError) {
-    return props.renderError();
-  } else if (
-    typeof renderedElement === "object" &&
-    renderedElement.type === "Rendered"
-  ) {
-    return React.createElement(React.Fragment, {}, ...renderedElement.element);
-  } else if (props.renderLoading) {
-    return props.renderLoading();
-  }
-  return null;
 };

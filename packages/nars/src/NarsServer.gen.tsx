@@ -14,6 +14,8 @@ import {reactElement as ReactReconciler_reactElement} from '../src/shims/ReactRe
 
 import {t as JsValue_t} from './JsValue.gen';
 
+import {t as RpcInterface_t} from './RpcInterface.gen';
+
 // tslint:disable-next-line:max-classes-per-file 
 export abstract class Socket_data { protected opaque!: any }; /* simulate opaque types */
 
@@ -37,10 +39,23 @@ export type server = Server_t;
 export type componentSpec = {
   readonly name: string; 
   readonly localProps: string[]; 
-  readonly props: Js_Dict_t<JsValue_t>
+  readonly props: Js_Dict_t<JsValue_t>; 
+  readonly rpcInterface: RpcInterface_t
 };
 
 export const startListening: (_1:server, _2:((_1:componentSpec) => ReactReconciler_reactElement)) => void = function (Arg1: any, Arg2: any) {
-  const result = Curry._2(NarsServerBS.startListening, Arg1, Arg2);
+  const result = Curry._2(NarsServerBS.startListening, Arg1, function (Arg11: any) {
+      const result1 = Arg2({name:Arg11.name, localProps:Arg11.localProps, props:Arg11.props, rpcInterface:{rpcCall:function (Arg12: any, Arg21: any) {
+          const result2 = Curry._2(Arg11.rpcInterface.rpcCall, Arg12, Arg21);
+          return result2
+        }, registerCallback:Arg11.rpcInterface.registerCallback, executeRpcCall:function (Arg13: any, Arg22: any) {
+          const result3 = Curry._2(Arg11.rpcInterface.executeRpcCall, Arg13, Arg22);
+          return result3
+        }, updateAnimatedValue:function (Arg14: any) {
+          const result4 = Curry._2(Arg11.rpcInterface.updateAnimatedValue, Arg14.value, Arg14.toValue);
+          return result4
+        }, clear:Arg11.rpcInterface.clear}});
+      return result1
+    });
   return result
 };

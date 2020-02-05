@@ -15,7 +15,7 @@ interface MessageEvent {
 // In reality we must realize that the code below should be tested in principle, too.
 // We are not testing the real behavior. We are testing the behavior in this
 // simulated enviornment which is vastly more predictable than the network conditions.
-export type TestSocketLike = Client.SocketLike & {
+export type TestSocketLike = SocketLike & {
   setServerSocketIn: (_: (data: Server.Socket_data) => any) => void;
   clientSocketIn: () => (ev: MessageEvent) => any;
 };

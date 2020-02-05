@@ -1,12 +1,9 @@
 import * as React from "react";
-import { t as LocalProp } from "./LocalProp.gen";
 import { name, props } from "./TouchableOpacity.gen";
+import { Callback } from "./Callback";
 
 export interface Props extends props {
-  onPress?: () => void;
-  localProps?: {
-    onPress?: LocalProp;
-  };
+  onPress?: Callback<void>;
   children?: React.ReactNode;
 }
 

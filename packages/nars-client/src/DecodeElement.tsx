@@ -1,7 +1,6 @@
 import * as React from "react";
-import { ofStruct, toStruct } from "./StructCoders";
+import { ofStruct } from "./StructCoders";
 import * as Schema from "./schema_pb";
-import { Struct } from "./struct_pb";
 import {
   View,
   Text,
@@ -29,11 +28,34 @@ function assignLocalProps<T extends object>(
   });
 }
 
+const decodeCallback = (
+  encoded: Schema.Callback,
+  getLocalProp: (key: string) => unknown,
+  rpcCall: (callId: number, args?: { [k: string]: unknown }) => void
+): (<LocalArgs>(local: LocalArgs) => void) | undefined => {
+  if (encoded.hasRemote()) {
+    const callId = encoded.getRemote();
+    return args => {
+      rpcCall(callId, { value: args });
+    };
+  } else if (encoded.hasLocal()) {
+    const local = encoded.getLocal()!;
+    const args = ofStruct(local.getArgs());
+    const callback = getLocalProp(local.getLocalkey());
+    if (typeof callback === "function") {
+      return localArgs => {
+        callback(localArgs, args);
+      };
+    }
+  }
+  return undefined;
+};
+
 /**
  * TODO: Reduce boilerplate
  */
 export const ofEncodedReactElement = (
-  rpcCall: (callId: number, args?: Struct) => void,
+  rpcCall: (callId: number, args?: { [k: string]: unknown }) => void,
   getLocalProp: (key: string) => unknown,
   element: Schema.ReactElement,
   retainedInstances: RetainedInstances
@@ -81,10 +103,14 @@ export const ofEncodedReactElement = (
     }
     assignLocalProps(props, fl.getLocalpropsList(), getLocalProp);
     if (fl.hasOnendreached()) {
-      const callId = fl.getOnendreached()!.getCallid();
-      props.onEndReached = () => {
-        rpcCall(callId);
-      };
+      const decoded = decodeCallback(
+        fl.getOnendreached()!,
+        getLocalProp,
+        rpcCall
+      );
+      if (decoded) {
+        props.onEndReached = decoded;
+      }
     }
     props.data = fl.getChildrenList();
     props.renderItem = ({ item }) => {
@@ -107,10 +133,10 @@ export const ofEncodedReactElement = (
     const children = getChildren(to);
     assignLocalProps(props, to.getLocalpropsList(), getLocalProp);
     if (to.hasOnpress()) {
-      const callId = to.getOnpress()!.getCallid();
-      props.onPress = () => {
-        rpcCall(callId);
-      };
+      const decoded = decodeCallback(to.getOnpress()!, getLocalProp, rpcCall);
+      if (decoded) {
+        props.onPress = decoded;
+      }
     }
     return React.createElement(TouchableOpacity, props, ...children);
   } else if (element.hasTextinput()) {
@@ -121,10 +147,14 @@ export const ofEncodedReactElement = (
     }
     props.value = ti.getValue();
     if (ti.hasOnvaluechange()) {
-      const callId = ti.getOnvaluechange()!.getCallid();
-      props.onChangeText = value => {
-        rpcCall(callId, toStruct({ value }));
-      };
+      const decoded = decodeCallback(
+        ti.getOnvaluechange()!,
+        getLocalProp,
+        rpcCall
+      );
+      if (decoded) {
+        props.onChangeText = decoded;
+      }
     }
     assignLocalProps(props, ti.getLocalpropsList(), getLocalProp);
     if (ti.hasPlaceholdertextcolor()) {
@@ -142,10 +172,14 @@ export const ofEncodedReactElement = (
     }
     props.value = sw.getValue();
     if (sw.hasOnvaluechange()) {
-      const callId = sw.getOnvaluechange()!.getCallid();
-      props.onValueChange = value => {
-        rpcCall(callId, toStruct({ value }));
-      };
+      const decoded = decodeCallback(
+        sw.getOnvaluechange()!,
+        getLocalProp,
+        rpcCall
+      );
+      if (decoded) {
+        props.onValueChange = decoded;
+      }
     }
     return <Switch {...props} />;
   } else if (element.hasImage()) {

@@ -32,6 +32,7 @@ type componentSpec = {
   "name": string,
   "localProps": array(string),
   "props": Js.Dict.t(JsValue.t),
+  "rpcInterface": RpcInterface.t,
 };
 
 external uint8ArrayAsArray: Uint8Array.t => Js.Array.t(Uint8Array.elt) =
@@ -72,7 +73,16 @@ let updateAnimatedValue = (~socket, ~rootId, ~containers, ~value, ~toValue) => {
   send(
     ~socket,
     ~message=
-        `AnimatedValueUpdate({value: Some(value), toValue: Some(toValue)}),
+      `AnimatedValueUpdate({value: Some(value), toValue: Some(toValue)}),
+    ~rootId,
+    ~containers,
+  );
+};
+
+let sendRPCCall = (~socket, ~rootId, ~containers, ~messageId, ~args) => {
+  send(
+    ~socket,
+    ~message=`Call(Schema.Call.{messageId, args}),
     ~rootId,
     ~containers,
   );
@@ -114,8 +124,20 @@ let startListening = (server: server, render) => {
             | None =>
               let container =
                 NarsReconciler.createContainer(
-                  ~flushUpdates=sendViewUpdates(~socket, ~rootId, ~containers),
-                  ~updateAnimatedValue=updateAnimatedValue(~socket, ~rootId, ~containers),
+                  ~rpcCall=
+                    (messageId, args) => {
+                      sendRPCCall(
+                        ~socket,
+                        ~rootId,
+                        ~containers,
+                        ~messageId,
+                        ~args=Some(args),
+                      )
+                    },
+                  ~flushUpdates=
+                    sendViewUpdates(~socket, ~rootId, ~containers),
+                  ~updateAnimatedValue=
+                    updateAnimatedValue(~socket, ~rootId, ~containers),
                 );
               ContainerMap.set(containers, rootId, container);
               container;
@@ -125,13 +147,15 @@ let startListening = (server: server, render) => {
             |> Js.Option.getWithDefault(Js.Dict.empty());
           NarsReconciler.updateContainer(
             ~element=
-              render(
-                {
-                  "name": name,
-                  "localProps": localProps |> Array.of_list,
-                  "props": props,
-                }: componentSpec,
-              ),
+              rpcInterface =>
+                render(
+                  {
+                    "name": name,
+                    "localProps": localProps |> Array.of_list,
+                    "props": props,
+                    "rpcInterface": rpcInterface,
+                  }: componentSpec,
+                ),
             ~container,
           )
           |> ignore;
@@ -139,13 +163,16 @@ let startListening = (server: server, render) => {
           ContainerMap.remove(containers, rootId);
           NarsReconciler.unbatchedUpdates(() => {
             NarsReconciler.updateContainer(
-              ~element=NarsReconciler.nullElement,
+              ~element=_ => NarsReconciler.nullElement,
               ~container,
             )
             |> ignore
           });
         | (`Call({messageId, args}), Some(container)) =>
-          NarsReconciler.invokeCallback(~container, ~messageId, ~args)
+          NarsReconciler.rpcInterface(~container).executeRpcCall(
+            messageId,
+            Js.Option.getWithDefault([], args),
+          )
         | (`Unmount(_), None)
         | (`Call(_), None) => ()
         | (`not_set, _) => ()

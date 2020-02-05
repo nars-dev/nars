@@ -2,6 +2,7 @@
 'use strict';
 
 var $$Array = require("bs-platform/lib/js/array.js");
+var Callback = require("./Callback.bs.js");
 var Js_option = require("bs-platform/lib/js/js_option.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 var ProtoEncoders = require("./ProtoEncoders.bs.js");
@@ -24,12 +25,16 @@ function encoder(key, param, bridge, children) {
             -193011497,
             {
               style: ProtoEncoders.encodeStyleOptional(props),
-              onEndReached: ProtoEncoders.encodeArityZeroCallbackOptional(bridge.registerCallback, props.onEndReached),
+              onEndReached: ProtoEncoders.encodeOptional(props.onEndReached, (function (onEndReached) {
+                      return ProtoEncoders.encodeCallback(bridge, Callback.map((function (param) {
+                                        return /* () */0;
+                                      }), onEndReached));
+                    })),
               onEndReachedThreshold: Js_option.map((function (threshold) {
                       return threshold | 0;
                     }), props.onEndReachedThreshold),
               children: children$1,
-              localProps: ProtoEncoders.encodeOptionalLocalProps(props.localProps)
+              localProps: /* [] */0
             }
           ]
         };

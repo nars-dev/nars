@@ -36,6 +36,6 @@
     "@types/uuid": "^3.4.5",
     "@types/ws": "^6.0.3",
     "prettier": "^1.18.2",
-    "typescript": "~3.5.0"
+    "typescript": "~3.7.0"
   }
 }
