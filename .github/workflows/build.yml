@@ -1,0 +1,23 @@
+name: Build pull request
+
+on: pull_request
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+          ref: ${{ github.ref }}
+          submodules: true
+      # We use node v12 in the CI pipeline
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+      - name: Build packages
+        run: |
+          set -e
+          yarn
+          yarn build
