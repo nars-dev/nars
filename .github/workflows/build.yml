@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+      - uses: Arduino/actions/setup-protoc@master
       - name: Build packages
         run: |
           set -e

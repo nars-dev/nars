@@ -1,3 +1,5 @@
+set -e
+
 PROTOC_GEN_TS_PATH="./node_modules/.bin/protoc-gen-ts"
 OUT_DIR="./dist"
 
@@ -8,4 +10,6 @@ protoc \
     -I ../nars-common/proto/ \
     struct.proto nars_animated.proto schema.proto
 
-cp ./src/*_pb.d.ts ./dist/
+mkdir -p $OUT_DIR
+
+cp ./src/*_pb.d.ts $OUT_DIR
