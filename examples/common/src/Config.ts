@@ -5,12 +5,12 @@ import { InputProp } from "nars-common";
  */
 export const config = {
   Form: {
-    isCompany: InputProp.optional(InputProp.boolean)
+    isCompany: InputProp.optional(InputProp.boolean),
   },
   Feed: {
-    backgroundColor: InputProp.string
+    backgroundColor: InputProp.string,
   },
   ProgressBar: {
-    height: InputProp.number
+    height: InputProp.number,
   },
 };
