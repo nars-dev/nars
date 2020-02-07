@@ -6111,6 +6111,33 @@ nanomatch@^1.2.9:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
+nars-client@1.0.0-alpha.5:
+  version "1.0.0-alpha.5"
+  resolved "https://registry.yarnpkg.com/nars-client/-/nars-client-1.0.0-alpha.5.tgz#8aa8511f0d8a898cb27e0441f9023cf9ceacb01b"
+  integrity sha512-kJfV6TXKUHLc6vbcCFBxrhdFMHuQ8Tc+bb3zuAguFNddlg+nGpmgyYqqGJXObpkqGZOTDY/IXDhAwOWZlzatPw==
+  dependencies:
+    nars-common "1.0.0-alpha.2"
+    ts-protoc-gen "^0.12.1-pre.a78a914"
+
+nars-common@1.0.0-alpha.2:
+  version "1.0.0-alpha.2"
+  resolved "https://registry.yarnpkg.com/nars-common/-/nars-common-1.0.0-alpha.2.tgz#4f6417396149d8d2ac8c72e0b7fa0f59c044de21"
+  integrity sha512-NcuCtBWOA09aiEUBzbm3TuDjZk/fyzeL6wEviYVrmbILzMzW5Vv8F/W70P/BNj+RIczfmDjSDJD5aqHpdO4POQ==
+
+nars@1.0.0-alpha.9:
+  version "1.0.0-alpha.9"
+  resolved "https://registry.yarnpkg.com/nars/-/nars-1.0.0-alpha.9.tgz#bbdb6d3e98f6c0ac4cd345b6187f9901387942bb"
+  integrity sha512-QCMXY5j40kH/7cmODp17dNI1wp+A81V3eN+P0V8b3JCKUBGdPSg8FAEjWIDHTxWIlSul+5JzUK+CKDIGCEcgeg==
+  dependencies:
+    analytics-node "^3.4.0-beta.1"
+    bs-platform "7.0.1"
+    gentype "^3.4.0"
+    nars-common "1.0.0-alpha.2"
+    node-machine-id "^1.1.12"
+    ocaml-protoc-plugin-runtime-bs "2.0.2"
+    reason-react-reconciler "~0.24.0000"
+    uuid "^3.3.3"
+
 natural-compare@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/natural-compare/-/natural-compare-1.4.0.tgz#4abebfeed7541f2c27acfb29bdbbd15c8d5ba4f7"
@@ -6446,6 +6473,11 @@ object.values@^1.1.0:
     es-abstract "^1.12.0"
     function-bind "^1.1.1"
     has "^1.0.3"
+
+ocaml-protoc-plugin-runtime-bs@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ocaml-protoc-plugin-runtime-bs/-/ocaml-protoc-plugin-runtime-bs-2.0.2.tgz#9a0cac5dc26012cbc8ee8512fbb01279de456a03"
+  integrity sha512-fVVT8U566eHwVjqW0QYE0AOV4uW+gOifbUypdIdJaSLU8hU0CSUL14NFdIn2QLaFE1yuPDr4Ni3yB0ffa4rWRA==
 
 ocaml-protoc-plugin-runtime-bs@3.0.0-alpha.3:
   version "3.0.0-alpha.3"
