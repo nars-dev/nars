@@ -5,9 +5,9 @@
 // tslint:disable-next-line:no-var-requires
 const TouchableOpacityBS = require('./TouchableOpacity.bs');
 
-import {t as LocalProp_t} from './LocalProp.gen';
+import {t as Callback_t} from './Callback.gen';
 
 // tslint:disable-next-line:interface-over-type-literal
-export type props = { readonly onPress?: (_1:void) => void; readonly localProps?: { readonly onPress?: LocalProp_t } };
+export type props = { readonly onPress?: Callback_t<void> };
 
 export const name: string = TouchableOpacityBS.name;

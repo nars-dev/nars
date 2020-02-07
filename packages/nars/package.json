@@ -24,7 +24,7 @@
     "bs-platform": "7.0.1",
     "nars-common": "1.0.0-alpha.2",
     "node-machine-id": "^1.1.12",
-    "ocaml-protoc-plugin-runtime-bs": "2.0.2",
+    "ocaml-protoc-plugin-runtime-bs": "3.0.0-alpha.3",
     "reason-react-reconciler": "~0.24.0000",
     "uuid": "^3.3.3",
     "gentype": "^3.4.0"
@@ -36,6 +36,6 @@
     "@types/uuid": "^3.4.5",
     "@types/ws": "^6.0.3",
     "prettier": "^1.18.2",
-    "typescript": "~3.5.0"
+    "typescript": "~3.7.0"
   }
 }

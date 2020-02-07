@@ -53,8 +53,10 @@ type DecodedValue =
   | UnknownObject
   | DecodedValueArray;
 
-export const ofValue = (value: Value): DecodedValue => {
-  if (value.hasNumberValue()) {
+export const ofValue = (value: Value | undefined): DecodedValue => {
+  if (typeof value === "undefined") {
+    return undefined;
+  } else if (value.hasNumberValue()) {
     return Number(value.getNumberValue());
   } else if (value.hasNullValue()) {
     return null;

@@ -4,6 +4,7 @@ import { name, props } from "./Text.gen";
 
 export interface Props extends props {
   style?: StyleProp<TextStyle>;
+  numberOfLines?: number;
   children?: React.ReactNode;
 }
 

@@ -2,21 +2,20 @@
 let name = "TouchableOpacity";
 
 [@genType]
-type props = {
-  .
-  "onPress": option(unit => unit),
-  "localProps": option({. "onPress": option(LocalProp.t)}),
-};
+type props = {. "onPress": option(Callback.t(unit))};
 
 external props_unsafe_cast: Js.t('a) => props = "%identity";
 
-let encoder =
-    (~key, ~props as Instance.Props(props), ~bridge, ~children) => {
+let encoder = (~key, ~props as Instance.Props(props), ~rpcInterface, ~children) => {
   let props = props_unsafe_cast(props);
   let onPress =
-    ProtoEncoders.encodeArityZeroCallbackOptional(
-      ~registerCallback=bridge.Instance.registerCallback,
-      ~callback=props##onPress,
+    ProtoEncoders.encodeCallbackOptional(
+      ~rpcInterface,
+      ~callback=
+        Js.Option.map(
+          (. callback) => Callback.map(~f=_ => (), callback),
+          props##onPress,
+        ),
     );
   Schema.ReactElement.{
     key,
@@ -24,10 +23,7 @@ let encoder =
       `TouchableOpacity(
         Schema.TouchableOpacity.{
           onPress,
-          localProps:
-            ProtoEncoders.encodeOptionalLocalProps(
-              LocalProp.propsToDict(props##localProps),
-            ),
+          localProps: [],
           children: Array.to_list(children),
         },
       ),

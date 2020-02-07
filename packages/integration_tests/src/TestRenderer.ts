@@ -121,6 +121,7 @@ export const render = (element: React.ReactElement): ReactTestRenderer => {
   act(() => {
     component = create(element);
   });
+  // @ts-ignore: It's defined in the synchronous act() callback.
   return component;
 };
 

@@ -4,18 +4,14 @@
 var Curry = require("bs-platform/lib/js/curry.js");
 var Caml_array = require("bs-platform/lib/js/caml_array.js");
 
-function encode(instance, registerCallback, updateAnimatedValue) {
+function encode(instance, rpcInterface) {
   if (typeof instance === "number") {
     return /* Suspended */0;
   } else if (instance.tag) {
     var inst = instance[0];
-    var children = encodeArray(inst.children, registerCallback, updateAnimatedValue);
+    var children = encodeArray(inst.children, rpcInterface);
     if (children) {
-      var bridge = {
-        registerCallback: registerCallback,
-        updateAnimatedValue: updateAnimatedValue
-      };
-      return /* Encoded */[Curry._4(inst.encode, inst.key, inst.props, bridge, children[0])];
+      return /* Encoded */[Curry._4(inst.encode, inst.key, inst.props, rpcInterface, children[0])];
     } else {
       return /* Suspended */0;
     }
@@ -24,13 +20,13 @@ function encode(instance, registerCallback, updateAnimatedValue) {
               key: undefined,
               value: /* `RawText */[
                 -687863147,
-                instance[0]
+                instance[0].contents
               ]
             }];
   }
 }
 
-function encodeArray(instances, registerCallback, updateAnimatedValue) {
+function encodeArray(instances, rpcInterface) {
   var length = instances.length;
   var resultArray = new Array(length);
   var _index = 0;
@@ -40,7 +36,7 @@ function encodeArray(instances, registerCallback, updateAnimatedValue) {
       return /* Encoded */[resultArray];
     } else {
       var current = Caml_array.caml_array_get(instances, index);
-      var match = encode(current, registerCallback, updateAnimatedValue);
+      var match = encode(current, rpcInterface);
       if (match) {
         Caml_array.caml_array_set(resultArray, index, match[0]);
         _index = index + 1 | 0;
@@ -52,11 +48,8 @@ function encodeArray(instances, registerCallback, updateAnimatedValue) {
   };
 }
 
-var Struct = /* alias */0;
-
 var waitComponentName = "Wait";
 
-exports.Struct = Struct;
 exports.encode = encode;
 exports.encodeArray = encodeArray;
 exports.waitComponentName = waitComponentName;

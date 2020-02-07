@@ -8,20 +8,27 @@
    Source: nars_animated.proto
    Syntax: proto3 
    Parameters:
-     annot=''
      debug=false
+     annot=''
      opens=[]
      int64_as_int=false
      int32_as_int=true
      fixed_as_int=false
      singleton_record=false
 *)
+
+open Ocaml_protoc_plugin.Runtime [@@warning "-33"]
+(**/**)
+module Imported'modules = struct
+  module Struct = Struct
+end
+(**/**)
 module Nars = struct
   module Animated = struct
     module rec UnaryOperatorType : sig
       type t = Sqrt | Log | Sin | Cos | Tan | Acos | Asin | Atan | Exp | Round | Floor | Ceil | Defined | Not 
       val to_int: t -> int
-      val from_int: int -> t Ocaml_protoc_plugin.Result.t
+      val from_int: int -> (t, [> Runtime'.Result.error]) result
     end = struct 
       type t = Sqrt | Log | Sin | Cos | Tan | Acos | Asin | Atan | Exp | Round | Floor | Ceil | Defined | Not 
       let to_int = function
@@ -61,7 +68,7 @@ module Nars = struct
     and MultiOperatorType : sig
       type t = Add | Sub | Multiply | Divide | Pow | Modulo | And | Or 
       val to_int: t -> int
-      val from_int: int -> t Ocaml_protoc_plugin.Result.t
+      val from_int: int -> (t, [> Runtime'.Result.error]) result
     end = struct 
       type t = Add | Sub | Multiply | Divide | Pow | Modulo | And | Or 
       let to_int = function
@@ -89,7 +96,7 @@ module Nars = struct
     and UnaryDerivedOperatorType : sig
       type t = Abs | Acc | Diff 
       val to_int: t -> int
-      val from_int: int -> t Ocaml_protoc_plugin.Result.t
+      val from_int: int -> (t, [> Runtime'.Result.error]) result
     end = struct 
       type t = Abs | Acc | Diff 
       let to_int = function
@@ -107,7 +114,7 @@ module Nars = struct
     and BinaryOperatorType : sig
       type t = Max | Min | LessThan | Eq | GreaterThan | LessOrEq | GreaterOrEq | Neq 
       val to_int: t -> int
-      val from_int: int -> t Ocaml_protoc_plugin.Result.t
+      val from_int: int -> (t, [> Runtime'.Result.error]) result
     end = struct 
       type t = Max | Min | LessThan | Eq | GreaterThan | LessOrEq | GreaterOrEq | Neq 
       let to_int = function
@@ -135,7 +142,7 @@ module Nars = struct
     and ExtrapolateType : sig
       type t = Extend | Clamp | Identity 
       val to_int: t -> int
-      val from_int: int -> t Ocaml_protoc_plugin.Result.t
+      val from_int: int -> (t, [> Runtime'.Result.error]) result
     end = struct 
       type t = Extend | Clamp | Identity 
       let to_int = function
@@ -153,7 +160,7 @@ module Nars = struct
     and ClockOperationType : sig
       type t = Start | Stop | IsRunning 
       val to_int: t -> int
-      val from_int: int -> t Ocaml_protoc_plugin.Result.t
+      val from_int: int -> (t, [> Runtime'.Result.error]) result
     end = struct 
       type t = Start | Stop | IsRunning 
       let to_int = function
@@ -171,889 +178,889 @@ module Nars = struct
     and EasingCustom : sig
       val name': unit -> string
       type t = Node.t option 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.EasingCustom"
-      type t = Node.t option 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Node.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.EasingCustom"
+      type t = Node.t option
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Node.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Node.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Node.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and EasingStatic : sig
       val name': unit -> string
       type t = unit 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.EasingStatic"
-      type t = unit 
-      let to_proto = 
-        let apply = fun ~f () -> f in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.EasingStatic"
+      type t = unit
+      let to_proto =
+        let apply = fun ~f () -> f [] in
+        let spec = Runtime'.Serialize.C.( nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = () in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extension -> () in
+        let spec = Runtime'.Deserialize.C.( nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and EasingFunction : sig
       val name': unit -> string
-      type t = [ `Builtin of EasingStatic.t | `Custom of EasingCustom.t ] 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = [ `not_set | `Builtin of EasingStatic.t | `Custom of EasingCustom.t ] 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.EasingFunction"
-      type t = [ `Builtin of EasingStatic.t | `Custom of EasingCustom.t ] 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Builtin v -> oneof_elem (1, (message (fun t -> EasingStatic.to_proto t)), v) | `Custom v -> oneof_elem (2, (message (fun t -> EasingCustom.to_proto t)), v))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.EasingFunction"
+      type t = [ `not_set | `Builtin of EasingStatic.t | `Custom of EasingCustom.t ]
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Builtin v -> oneof_elem (1, (message (fun t -> EasingStatic.to_proto t)), v) | `Custom v -> oneof_elem (2, (message (fun t -> EasingCustom.to_proto t)), v))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> EasingStatic.from_proto t)), fun v -> `Builtin v); oneof_elem (2, (message (fun t -> EasingCustom.from_proto t)), fun v -> `Custom v) ]) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> EasingStatic.from_proto t)), fun v -> `Builtin v); oneof_elem (2, (message (fun t -> EasingCustom.from_proto t)), fun v -> `Custom v) ]) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and UnaryOperator : sig
       val name': unit -> string
       type t = { value: Adaptable.t option; operator: UnaryOperatorType.t } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.UnaryOperator"
-      type t = { value: Adaptable.t option; operator: UnaryOperatorType.t } 
-      let to_proto = 
-        let apply = fun ~f:f' { value; operator } -> f' value operator in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic (2, (enum UnaryOperatorType.to_int), proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.UnaryOperator"
+      type t = { value: Adaptable.t option; operator: UnaryOperatorType.t }
+      let to_proto =
+        let apply = fun ~f:f' { value; operator } -> f' [] value operator in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic (2, (enum UnaryOperatorType.to_int), proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun value operator -> { value; operator } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic (2, (enum UnaryOperatorType.from_int), proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions value operator -> { value; operator } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic (2, (enum UnaryOperatorType.from_int), proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and MultiOperator : sig
       val name': unit -> string
       type t = { a: Adaptable.t option; b: Adaptable.t option; others: Adaptable.t list; operator: MultiOperatorType.t } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.MultiOperator"
-      type t = { a: Adaptable.t option; b: Adaptable.t option; others: Adaptable.t list; operator: MultiOperatorType.t } 
-      let to_proto = 
-        let apply = fun ~f:f' { a; b; others; operator } -> f' a b others operator in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: repeated (3, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: basic (4, (enum MultiOperatorType.to_int), proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.MultiOperator"
+      type t = { a: Adaptable.t option; b: Adaptable.t option; others: Adaptable.t list; operator: MultiOperatorType.t }
+      let to_proto =
+        let apply = fun ~f:f' { a; b; others; operator } -> f' [] a b others operator in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: repeated (3, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: basic (4, (enum MultiOperatorType.to_int), proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a b others operator -> { a; b; others; operator } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: repeated (3, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: basic (4, (enum MultiOperatorType.from_int), proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a b others operator -> { a; b; others; operator } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: repeated (3, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: basic (4, (enum MultiOperatorType.from_int), proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Condition : sig
       val name': unit -> string
       type t = { condition: Adaptable.t option; ifNode: Adaptable.t option; elseNode: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Condition"
-      type t = { condition: Adaptable.t option; ifNode: Adaptable.t option; elseNode: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { condition; ifNode; elseNode } -> f' condition ifNode elseNode in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Condition"
+      type t = { condition: Adaptable.t option; ifNode: Adaptable.t option; elseNode: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { condition; ifNode; elseNode } -> f' [] condition ifNode elseNode in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun condition ifNode elseNode -> { condition; ifNode; elseNode } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions condition ifNode elseNode -> { condition; ifNode; elseNode } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Value : sig
       val name': unit -> string
-      type t = { initialValue: [ `Float of float | `String of string | `Bool of bool ]; __nodeID: int } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = { initialValue: [ `not_set | `Float of float | `String of string | `Bool of bool ]; __nodeID: int } 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Value"
-      type t = { initialValue: [ `Float of float | `String of string | `Bool of bool ]; __nodeID: int } 
-      let to_proto = 
-        let apply = fun ~f:f' { initialValue; __nodeID } -> f' initialValue __nodeID in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Float v -> oneof_elem (1, float, v) | `String v -> oneof_elem (2, string, v) | `Bool v -> oneof_elem (3, bool, v))) ^:: basic (4, int32_int, proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Value"
+      type t = { initialValue: [ `not_set | `Float of float | `String of string | `Bool of bool ]; __nodeID: int }
+      let to_proto =
+        let apply = fun ~f:f' { initialValue; __nodeID } -> f' [] initialValue __nodeID in
+        let spec = Runtime'.Serialize.C.( oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Float v -> oneof_elem (1, float, v) | `String v -> oneof_elem (2, string, v) | `Bool v -> oneof_elem (3, bool, v))) ^:: basic (4, int32_int, proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun initialValue __nodeID -> { initialValue; __nodeID } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, float, fun v -> `Float v); oneof_elem (2, string, fun v -> `String v); oneof_elem (3, bool, fun v -> `Bool v) ]) ^:: basic (4, int32_int, proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions initialValue __nodeID -> { initialValue; __nodeID } in
+        let spec = Runtime'.Deserialize.C.( oneof ([ oneof_elem (1, float, fun v -> `Float v); oneof_elem (2, string, fun v -> `String v); oneof_elem (3, bool, fun v -> `Bool v) ]) ^:: basic (4, int32_int, proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Setter : sig
       val name': unit -> string
       type t = { valueToBeUpdated: Value.t option; toValue: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Setter"
-      type t = { valueToBeUpdated: Value.t option; toValue: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { valueToBeUpdated; toValue } -> f' valueToBeUpdated toValue in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Value.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Setter"
+      type t = { valueToBeUpdated: Value.t option; toValue: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { valueToBeUpdated; toValue } -> f' [] valueToBeUpdated toValue in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Value.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun valueToBeUpdated toValue -> { valueToBeUpdated; toValue } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Value.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions valueToBeUpdated toValue -> { valueToBeUpdated; toValue } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Value.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and UnaryDerivedOperator : sig
       val name': unit -> string
       type t = { value: Adaptable.t option; operator: UnaryDerivedOperatorType.t } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.UnaryDerivedOperator"
-      type t = { value: Adaptable.t option; operator: UnaryDerivedOperatorType.t } 
-      let to_proto = 
-        let apply = fun ~f:f' { value; operator } -> f' value operator in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic (2, (enum UnaryDerivedOperatorType.to_int), proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.UnaryDerivedOperator"
+      type t = { value: Adaptable.t option; operator: UnaryDerivedOperatorType.t }
+      let to_proto =
+        let apply = fun ~f:f' { value; operator } -> f' [] value operator in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic (2, (enum UnaryDerivedOperatorType.to_int), proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun value operator -> { value; operator } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic (2, (enum UnaryDerivedOperatorType.from_int), proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions value operator -> { value; operator } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic (2, (enum UnaryDerivedOperatorType.from_int), proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and BinaryOperator : sig
       val name': unit -> string
       type t = { operator: BinaryOperatorType.t; left: Adaptable.t option; right: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.BinaryOperator"
-      type t = { operator: BinaryOperatorType.t; left: Adaptable.t option; right: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { operator; left; right } -> f' operator left right in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, (enum BinaryOperatorType.to_int), proto3) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.BinaryOperator"
+      type t = { operator: BinaryOperatorType.t; left: Adaptable.t option; right: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { operator; left; right } -> f' [] operator left right in
+        let spec = Runtime'.Serialize.C.( basic (1, (enum BinaryOperatorType.to_int), proto3) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun operator left right -> { operator; left; right } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, (enum BinaryOperatorType.from_int), proto3) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions operator left right -> { operator; left; right } in
+        let spec = Runtime'.Deserialize.C.( basic (1, (enum BinaryOperatorType.from_int), proto3) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Color : sig
       val name': unit -> string
       type t = { r: Adaptable.t option; g: Adaptable.t option; b: Adaptable.t option; alpha: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Color"
-      type t = { r: Adaptable.t option; g: Adaptable.t option; b: Adaptable.t option; alpha: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { r; g; b; alpha } -> f' r g b alpha in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Color"
+      type t = { r: Adaptable.t option; g: Adaptable.t option; b: Adaptable.t option; alpha: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { r; g; b; alpha } -> f' [] r g b alpha in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun r g b alpha -> { r; g; b; alpha } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions r g b alpha -> { r; g; b; alpha } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and DiffClamp : sig
       val name': unit -> string
       type t = { value: Adaptable.t option; minVal: Adaptable.t option; maxVal: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.DiffClamp"
-      type t = { value: Adaptable.t option; minVal: Adaptable.t option; maxVal: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { value; minVal; maxVal } -> f' value minVal maxVal in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.DiffClamp"
+      type t = { value: Adaptable.t option; minVal: Adaptable.t option; maxVal: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { value; minVal; maxVal } -> f' [] value minVal maxVal in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun value minVal maxVal -> { value; minVal; maxVal } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions value minVal maxVal -> { value; minVal; maxVal } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Extrapolate : sig
       val name': unit -> string
       type t = ExtrapolateType.t 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Extrapolate"
-      type t = ExtrapolateType.t 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, (enum ExtrapolateType.to_int), proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Extrapolate"
+      type t = ExtrapolateType.t
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( basic (1, (enum ExtrapolateType.to_int), proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, (enum ExtrapolateType.from_int), proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( basic (1, (enum ExtrapolateType.from_int), proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and InterpolationConfig : sig
       val name': unit -> string
       type t = { inputRange: Adaptable.t list; outputRange: Adaptable.t list; extrapolate: Extrapolate.t option; extrapolateLeft: Extrapolate.t option; extrapolateRight: Extrapolate.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.InterpolationConfig"
-      type t = { inputRange: Adaptable.t list; outputRange: Adaptable.t list; extrapolate: Extrapolate.t option; extrapolateLeft: Extrapolate.t option; extrapolateRight: Extrapolate.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { inputRange; outputRange; extrapolate; extrapolateLeft; extrapolateRight } -> f' inputRange outputRange extrapolate extrapolateLeft extrapolateRight in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: repeated (2, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: basic_opt (3, (message (fun t -> Extrapolate.to_proto t))) ^:: basic_opt (4, (message (fun t -> Extrapolate.to_proto t))) ^:: basic_opt (5, (message (fun t -> Extrapolate.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.InterpolationConfig"
+      type t = { inputRange: Adaptable.t list; outputRange: Adaptable.t list; extrapolate: Extrapolate.t option; extrapolateLeft: Extrapolate.t option; extrapolateRight: Extrapolate.t option }
+      let to_proto =
+        let apply = fun ~f:f' { inputRange; outputRange; extrapolate; extrapolateLeft; extrapolateRight } -> f' [] inputRange outputRange extrapolate extrapolateLeft extrapolateRight in
+        let spec = Runtime'.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: repeated (2, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: basic_opt (3, (message (fun t -> Extrapolate.to_proto t))) ^:: basic_opt (4, (message (fun t -> Extrapolate.to_proto t))) ^:: basic_opt (5, (message (fun t -> Extrapolate.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun inputRange outputRange extrapolate extrapolateLeft extrapolateRight -> { inputRange; outputRange; extrapolate; extrapolateLeft; extrapolateRight } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: repeated (2, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: basic_opt (3, (message (fun t -> Extrapolate.from_proto t))) ^:: basic_opt (4, (message (fun t -> Extrapolate.from_proto t))) ^:: basic_opt (5, (message (fun t -> Extrapolate.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions inputRange outputRange extrapolate extrapolateLeft extrapolateRight -> { inputRange; outputRange; extrapolate; extrapolateLeft; extrapolateRight } in
+        let spec = Runtime'.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: repeated (2, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: basic_opt (3, (message (fun t -> Extrapolate.from_proto t))) ^:: basic_opt (4, (message (fun t -> Extrapolate.from_proto t))) ^:: basic_opt (5, (message (fun t -> Extrapolate.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Interpolate : sig
       val name': unit -> string
       type t = { value: Adaptable.t option; config: InterpolationConfig.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Interpolate"
-      type t = { value: Adaptable.t option; config: InterpolationConfig.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { value; config } -> f' value config in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> InterpolationConfig.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Interpolate"
+      type t = { value: Adaptable.t option; config: InterpolationConfig.t option }
+      let to_proto =
+        let apply = fun ~f:f' { value; config } -> f' [] value config in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> InterpolationConfig.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun value config -> { value; config } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> InterpolationConfig.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions value config -> { value; config } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> InterpolationConfig.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Block : sig
       val name': unit -> string
       type t = Adaptable.t list 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Block"
-      type t = Adaptable.t list 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Block"
+      type t = Adaptable.t list
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Concat : sig
       val name': unit -> string
       type t = Adaptable.t list 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Concat"
-      type t = Adaptable.t list 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Concat"
+      type t = Adaptable.t list
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Node : sig
       val name': unit -> string
-      type t = [ `Cond of Condition.t | `Unary of UnaryOperator.t | `Multi of MultiOperator.t | `Setter of Setter.t | `Binary of BinaryOperator.t | `DerivedUnary of UnaryDerivedOperator.t | `Animation of Animation.t | `Block of Block.t | `Value of Value.t | `Concat of Concat.t | `Call of Call.t | `Debug of Debug.t | `OnChange of OnChange.t | `ClockOperation of ClockOperation.t | `Clock of Clock.t | `Interpolate of Interpolate.t | `Color of Color.t | `DiffClamp of DiffClamp.t ] 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = [ `not_set | `Cond of Condition.t | `Unary of UnaryOperator.t | `Multi of MultiOperator.t | `Setter of Setter.t | `Binary of BinaryOperator.t | `DerivedUnary of UnaryDerivedOperator.t | `Animation of Animation.t | `Block of Block.t | `Value of Value.t | `Concat of Concat.t | `Call of Call.t | `Debug of Debug.t | `OnChange of OnChange.t | `ClockOperation of ClockOperation.t | `Clock of Clock.t | `Interpolate of Interpolate.t | `Color of Color.t | `DiffClamp of DiffClamp.t ] 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Node"
-      type t = [ `Cond of Condition.t | `Unary of UnaryOperator.t | `Multi of MultiOperator.t | `Setter of Setter.t | `Binary of BinaryOperator.t | `DerivedUnary of UnaryDerivedOperator.t | `Animation of Animation.t | `Block of Block.t | `Value of Value.t | `Concat of Concat.t | `Call of Call.t | `Debug of Debug.t | `OnChange of OnChange.t | `ClockOperation of ClockOperation.t | `Clock of Clock.t | `Interpolate of Interpolate.t | `Color of Color.t | `DiffClamp of DiffClamp.t ] 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Cond v -> oneof_elem (1, (message (fun t -> Condition.to_proto t)), v) | `Unary v -> oneof_elem (2, (message (fun t -> UnaryOperator.to_proto t)), v) | `Multi v -> oneof_elem (3, (message (fun t -> MultiOperator.to_proto t)), v) | `Setter v -> oneof_elem (4, (message (fun t -> Setter.to_proto t)), v) | `Binary v -> oneof_elem (5, (message (fun t -> BinaryOperator.to_proto t)), v) | `DerivedUnary v -> oneof_elem (6, (message (fun t -> UnaryDerivedOperator.to_proto t)), v) | `Animation v -> oneof_elem (7, (message (fun t -> Animation.to_proto t)), v) | `Block v -> oneof_elem (8, (message (fun t -> Block.to_proto t)), v) | `Value v -> oneof_elem (9, (message (fun t -> Value.to_proto t)), v) | `Concat v -> oneof_elem (10, (message (fun t -> Concat.to_proto t)), v) | `Call v -> oneof_elem (11, (message (fun t -> Call.to_proto t)), v) | `Debug v -> oneof_elem (12, (message (fun t -> Debug.to_proto t)), v) | `OnChange v -> oneof_elem (13, (message (fun t -> OnChange.to_proto t)), v) | `ClockOperation v -> oneof_elem (14, (message (fun t -> ClockOperation.to_proto t)), v) | `Clock v -> oneof_elem (15, (message (fun t -> Clock.to_proto t)), v) | `Interpolate v -> oneof_elem (16, (message (fun t -> Interpolate.to_proto t)), v) | `Color v -> oneof_elem (17, (message (fun t -> Color.to_proto t)), v) | `DiffClamp v -> oneof_elem (18, (message (fun t -> DiffClamp.to_proto t)), v))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Node"
+      type t = [ `not_set | `Cond of Condition.t | `Unary of UnaryOperator.t | `Multi of MultiOperator.t | `Setter of Setter.t | `Binary of BinaryOperator.t | `DerivedUnary of UnaryDerivedOperator.t | `Animation of Animation.t | `Block of Block.t | `Value of Value.t | `Concat of Concat.t | `Call of Call.t | `Debug of Debug.t | `OnChange of OnChange.t | `ClockOperation of ClockOperation.t | `Clock of Clock.t | `Interpolate of Interpolate.t | `Color of Color.t | `DiffClamp of DiffClamp.t ]
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Cond v -> oneof_elem (1, (message (fun t -> Condition.to_proto t)), v) | `Unary v -> oneof_elem (2, (message (fun t -> UnaryOperator.to_proto t)), v) | `Multi v -> oneof_elem (3, (message (fun t -> MultiOperator.to_proto t)), v) | `Setter v -> oneof_elem (4, (message (fun t -> Setter.to_proto t)), v) | `Binary v -> oneof_elem (5, (message (fun t -> BinaryOperator.to_proto t)), v) | `DerivedUnary v -> oneof_elem (6, (message (fun t -> UnaryDerivedOperator.to_proto t)), v) | `Animation v -> oneof_elem (7, (message (fun t -> Animation.to_proto t)), v) | `Block v -> oneof_elem (8, (message (fun t -> Block.to_proto t)), v) | `Value v -> oneof_elem (9, (message (fun t -> Value.to_proto t)), v) | `Concat v -> oneof_elem (10, (message (fun t -> Concat.to_proto t)), v) | `Call v -> oneof_elem (11, (message (fun t -> Call.to_proto t)), v) | `Debug v -> oneof_elem (12, (message (fun t -> Debug.to_proto t)), v) | `OnChange v -> oneof_elem (13, (message (fun t -> OnChange.to_proto t)), v) | `ClockOperation v -> oneof_elem (14, (message (fun t -> ClockOperation.to_proto t)), v) | `Clock v -> oneof_elem (15, (message (fun t -> Clock.to_proto t)), v) | `Interpolate v -> oneof_elem (16, (message (fun t -> Interpolate.to_proto t)), v) | `Color v -> oneof_elem (17, (message (fun t -> Color.to_proto t)), v) | `DiffClamp v -> oneof_elem (18, (message (fun t -> DiffClamp.to_proto t)), v))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> Condition.from_proto t)), fun v -> `Cond v); oneof_elem (2, (message (fun t -> UnaryOperator.from_proto t)), fun v -> `Unary v); oneof_elem (3, (message (fun t -> MultiOperator.from_proto t)), fun v -> `Multi v); oneof_elem (4, (message (fun t -> Setter.from_proto t)), fun v -> `Setter v); oneof_elem (5, (message (fun t -> BinaryOperator.from_proto t)), fun v -> `Binary v); oneof_elem (6, (message (fun t -> UnaryDerivedOperator.from_proto t)), fun v -> `DerivedUnary v); oneof_elem (7, (message (fun t -> Animation.from_proto t)), fun v -> `Animation v); oneof_elem (8, (message (fun t -> Block.from_proto t)), fun v -> `Block v); oneof_elem (9, (message (fun t -> Value.from_proto t)), fun v -> `Value v); oneof_elem (10, (message (fun t -> Concat.from_proto t)), fun v -> `Concat v); oneof_elem (11, (message (fun t -> Call.from_proto t)), fun v -> `Call v); oneof_elem (12, (message (fun t -> Debug.from_proto t)), fun v -> `Debug v); oneof_elem (13, (message (fun t -> OnChange.from_proto t)), fun v -> `OnChange v); oneof_elem (14, (message (fun t -> ClockOperation.from_proto t)), fun v -> `ClockOperation v); oneof_elem (15, (message (fun t -> Clock.from_proto t)), fun v -> `Clock v); oneof_elem (16, (message (fun t -> Interpolate.from_proto t)), fun v -> `Interpolate v); oneof_elem (17, (message (fun t -> Color.from_proto t)), fun v -> `Color v); oneof_elem (18, (message (fun t -> DiffClamp.from_proto t)), fun v -> `DiffClamp v) ]) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> Condition.from_proto t)), fun v -> `Cond v); oneof_elem (2, (message (fun t -> UnaryOperator.from_proto t)), fun v -> `Unary v); oneof_elem (3, (message (fun t -> MultiOperator.from_proto t)), fun v -> `Multi v); oneof_elem (4, (message (fun t -> Setter.from_proto t)), fun v -> `Setter v); oneof_elem (5, (message (fun t -> BinaryOperator.from_proto t)), fun v -> `Binary v); oneof_elem (6, (message (fun t -> UnaryDerivedOperator.from_proto t)), fun v -> `DerivedUnary v); oneof_elem (7, (message (fun t -> Animation.from_proto t)), fun v -> `Animation v); oneof_elem (8, (message (fun t -> Block.from_proto t)), fun v -> `Block v); oneof_elem (9, (message (fun t -> Value.from_proto t)), fun v -> `Value v); oneof_elem (10, (message (fun t -> Concat.from_proto t)), fun v -> `Concat v); oneof_elem (11, (message (fun t -> Call.from_proto t)), fun v -> `Call v); oneof_elem (12, (message (fun t -> Debug.from_proto t)), fun v -> `Debug v); oneof_elem (13, (message (fun t -> OnChange.from_proto t)), fun v -> `OnChange v); oneof_elem (14, (message (fun t -> ClockOperation.from_proto t)), fun v -> `ClockOperation v); oneof_elem (15, (message (fun t -> Clock.from_proto t)), fun v -> `Clock v); oneof_elem (16, (message (fun t -> Interpolate.from_proto t)), fun v -> `Interpolate v); oneof_elem (17, (message (fun t -> Color.from_proto t)), fun v -> `Color v); oneof_elem (18, (message (fun t -> DiffClamp.from_proto t)), fun v -> `DiffClamp v) ]) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and ValueArgument : sig
       val name': unit -> string
       type t = string 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.ValueArgument"
-      type t = string 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.ValueArgument"
+      type t = string
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( basic (1, string, proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( basic (1, string, proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Primitive : sig
       val name': unit -> string
-      type t = [ `Float of float | `String of string | `Bool of bool ] 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = [ `not_set | `Float of float | `String of string | `Bool of bool ] 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Primitive"
-      type t = [ `Float of float | `String of string | `Bool of bool ] 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Float v -> oneof_elem (1, float, v) | `String v -> oneof_elem (2, string, v) | `Bool v -> oneof_elem (3, bool, v))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Primitive"
+      type t = [ `not_set | `Float of float | `String of string | `Bool of bool ]
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Float v -> oneof_elem (1, float, v) | `String v -> oneof_elem (2, string, v) | `Bool v -> oneof_elem (3, bool, v))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, float, fun v -> `Float v); oneof_elem (2, string, fun v -> `String v); oneof_elem (3, bool, fun v -> `Bool v) ]) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( oneof ([ oneof_elem (1, float, fun v -> `Float v); oneof_elem (2, string, fun v -> `String v); oneof_elem (3, bool, fun v -> `Bool v) ]) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Adaptable : sig
       val name': unit -> string
-      type t = [ `Primitive of Primitive.t | `Node of Node.t ] 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = [ `not_set | `Primitive of Primitive.t | `Node of Node.t ] 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Adaptable"
-      type t = [ `Primitive of Primitive.t | `Node of Node.t ] 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Primitive v -> oneof_elem (1, (message (fun t -> Primitive.to_proto t)), v) | `Node v -> oneof_elem (2, (message (fun t -> Node.to_proto t)), v))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Adaptable"
+      type t = [ `not_set | `Primitive of Primitive.t | `Node of Node.t ]
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Primitive v -> oneof_elem (1, (message (fun t -> Primitive.to_proto t)), v) | `Node v -> oneof_elem (2, (message (fun t -> Node.to_proto t)), v))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> Primitive.from_proto t)), fun v -> `Primitive v); oneof_elem (2, (message (fun t -> Node.from_proto t)), fun v -> `Node v) ]) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> Primitive.from_proto t)), fun v -> `Primitive v); oneof_elem (2, (message (fun t -> Node.from_proto t)), fun v -> `Node v) ]) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Call : sig
       val name': unit -> string
       type t = { args: Adaptable.t list; callId: int } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Call"
-      type t = { args: Adaptable.t list; callId: int } 
-      let to_proto = 
-        let apply = fun ~f:f' { args; callId } -> f' args callId in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: basic (2, int32_int, proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Call"
+      type t = { args: Adaptable.t list; callId: int }
+      let to_proto =
+        let apply = fun ~f:f' { args; callId } -> f' [] args callId in
+        let spec = Runtime'.Serialize.C.( repeated (1, (message (fun t -> Adaptable.to_proto t)), not_packed) ^:: basic (2, int32_int, proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun args callId -> { args; callId } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: basic (2, int32_int, proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions args callId -> { args; callId } in
+        let spec = Runtime'.Deserialize.C.( repeated (1, (message (fun t -> Adaptable.from_proto t)), not_packed) ^:: basic (2, int32_int, proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Debug : sig
       val name': unit -> string
       type t = { debugMessage: string; value: Node.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Debug"
-      type t = { debugMessage: string; value: Node.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { debugMessage; value } -> f' debugMessage value in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Node.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Debug"
+      type t = { debugMessage: string; value: Node.t option }
+      let to_proto =
+        let apply = fun ~f:f' { debugMessage; value } -> f' [] debugMessage value in
+        let spec = Runtime'.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Node.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun debugMessage value -> { debugMessage; value } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Node.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions debugMessage value -> { debugMessage; value } in
+        let spec = Runtime'.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Node.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and OnChange : sig
       val name': unit -> string
       type t = { value: Adaptable.t option; action: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.OnChange"
-      type t = { value: Adaptable.t option; action: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { value; action } -> f' value action in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.OnChange"
+      type t = { value: Adaptable.t option; action: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { value; action } -> f' [] value action in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun value action -> { value; action } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions value action -> { value; action } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Clock : sig
       val name': unit -> string
       type t = int 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Clock"
-      type t = int 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Clock"
+      type t = int
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( basic (1, int32_int, proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and ClockOperation : sig
       val name': unit -> string
       type t = { clock: Clock.t option; operation: ClockOperationType.t } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.ClockOperation"
-      type t = { clock: Clock.t option; operation: ClockOperationType.t } 
-      let to_proto = 
-        let apply = fun ~f:f' { clock; operation } -> f' clock operation in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic (2, (enum ClockOperationType.to_int), proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.ClockOperation"
+      type t = { clock: Clock.t option; operation: ClockOperationType.t }
+      let to_proto =
+        let apply = fun ~f:f' { clock; operation } -> f' [] clock operation in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic (2, (enum ClockOperationType.to_int), proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun clock operation -> { clock; operation } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic (2, (enum ClockOperationType.from_int), proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions clock operation -> { clock; operation } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic (2, (enum ClockOperationType.from_int), proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and AnimationState : sig
       val name': unit -> string
       type t = { finished: Value.t option; position: Value.t option; time: Value.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.AnimationState"
-      type t = { finished: Value.t option; position: Value.t option; time: Value.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { finished; position; time } -> f' finished position time in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Value.to_proto t))) ^:: basic_opt (2, (message (fun t -> Value.to_proto t))) ^:: basic_opt (3, (message (fun t -> Value.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.AnimationState"
+      type t = { finished: Value.t option; position: Value.t option; time: Value.t option }
+      let to_proto =
+        let apply = fun ~f:f' { finished; position; time } -> f' [] finished position time in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Value.to_proto t))) ^:: basic_opt (2, (message (fun t -> Value.to_proto t))) ^:: basic_opt (3, (message (fun t -> Value.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun finished position time -> { finished; position; time } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Value.from_proto t))) ^:: basic_opt (2, (message (fun t -> Value.from_proto t))) ^:: basic_opt (3, (message (fun t -> Value.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions finished position time -> { finished; position; time } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Value.from_proto t))) ^:: basic_opt (2, (message (fun t -> Value.from_proto t))) ^:: basic_opt (3, (message (fun t -> Value.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and PhysicsAnimationState : sig
       val name': unit -> string
       type t = { animation: AnimationState.t option; velocity: Value.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.PhysicsAnimationState"
-      type t = { animation: AnimationState.t option; velocity: Value.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { animation; velocity } -> f' animation velocity in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> AnimationState.to_proto t))) ^:: basic_opt (2, (message (fun t -> Value.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.PhysicsAnimationState"
+      type t = { animation: AnimationState.t option; velocity: Value.t option }
+      let to_proto =
+        let apply = fun ~f:f' { animation; velocity } -> f' [] animation velocity in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> AnimationState.to_proto t))) ^:: basic_opt (2, (message (fun t -> Value.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun animation velocity -> { animation; velocity } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> AnimationState.from_proto t))) ^:: basic_opt (2, (message (fun t -> Value.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions animation velocity -> { animation; velocity } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> AnimationState.from_proto t))) ^:: basic_opt (2, (message (fun t -> Value.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and DecayConfig : sig
       val name': unit -> string
       type t = Adaptable.t option 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.DecayConfig"
-      type t = Adaptable.t option 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.DecayConfig"
+      type t = Adaptable.t option
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and DecayAnimation : sig
       val name': unit -> string
       type t = { clock: Clock.t option; state: PhysicsAnimationState.t option; config: DecayConfig.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.DecayAnimation"
-      type t = { clock: Clock.t option; state: PhysicsAnimationState.t option; config: DecayConfig.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { clock; state; config } -> f' clock state config in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.to_proto t))) ^:: basic_opt (3, (message (fun t -> DecayConfig.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.DecayAnimation"
+      type t = { clock: Clock.t option; state: PhysicsAnimationState.t option; config: DecayConfig.t option }
+      let to_proto =
+        let apply = fun ~f:f' { clock; state; config } -> f' [] clock state config in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.to_proto t))) ^:: basic_opt (3, (message (fun t -> DecayConfig.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun clock state config -> { clock; state; config } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.from_proto t))) ^:: basic_opt (3, (message (fun t -> DecayConfig.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions clock state config -> { clock; state; config } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.from_proto t))) ^:: basic_opt (3, (message (fun t -> DecayConfig.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and TimingState : sig
       val name': unit -> string
       type t = { animation: AnimationState.t option; frameTime: Value.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.TimingState"
-      type t = { animation: AnimationState.t option; frameTime: Value.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { animation; frameTime } -> f' animation frameTime in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> AnimationState.to_proto t))) ^:: basic_opt (2, (message (fun t -> Value.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.TimingState"
+      type t = { animation: AnimationState.t option; frameTime: Value.t option }
+      let to_proto =
+        let apply = fun ~f:f' { animation; frameTime } -> f' [] animation frameTime in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> AnimationState.to_proto t))) ^:: basic_opt (2, (message (fun t -> Value.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun animation frameTime -> { animation; frameTime } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> AnimationState.from_proto t))) ^:: basic_opt (2, (message (fun t -> Value.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions animation frameTime -> { animation; frameTime } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> AnimationState.from_proto t))) ^:: basic_opt (2, (message (fun t -> Value.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and TimingConfig : sig
       val name': unit -> string
       type t = { toValue: Adaptable.t option; duration: Adaptable.t option; easing: EasingFunction.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.TimingConfig"
-      type t = { toValue: Adaptable.t option; duration: Adaptable.t option; easing: EasingFunction.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { toValue; duration; easing } -> f' toValue duration easing in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> EasingFunction.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.TimingConfig"
+      type t = { toValue: Adaptable.t option; duration: Adaptable.t option; easing: EasingFunction.t option }
+      let to_proto =
+        let apply = fun ~f:f' { toValue; duration; easing } -> f' [] toValue duration easing in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> EasingFunction.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun toValue duration easing -> { toValue; duration; easing } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> EasingFunction.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions toValue duration easing -> { toValue; duration; easing } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> EasingFunction.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and TimingAnimation : sig
       val name': unit -> string
       type t = { clock: Clock.t option; state: TimingState.t option; config: TimingConfig.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.TimingAnimation"
-      type t = { clock: Clock.t option; state: TimingState.t option; config: TimingConfig.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { clock; state; config } -> f' clock state config in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic_opt (2, (message (fun t -> TimingState.to_proto t))) ^:: basic_opt (3, (message (fun t -> TimingConfig.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.TimingAnimation"
+      type t = { clock: Clock.t option; state: TimingState.t option; config: TimingConfig.t option }
+      let to_proto =
+        let apply = fun ~f:f' { clock; state; config } -> f' [] clock state config in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic_opt (2, (message (fun t -> TimingState.to_proto t))) ^:: basic_opt (3, (message (fun t -> TimingConfig.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun clock state config -> { clock; state; config } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic_opt (2, (message (fun t -> TimingState.from_proto t))) ^:: basic_opt (3, (message (fun t -> TimingConfig.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions clock state config -> { clock; state; config } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic_opt (2, (message (fun t -> TimingState.from_proto t))) ^:: basic_opt (3, (message (fun t -> TimingConfig.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and SpringConfig : sig
       val name': unit -> string
       type t = { damping: Adaptable.t option; mass: Adaptable.t option; stiffness: Adaptable.t option; overshootClamping: Adaptable.t option; restSpeedThreshold: Adaptable.t option; restDisplacementThreshold: Adaptable.t option; toValue: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.SpringConfig"
-      type t = { damping: Adaptable.t option; mass: Adaptable.t option; stiffness: Adaptable.t option; overshootClamping: Adaptable.t option; restSpeedThreshold: Adaptable.t option; restDisplacementThreshold: Adaptable.t option; toValue: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { damping; mass; stiffness; overshootClamping; restSpeedThreshold; restDisplacementThreshold; toValue } -> f' damping mass stiffness overshootClamping restSpeedThreshold restDisplacementThreshold toValue in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (5, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (6, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (7, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.SpringConfig"
+      type t = { damping: Adaptable.t option; mass: Adaptable.t option; stiffness: Adaptable.t option; overshootClamping: Adaptable.t option; restSpeedThreshold: Adaptable.t option; restDisplacementThreshold: Adaptable.t option; toValue: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { damping; mass; stiffness; overshootClamping; restSpeedThreshold; restDisplacementThreshold; toValue } -> f' [] damping mass stiffness overshootClamping restSpeedThreshold restDisplacementThreshold toValue in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (5, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (6, (message (fun t -> Adaptable.to_proto t))) ^:: basic_opt (7, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun damping mass stiffness overshootClamping restSpeedThreshold restDisplacementThreshold toValue -> { damping; mass; stiffness; overshootClamping; restSpeedThreshold; restDisplacementThreshold; toValue } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (5, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (6, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (7, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions damping mass stiffness overshootClamping restSpeedThreshold restDisplacementThreshold toValue -> { damping; mass; stiffness; overshootClamping; restSpeedThreshold; restDisplacementThreshold; toValue } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (3, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (4, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (5, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (6, (message (fun t -> Adaptable.from_proto t))) ^:: basic_opt (7, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and SpringAnimation : sig
       val name': unit -> string
       type t = { clock: Clock.t option; state: PhysicsAnimationState.t option; config: SpringConfig.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.SpringAnimation"
-      type t = { clock: Clock.t option; state: PhysicsAnimationState.t option; config: SpringConfig.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { clock; state; config } -> f' clock state config in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.to_proto t))) ^:: basic_opt (3, (message (fun t -> SpringConfig.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.SpringAnimation"
+      type t = { clock: Clock.t option; state: PhysicsAnimationState.t option; config: SpringConfig.t option }
+      let to_proto =
+        let apply = fun ~f:f' { clock; state; config } -> f' [] clock state config in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Clock.to_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.to_proto t))) ^:: basic_opt (3, (message (fun t -> SpringConfig.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun clock state config -> { clock; state; config } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.from_proto t))) ^:: basic_opt (3, (message (fun t -> SpringConfig.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions clock state config -> { clock; state; config } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Clock.from_proto t))) ^:: basic_opt (2, (message (fun t -> PhysicsAnimationState.from_proto t))) ^:: basic_opt (3, (message (fun t -> SpringConfig.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Animation : sig
       val name': unit -> string
-      type t = [ `Decay of DecayAnimation.t | `Timing of TimingAnimation.t | `Spring of SpringAnimation.t ] 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = [ `not_set | `Decay of DecayAnimation.t | `Timing of TimingAnimation.t | `Spring of SpringAnimation.t ] 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.Animation"
-      type t = [ `Decay of DecayAnimation.t | `Timing of TimingAnimation.t | `Spring of SpringAnimation.t ] 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Decay v -> oneof_elem (1, (message (fun t -> DecayAnimation.to_proto t)), v) | `Timing v -> oneof_elem (2, (message (fun t -> TimingAnimation.to_proto t)), v) | `Spring v -> oneof_elem (3, (message (fun t -> SpringAnimation.to_proto t)), v))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Animation"
+      type t = [ `not_set | `Decay of DecayAnimation.t | `Timing of TimingAnimation.t | `Spring of SpringAnimation.t ]
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Decay v -> oneof_elem (1, (message (fun t -> DecayAnimation.to_proto t)), v) | `Timing v -> oneof_elem (2, (message (fun t -> TimingAnimation.to_proto t)), v) | `Spring v -> oneof_elem (3, (message (fun t -> SpringAnimation.to_proto t)), v))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> DecayAnimation.from_proto t)), fun v -> `Decay v); oneof_elem (2, (message (fun t -> TimingAnimation.from_proto t)), fun v -> `Timing v); oneof_elem (3, (message (fun t -> SpringAnimation.from_proto t)), fun v -> `Spring v) ]) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( oneof ([ oneof_elem (1, (message (fun t -> DecayAnimation.from_proto t)), fun v -> `Decay v); oneof_elem (2, (message (fun t -> TimingAnimation.from_proto t)), fun v -> `Timing v); oneof_elem (3, (message (fun t -> SpringAnimation.from_proto t)), fun v -> `Spring v) ]) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and ListValue : sig
       val name': unit -> string
       type t = ValueOrAnimatedNode.t list 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.ListValue"
-      type t = ValueOrAnimatedNode.t list 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message (fun t -> ValueOrAnimatedNode.to_proto t)), not_packed) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.ListValue"
+      type t = ValueOrAnimatedNode.t list
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( repeated (1, (message (fun t -> ValueOrAnimatedNode.to_proto t)), not_packed) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message (fun t -> ValueOrAnimatedNode.from_proto t)), not_packed) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( repeated (1, (message (fun t -> ValueOrAnimatedNode.from_proto t)), not_packed) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and TopLevelNode : sig
       val name': unit -> string
       type t = { node: Node.t option; __nodeID: int } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.TopLevelNode"
-      type t = { node: Node.t option; __nodeID: int } 
-      let to_proto = 
-        let apply = fun ~f:f' { node; __nodeID } -> f' node __nodeID in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Node.to_proto t))) ^:: basic (2, int32_int, proto3) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.TopLevelNode"
+      type t = { node: Node.t option; __nodeID: int }
+      let to_proto =
+        let apply = fun ~f:f' { node; __nodeID } -> f' [] node __nodeID in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Node.to_proto t))) ^:: basic (2, int32_int, proto3) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun node __nodeID -> { node; __nodeID } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Node.from_proto t))) ^:: basic (2, int32_int, proto3) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions node __nodeID -> { node; __nodeID } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Node.from_proto t))) ^:: basic (2, int32_int, proto3) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and ValueOrAnimatedNode : sig
       val name': unit -> string
-      type t = [ `Null_value of Struct.Google_mirror.Protobuf.NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Style_value of Style.t | `List_value of ListValue.t | `Undefined_value of Struct.Google_mirror.Protobuf.UndefinedValue.t | `Node of TopLevelNode.t ] 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = [ `not_set | `Null_value of Imported'modules.Struct.Google_mirror.Protobuf.NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Style_value of Style.t | `List_value of ListValue.t | `Undefined_value of Imported'modules.Struct.Google_mirror.Protobuf.UndefinedValue.t | `Node of TopLevelNode.t ] 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.ValueOrAnimatedNode"
-      type t = [ `Null_value of Struct.Google_mirror.Protobuf.NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Style_value of Style.t | `List_value of ListValue.t | `Undefined_value of Struct.Google_mirror.Protobuf.UndefinedValue.t | `Node of TopLevelNode.t ] 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( oneof ((function `Null_value v -> oneof_elem (1, (enum Struct.Google_mirror.Protobuf.NullValue.to_int), v) | `Number_value v -> oneof_elem (2, double, v) | `String_value v -> oneof_elem (3, string, v) | `Bool_value v -> oneof_elem (4, bool, v) | `Style_value v -> oneof_elem (5, (message (fun t -> Style.to_proto t)), v) | `List_value v -> oneof_elem (6, (message (fun t -> ListValue.to_proto t)), v) | `Undefined_value v -> oneof_elem (7, (enum Struct.Google_mirror.Protobuf.UndefinedValue.to_int), v) | `Node v -> oneof_elem (8, (message (fun t -> TopLevelNode.to_proto t)), v))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.ValueOrAnimatedNode"
+      type t = [ `not_set | `Null_value of Imported'modules.Struct.Google_mirror.Protobuf.NullValue.t | `Number_value of float | `String_value of string | `Bool_value of bool | `Style_value of Style.t | `List_value of ListValue.t | `Undefined_value of Imported'modules.Struct.Google_mirror.Protobuf.UndefinedValue.t | `Node of TopLevelNode.t ]
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Null_value v -> oneof_elem (1, (enum Imported'modules.Struct.Google_mirror.Protobuf.NullValue.to_int), v) | `Number_value v -> oneof_elem (2, double, v) | `String_value v -> oneof_elem (3, string, v) | `Bool_value v -> oneof_elem (4, bool, v) | `Style_value v -> oneof_elem (5, (message (fun t -> Style.to_proto t)), v) | `List_value v -> oneof_elem (6, (message (fun t -> ListValue.to_proto t)), v) | `Undefined_value v -> oneof_elem (7, (enum Imported'modules.Struct.Google_mirror.Protobuf.UndefinedValue.to_int), v) | `Node v -> oneof_elem (8, (message (fun t -> TopLevelNode.to_proto t)), v))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( oneof ([ oneof_elem (1, (enum Struct.Google_mirror.Protobuf.NullValue.from_int), fun v -> `Null_value v); oneof_elem (2, double, fun v -> `Number_value v); oneof_elem (3, string, fun v -> `String_value v); oneof_elem (4, bool, fun v -> `Bool_value v); oneof_elem (5, (message (fun t -> Style.from_proto t)), fun v -> `Style_value v); oneof_elem (6, (message (fun t -> ListValue.from_proto t)), fun v -> `List_value v); oneof_elem (7, (enum Struct.Google_mirror.Protobuf.UndefinedValue.from_int), fun v -> `Undefined_value v); oneof_elem (8, (message (fun t -> TopLevelNode.from_proto t)), fun v -> `Node v) ]) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( oneof ([ oneof_elem (1, (enum Imported'modules.Struct.Google_mirror.Protobuf.NullValue.from_int), fun v -> `Null_value v); oneof_elem (2, double, fun v -> `Number_value v); oneof_elem (3, string, fun v -> `String_value v); oneof_elem (4, bool, fun v -> `Bool_value v); oneof_elem (5, (message (fun t -> Style.from_proto t)), fun v -> `Style_value v); oneof_elem (6, (message (fun t -> ListValue.from_proto t)), fun v -> `List_value v); oneof_elem (7, (enum Imported'modules.Struct.Google_mirror.Protobuf.UndefinedValue.from_int), fun v -> `Undefined_value v); oneof_elem (8, (message (fun t -> TopLevelNode.from_proto t)), fun v -> `Node v) ]) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and Style : sig
       module rec FieldsEntry : sig
         val name': unit -> string
         type t = (string * ValueOrAnimatedNode.t option) 
-        val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-        val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+        val to_proto: t -> Runtime'.Writer.t
+        val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
       end
       val name': unit -> string
-      type t = FieldsEntry.t list 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      type t = Style.FieldsEntry.t list 
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
       module rec FieldsEntry : sig
         val name': unit -> string
         type t = (string * ValueOrAnimatedNode.t option) 
-        val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-        val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+        val to_proto: t -> Runtime'.Writer.t
+        val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
       end = struct 
-        let name' () = "Nars_animated.nars.animated.Style.FieldsEntry"
-        type t = (string * ValueOrAnimatedNode.t option) 
-        let to_proto = 
-          let apply = fun ~f (a, b) -> f a b in
-          let spec = Ocaml_protoc_plugin.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> ValueOrAnimatedNode.to_proto t))) ^:: nil ) in
-          let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-          fun t -> apply ~f:(serialize ()) t
+        let name' () = "nars_animated.nars.animated.Style.FieldsEntry"
+        type t = (string * ValueOrAnimatedNode.t option)
+        let to_proto =
+          let apply = fun ~f (a, b) -> f [] a b in
+          let spec = Runtime'.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> ValueOrAnimatedNode.to_proto t))) ^:: nil ) in
+          let serialize = Runtime'.Serialize.serialize [] (spec) in
+          fun t -> apply ~f:serialize t
         
-        let from_proto = 
-          let constructor = fun a b -> (a, b) in
-          let spec = Ocaml_protoc_plugin.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> ValueOrAnimatedNode.from_proto t))) ^:: nil ) in
-          let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-          fun writer -> deserialize writer
+        let from_proto =
+          let constructor = fun _extensions a b -> (a, b) in
+          let spec = Runtime'.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> ValueOrAnimatedNode.from_proto t))) ^:: nil ) in
+          let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+          fun writer -> deserialize writer |> Runtime'.Result.open_error
         
       end
-      let name' () = "Nars_animated.nars.animated.Style"
-      type t = FieldsEntry.t list 
-      let to_proto = 
-        let apply = fun ~f a -> f a in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( repeated (1, (message (fun t -> FieldsEntry.to_proto t)), not_packed) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.Style"
+      type t = Style.FieldsEntry.t list
+      let to_proto =
+        let apply = fun ~f a -> f [] a in
+        let spec = Runtime'.Serialize.C.( repeated (1, (message (fun t -> Style.FieldsEntry.to_proto t)), not_packed) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun a -> a in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( repeated (1, (message (fun t -> FieldsEntry.from_proto t)), not_packed) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions a -> a in
+        let spec = Runtime'.Deserialize.C.( repeated (1, (message (fun t -> Style.FieldsEntry.from_proto t)), not_packed) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
     and ValueUpdate : sig
       val name': unit -> string
       type t = { value: Value.t option; toValue: Adaptable.t option } 
-      val to_proto: t -> Ocaml_protoc_plugin.Writer.t
-      val from_proto: Ocaml_protoc_plugin.Reader.t -> t Ocaml_protoc_plugin.Result.t
+      val to_proto: t -> Runtime'.Writer.t
+      val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
     end = struct 
-      let name' () = "Nars_animated.nars.animated.ValueUpdate"
-      type t = { value: Value.t option; toValue: Adaptable.t option } 
-      let to_proto = 
-        let apply = fun ~f:f' { value; toValue } -> f' value toValue in
-        let spec = Ocaml_protoc_plugin.Serialize.C.( basic_opt (1, (message (fun t -> Value.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
-        let serialize = Ocaml_protoc_plugin.Serialize.serialize (spec) in
-        fun t -> apply ~f:(serialize ()) t
+      let name' () = "nars_animated.nars.animated.ValueUpdate"
+      type t = { value: Value.t option; toValue: Adaptable.t option }
+      let to_proto =
+        let apply = fun ~f:f' { value; toValue } -> f' [] value toValue in
+        let spec = Runtime'.Serialize.C.( basic_opt (1, (message (fun t -> Value.to_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.to_proto t))) ^:: nil ) in
+        let serialize = Runtime'.Serialize.serialize [] (spec) in
+        fun t -> apply ~f:serialize t
       
-      let from_proto = 
-        let constructor = fun value toValue -> { value; toValue } in
-        let spec = Ocaml_protoc_plugin.Deserialize.C.( basic_opt (1, (message (fun t -> Value.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
-        let deserialize = Ocaml_protoc_plugin.Deserialize.deserialize (spec) constructor in
-        fun writer -> deserialize writer
+      let from_proto =
+        let constructor = fun _extensions value toValue -> { value; toValue } in
+        let spec = Runtime'.Deserialize.C.( basic_opt (1, (message (fun t -> Value.from_proto t))) ^:: basic_opt (2, (message (fun t -> Adaptable.from_proto t))) ^:: nil ) in
+        let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
+        fun writer -> deserialize writer |> Runtime'.Result.open_error
       
     end
   end

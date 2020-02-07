@@ -4,16 +4,24 @@ let encodeOptional = (value, decoder) => {
   opt_map((. value) => decoder(value), value);
 };
 
-let encodeArityZeroCallback = (~registerCallback, ~callback) => {
-  registerCallback(_ => {callback()});
+let encodeCallback = (~rpcInterface, ~callback) => {
+  switch (callback) {
+  | Callback.Rpc(callback) =>
+    `Remote(
+      rpcInterface.RpcInterface.registerCallback(callback),
+    )
+  | Callback.ClientSide(localKey, encodeArgs) =>
+    `Local({
+      Schema.LocalCallback.localKey,
+      arg: Some(encodeArgs(rpcInterface))
+    })
+  };
 };
 
-let encodeArityZeroCallbackOptional = (~registerCallback, ~callback) =>
-  encodeOptional(callback, callback => {registerCallback(_ => {callback()})});
-
-let encodeCallback = (~registerCallback, ~callback) => {
-  registerCallback(args => {callback(Js.Option.getExn(args))});
-};
+let encodeCallbackOptional = (~rpcInterface, ~callback) =>
+  encodeOptional(callback, callback =>
+    encodeCallback(~rpcInterface, ~callback)
+  );
 
 let encodeLocalProp = (~localKey, ~propKey) =>
   Schema.LocalProp.{localKey, propKey};

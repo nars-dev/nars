@@ -2,14 +2,19 @@
 'use strict';
 
 var $$Array = require("bs-platform/lib/js/array.js");
+var Callback = require("./Callback.bs.js");
+var Js_option = require("bs-platform/lib/js/js_option.js");
 var ProtoEncoders = require("./ProtoEncoders.bs.js");
 var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
 var name = "TouchableOpacity";
 
-function encoder(key, param, bridge, children) {
-  var props = param[0];
-  var onPress = ProtoEncoders.encodeArityZeroCallbackOptional(bridge.registerCallback, props.onPress);
+function encoder(key, param, rpcInterface, children) {
+  var onPress = ProtoEncoders.encodeCallbackOptional(rpcInterface, Js_option.map((function (callback) {
+              return Callback.map((function (param) {
+                            return /* () */0;
+                          }), callback);
+            }), param[0].onPress));
   return {
           key: key,
           value: /* `TouchableOpacity */[
@@ -17,7 +22,7 @@ function encoder(key, param, bridge, children) {
             {
               onPress: onPress,
               children: $$Array.to_list(children),
-              localProps: ProtoEncoders.encodeOptionalLocalProps(props.localProps)
+              localProps: /* [] */0
             }
           ]
         };

@@ -2,25 +2,19 @@
 'use strict';
 
 var Block = require("bs-platform/lib/js/block.js");
+var $$Error = require("./Error.bs.js");
 var Instance = require("./Instance.bs.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Belt_HashMapString = require("bs-platform/lib/js/belt_HashMapString.js");
-var Caml_builtin_exceptions = require("bs-platform/lib/js/caml_builtin_exceptions.js");
 
 var registry = Belt_HashMapString.make(6);
 
 function add(name, encoder) {
   if (name === Instance.waitComponentName) {
-    throw [
-          Caml_builtin_exceptions.invalid_argument,
-          "\'" + (String(name) + "\' is a special component name used for suspended rendering")
-        ];
+    throw $$Error.make(/* CannotRegisterWaitComponent */0);
   }
   if (Belt_HashMapString.has(registry, name)) {
-    throw [
-          Caml_builtin_exceptions.invalid_argument,
-          "Component with this name exists: " + name
-        ];
+    throw $$Error.make(/* DuplicateComponentRegistrationAttempt */[name]);
   } else {
     return Belt_HashMapString.set(registry, name, encoder);
   }

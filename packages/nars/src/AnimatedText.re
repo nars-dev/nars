@@ -14,7 +14,7 @@ let encoder =
     (
       ~key,
       ~props as Instance.Props(props),
-      ~bridge as {Instance.updateAnimatedValue},
+      ~rpcInterface as {RpcInterface.updateAnimatedValue},
       ~children,
     ) => {
   let props = props_unsafe_cast(props);

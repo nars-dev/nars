@@ -4,6 +4,7 @@ type container;
 let createContainer:
   (
     ~flushUpdates: array(Instance.encoded) => unit,
+    ~rpcCall: (RpcInterface.messageId, RpcInterface.arg) => unit,
     ~updateAnimatedValue: (
                             ~value: Animated.animatedValue,
                             ~toValue: Animated.adaptable
@@ -12,11 +13,14 @@ let createContainer:
   ) =>
   container;
 let updateContainer:
-  (~element: ReactReconciler.reactElement, ~container: container) =>
+  (
+    ~element: RpcInterface.t => ReactReconciler.reactElement,
+    ~container: container
+  ) =>
   ReactReconciler.expirationTime;
 let unbatchedUpdates: (unit => 'a) => 'a;
-let invokeCallback:
-  (~container: container, ~messageId: int, ~args: Instance.args) => unit;
+let rpcInterface:
+  (~container: container) => RpcInterface.t;
 [@genType]
 let batchedUpdates: (unit => 'a) => 'a;
 [@genType]

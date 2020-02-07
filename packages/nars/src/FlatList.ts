@@ -1,18 +1,15 @@
 import { ViewStyle, StyleProp } from "./StyleSheet";
 import * as React from "react";
-import { t as LocalProp } from "./LocalProp.gen";
+import { Callback } from "./Callback";
 import { name, props } from "./FlatList.gen";
 
 export interface Props<T> {
   style?: StyleProp<ViewStyle>;
-  onEndReached?: () => void;
+  onEndReached?: Callback<void>;
   onEndReachedThreshold?: number;
   data: Iterable<T>;
   keyExtractor: (obj: { item: T; index: number }) => string | number;
   renderItem: (obj: { item: T; index: number }) => React.ReactElement | null;
-  localProps?: {
-    onEndReached?: LocalProp;
-  };
 }
 
 function filterNulls<T>(items: (T | null)[]): T[] {
@@ -41,7 +38,6 @@ export default <T>(props: Props<T>): React.ReactElement<unknown> => {
   const keys = items.map(({ key }) => key.toString());
 
   const reactProps: props = {
-    localProps: props.localProps,
     onEndReachedThreshold: props.onEndReachedThreshold,
     style: props.style,
     onEndReached: props.onEndReached,

@@ -1,5 +1,6 @@
 import * as React from "react";
 import { TextStyle, StyleProp, ColorValue } from "./StyleSheet";
+import { Callback } from "./Callback";
 import { name, props } from "./TextInput.gen";
 
 export interface Props extends props {
@@ -7,7 +8,7 @@ export interface Props extends props {
   placeholderTextColor?: ColorValue;
   placeholder?: string;
   value: string;
-  onValueChange?: (newValue: string) => void;
+  onValueChange?: Callback<string>;
 }
 
 export default (name as unknown) as React.ComponentType<Props>;

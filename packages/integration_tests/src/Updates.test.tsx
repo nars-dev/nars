@@ -5,9 +5,8 @@ jest.mock("react-native", () => ({
 jest.mock("react-native-reanimated", () => ({}));
 
 import * as React from "react";
-import { TouchableOpacity, LocalProp } from "nars";
 import { act } from "react-test-renderer";
-import { localProp, InputProp } from "nars-common";
+import { InputProp } from "nars-common";
 import {
   createRemoteComponent,
   render,
@@ -17,14 +16,13 @@ import {
 
 const config = {
   TestComponent: {
-    submit: localProp("optional", "TouchableOpacity", "onPress"),
     aProp: InputProp.number,
   },
 };
 
 const components = {
-  TestComponent: (props: { submit: LocalProp }) => {
-    return <TouchableOpacity localProps={{ onPress: props.submit }} />;
+  TestComponent: (props: { aProp: number}) => {
+    return String(props.aProp);
   },
 };
 
@@ -36,8 +34,6 @@ const [RemoteComponent, createServer] = createRemoteComponent(
 describe("Updates", () => {
   describe("RemoteComponent", () => {
     it("should only re-render remotely on prop changes", () => {
-      const submit = () => null;
-      const submit2 = () => null;
       let sendCounter = 0;
       let counter = 0;
       let socket = testSocketWithMessageSpy(
@@ -54,7 +50,6 @@ describe("Updates", () => {
         <RemoteComponent
           name="TestComponent"
           props={{
-            submit,
             aProp: 1,
           }}
           webSocket={socket}
@@ -70,7 +65,6 @@ describe("Updates", () => {
           <RemoteComponent
             name="TestComponent"
             props={{
-              submit,
               aProp: 0,
             }}
             webSocket={socket}
@@ -87,7 +81,6 @@ describe("Updates", () => {
           <RemoteComponent
             name="TestComponent"
             props={{
-              submit: submit2,
               aProp: 0,
             }}
             webSocket={socket}
@@ -95,7 +88,7 @@ describe("Updates", () => {
         );
       });
 
-      // Local re-render when local props are updated
+      // Props not changed
       expect(sendCounter).toEqual(2);
       expect(counter).toEqual(2);
 
@@ -115,7 +108,6 @@ describe("Updates", () => {
           <RemoteComponent
             name="TestComponent"
             props={{
-              submit: submit2,
               aProp: 0,
             }}
             webSocket={socket}

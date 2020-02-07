@@ -12,8 +12,16 @@ message Int32Value {
   int32 value = 1;
 }
 
+message LocalCallback {
+  string localKey = 1;
+  google_mirror.protobuf.Value arg = 2;
+};
+
 message Callback {
-  int32 callId = 1;
+  oneof value {
+    int32 remote = 1;
+    LocalCallback local = 2;
+  }
 }
 
 message LocalProp {
@@ -58,6 +66,7 @@ message RawText {
 message Text {
   google_mirror.protobuf.Struct style = 1;
   repeated ReactElement children = 2;
+  Int32Value numberOfLines = 3;
 };
 
 message TextInput {
@@ -105,9 +114,9 @@ message Render {
   google_mirror.protobuf.Struct props = 2;
   repeated string localProps = 3;
 };
-message Call {
+message RpcCall {
   int32 messageId = 1;
-  google_mirror.protobuf.Struct args = 2;
+  google_mirror.protobuf.Value arg = 2;
 }
 
 message ClientToServer {
@@ -115,7 +124,7 @@ message ClientToServer {
   oneof value {
     Unmount unmount = 2;
     Render render = 3;
-    Call call = 4;
+    RpcCall rpcCall = 4;
   };
 };
 
@@ -130,6 +139,7 @@ message ServerToClient {
   oneof value {
     Error error = 2;
     Update update = 3;
+    RpcCall rpcCall = 5;
     /* Temporary solution for setting animated values imperatively
      * In the future there'll be a more generic mechanism to update
      * any subset of the tree

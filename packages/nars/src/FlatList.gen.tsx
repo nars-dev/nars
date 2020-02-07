@@ -5,7 +5,7 @@
 // tslint:disable-next-line:no-var-requires
 const FlatListBS = require('./FlatList.bs');
 
-import {t as LocalProp_t} from './LocalProp.gen';
+import {t as Callback_t} from './Callback.gen';
 
 import {t as Style_t} from './Style.gen';
 
@@ -13,11 +13,8 @@ import {t as Style_t} from './Style.gen';
 export type props = {
   readonly keys: string[]; 
   readonly style?: Style_t; 
-  readonly onEndReached?: (_1:void) => void; 
-  readonly onEndReachedThreshold?: number; 
-  readonly localProps?: {
-    readonly onEndReached?: LocalProp_t
-  }
+  readonly onEndReached?: Callback_t<void>; 
+  readonly onEndReachedThreshold?: number
 };
 
 export const name: string = FlatListBS.name;

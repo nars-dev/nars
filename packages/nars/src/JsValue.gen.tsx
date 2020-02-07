@@ -2,6 +2,7 @@
 /* eslint-disable import/first */
 
 
-// tslint:disable-next-line:max-classes-per-file 
-// tslint:disable-next-line:class-name
-export abstract class t { protected opaque!: any }; /* simulate opaque types */
+import {TypeScriptUnknown as $$t} from './TsTypes';
+
+// tslint:disable-next-line:interface-over-type-literal
+export type t = $$t;

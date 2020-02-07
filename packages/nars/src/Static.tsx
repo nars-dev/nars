@@ -1,98 +1,111 @@
 import * as React from "react";
 import {
+  Prop,
   ComponentConfig,
-  ExtractInputPropType,
-  LocalPropKey,
+  Props,
   PropType,
+  isSuccess,
+  RPCInterface,
+  LocalPropType,
 } from "nars-common";
 import { startListening, server as Server } from "./NarsServer.gen";
-import { t as LocalProp } from "./LocalProp.gen";
 import { Dict_t } from "./shims/Js.shim";
 import { t as JsValue_t } from "./JsValue.gen";
+import {
+  ExtractPropType,
+  ExtractPropTypes,
+  Decoder,
+  ComponentDefinitions
+} from "./StaticPropTypes";
+import { toJs } from "./RpcInterface.gen";
+import { requiredPropMissing, localPropMissing } from "./Error";
+export { ComponentDefinitions } from "./StaticPropTypes";
 
-export type ExtractPropTypes<T> = {
-  [K in keyof T]: K extends string
-    ? T[K] extends LocalPropKey<any, any, any>
-      ? LocalProp
-      : ExtractInputPropType<T[K]>
-    : never;
-};
-
-export type ComponentDefinitions<T extends ComponentConfig> = {
-  readonly [P in keyof T]: React.ComponentType<ExtractPropTypes<T[P]>>;
-};
-
-type Decoder<T extends ComponentConfig> = {
-  readonly [P in keyof T]: (
-    props: Dict_t<JsValue_t> | undefined,
-    localPropKeys: string[]
-  ) => ExtractPropTypes<T[P]>;
-};
-
-type Writeable<T> = { -readonly [P in keyof T]: T[P] };
-
-function createDecoders<T extends ComponentConfig>(config: T): Decoder<T> {
-  let res = {} as Writeable<Decoder<T>>;
-  for (const config_component in config) {
-    const definition: T[Extract<keyof T, string>] = config[config_component];
-    const component: keyof Writeable<Decoder<T>> = config_component;
-    res[component] = (
-      propsIn: Dict_t<JsValue_t> | undefined = {},
-      localPropKeys: string[]
-    ) => {
-      type Props = ExtractPropTypes<T[keyof T]>;
-      const parsedProps = {} as Props;
-      for (const propKey in definition) {
-        const prop = propsIn[propKey];
-        const decoder: PropType = definition[propKey];
-        if (!("local" in decoder)) {
-          if (prop) {
-            parsedProps[propKey as keyof Props] = decoder.decode(prop);
-          } else if (!propsIn.hasOwnProperty(propKey) && !decoder.optional) {
-            throw `Required prop: '${propKey}' has not been passed to component <${component} />`;
-          }
-        } else {
-          const index = localPropKeys.indexOf(propKey);
-          if (index === -1) {
-            throw "Local Prop is not found";
-          } else {
-            parsedProps[propKey as keyof Props] = {
-              key: propKey,
-            } as Props[keyof Props];
-          }
-        }
-      }
-      return parsedProps;
-    };
+function decodePropsObject<
+  T extends Props,
+  Mapper extends <K extends keyof T & string>(
+    prop: T[K],
+    value: JsValue_t,
+    key: K
+  ) => ExtractPropType<T, K>
+>(f: Mapper, definition: T, props: Dict_t<JsValue_t>): ExtractPropTypes<T> {
+  const result: Partial<ExtractPropTypes<T>> = {};
+  for (const prop in definition) {
+    const mapped = f(definition[prop], props[prop], prop);
+    result[prop] = mapped;
   }
-  return res as Decoder<T>;
+  return result as ExtractPropTypes<T>;
+}
+
+// Typescript lost its shit in this function. It is not properly checked.
+// The types below are for information purposes only. No static guarantees given.
+function getDecoder<T extends ComponentConfig, P extends keyof T>(
+  config: T,
+  component: P
+): Decoder<T, P> {
+  const definition = config[component];
+  return (propsIn, localPropKeys, rpcInterface) => {
+    return decodePropsObject((decoder: Prop, prop, propKey) => {
+      switch (decoder.type) {
+        case PropType.Input:
+          if (!prop && decoder.optional) {
+            return undefined;
+          }
+          const parsed = decoder.decode(prop, rpcInterface);
+          if (isSuccess(parsed)) {
+            return parsed.value;
+          }
+          throw requiredPropMissing(propKey, component);
+          break;
+        case PropType.Local:
+          switch (decoder.localPropType) {
+            case LocalPropType.Opaque:
+              const index = localPropKeys.indexOf(propKey);
+              if (index === -1) {
+          throw localPropMissing(propKey, component);
+          //throw ;
+              } else {
+                return {
+                  key: propKey,
+                };
+              }
+              break;
+            case LocalPropType.Callable:
+              return {
+                key: propKey,
+                arg: decoder.serverArg,
+              };
+          }
+      }
+    }, definition, propsIn);
+  };
 }
 
 type Router<N> = (
   name: N | string,
   props: Dict_t<JsValue_t>,
-  localProps: string[]
+  localProps: string[],
+  rpcInterface: RPCInterface
 ) => React.ReactElement | undefined;
 
 export function createRouter<T extends ComponentConfig>(
   config: T,
   definitions: ComponentDefinitions<T>
 ): Router<keyof T & string> {
-  const parsers = createDecoders(config);
   return function<K extends keyof T>(
     name: K,
-    props: Dict_t<JsValue_t> | undefined,
-    localProps: string[]
+    props: Dict_t<JsValue_t>,
+    localProps: string[],
+    rpcInterface: RPCInterface
   ): React.ReactElement | undefined {
-    if (name in definitions && name in parsers) {
-      const Component: ComponentDefinitions<T>[K] = definitions[name];
-      const parsedProps = parsers[name](props, localProps);
-      if (parsedProps) {
-        return React.createElement(
-          Component as React.ComponentType<any>,
-          parsedProps
-        );
-      }
+    const decoder = getDecoder(config, name);
+    const Component: ComponentDefinitions<T>[K] = definitions[name];
+    const parsedProps = decoder(props, localProps, rpcInterface);
+    if (parsedProps) {
+      return React.createElement(
+        Component as React.ComponentType<any>,
+        parsedProps
+      );
     }
     return undefined;
   };
@@ -104,7 +117,8 @@ export function attatchListener<T>(server: Server, router: Router<T>): void {
       const element = router(
         componentDescription.name,
         componentDescription.props,
-        componentDescription.localProps ? componentDescription.localProps : []
+        componentDescription.localProps ? componentDescription.localProps : [],
+        toJs(componentDescription.rpcInterface)
       );
       if (element) {
         return element;

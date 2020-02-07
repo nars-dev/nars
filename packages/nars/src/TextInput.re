@@ -8,13 +8,13 @@ type props = {
   "placeholderTextColor": option(Js.null(string)),
   "placeholder": option(string),
   "value": string,
-  "onValueChange": option(string => unit),
+  "onValueChange": option(Callback.t(string)),
 };
 
 external props_unsafe_cast: Js.t('a) => props = "%identity";
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~bridge, ~children as _) => {
+    (~key, ~props as Instance.Props(props), ~rpcInterface, ~children as _) => {
   let props = props_unsafe_cast(props);
   Schema.ReactElement.{
     value:
@@ -31,12 +31,13 @@ let encoder =
           onValueChange:
             encodeOptional(props##onValueChange, callback =>
               encodeCallback(
-                ~registerCallback=bridge.Instance.registerCallback,
-                ~callback=args => {
-                callback(
-                  StructDecoders.(getFieldExn("value", args, getString)),
-                )
-              })
+                ~rpcInterface,
+                ~callback=
+                  Callback.map(
+                    ~f=StructDecoders.getString,
+                    callback,
+                  ),
+              )
             ),
           localProps: [],
         },

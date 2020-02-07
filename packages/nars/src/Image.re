@@ -14,7 +14,7 @@ type props = {
 external toProps: Js.t('a) => props = "%identity";
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~bridge as _, ~children as _) => {
+    (~key, ~props as Instance.Props(props), ~rpcInterface as _, ~children as _) => {
   let props = toProps(props);
   {
     key,

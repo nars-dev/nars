@@ -17,7 +17,7 @@ let encoder =
     (
       ~key,
       ~props as Instance.Props(props),
-      ~bridge as {Instance.updateAnimatedValue},
+      ~rpcInterface as {RpcInterface.updateAnimatedValue},
       ~children as _,
     ) => {
   let props = toProps(props);

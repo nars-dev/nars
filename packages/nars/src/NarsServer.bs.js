@@ -55,6 +55,16 @@ function updateAnimatedValue(socket, rootId, containers, value, toValue) {
             ], rootId, containers);
 }
 
+function sendRPCCall(socket, rootId, containers, messageId, arg) {
+  return send(socket, /* `RpcCall */[
+              -954784253,
+              {
+                messageId: messageId,
+                arg: arg
+              }
+            ], rootId, containers);
+}
+
 function startListening(server, render) {
   var analytics = new AnalyticsNode("RsD4jSdhauL5xheR1WDxcXApnCGh8Kts");
   var match;
@@ -90,44 +100,57 @@ function startListening(server, render) {
                                 var value = match.value;
                                 var rootId = match.rootId;
                                 var match$1 = Belt_HashMapInt.get(containers, rootId);
-                                var variant = value[0];
-                                if (variant !== 747848894) {
-                                  if (variant >= 968744822) {
-                                    var match$2 = value[1];
-                                    var container;
-                                    if (match$1 !== undefined) {
-                                      container = Caml_option.valFromOption(match$1);
-                                    } else {
-                                      var container$1 = NarsReconciler.createContainer((function (param) {
-                                              return sendViewUpdates(socket, rootId, containers, param);
-                                            }), (function (param, param$1) {
-                                              return updateAnimatedValue(socket, rootId, containers, param, param$1);
-                                            }));
-                                      Belt_HashMapInt.set(containers, rootId, container$1);
-                                      container = container$1;
-                                    }
-                                    var props = Js_option.getWithDefault({ }, Js_option.map(JsValue.structToDict, match$2.props));
-                                    NarsReconciler.updateContainer(Curry._1(render, {
-                                              name: match$2.name,
-                                              localProps: $$Array.of_list(match$2.localProps),
-                                              props: props
+                                if (typeof value === "number") {
+                                  return /* () */0;
+                                } else {
+                                  var variant = value[0];
+                                  if (variant !== -699977536) {
+                                    if (variant >= 968744822) {
+                                      var match$2 = value[1];
+                                      var localProps = match$2.localProps;
+                                      var name = match$2.name;
+                                      var container;
+                                      if (match$1 !== undefined) {
+                                        container = Caml_option.valFromOption(match$1);
+                                      } else {
+                                        var container$1 = NarsReconciler.createContainer((function (param) {
+                                                return sendViewUpdates(socket, rootId, containers, param);
+                                              }), (function (messageId, arg) {
+                                                return sendRPCCall(socket, rootId, containers, messageId, arg);
+                                              }), (function (param, param$1) {
+                                                return updateAnimatedValue(socket, rootId, containers, param, param$1);
+                                              }));
+                                        Belt_HashMapInt.set(containers, rootId, container$1);
+                                        container = container$1;
+                                      }
+                                      var props = Js_option.getWithDefault({ }, Js_option.map(JsValue.structToDict, match$2.props));
+                                      NarsReconciler.updateContainer((function (rpcInterface) {
+                                              return Curry._1(render, {
+                                                          name: name,
+                                                          localProps: $$Array.of_list(localProps),
+                                                          props: props,
+                                                          rpcInterface: rpcInterface
+                                                        });
                                             }), container);
-                                    return /* () */0;
+                                      return /* () */0;
+                                    } else if (match$1 !== undefined) {
+                                      var match$3 = value[1];
+                                      return Curry._2(NarsReconciler.rpcInterface(Caml_option.valFromOption(match$1)).executeRpcCall, match$3.messageId, Js_option.getWithDefault(/* not_set */-915128522, match$3.arg));
+                                    } else {
+                                      return /* () */0;
+                                    }
                                   } else if (match$1 !== undefined) {
                                     var container$2 = Caml_option.valFromOption(match$1);
                                     Belt_HashMapInt.remove(containers, rootId);
                                     return NarsReconciler.unbatchedUpdates((function (param) {
-                                                  NarsReconciler.updateContainer(NarsReconciler.nullElement, container$2);
+                                                  NarsReconciler.updateContainer((function (param) {
+                                                          return NarsReconciler.nullElement;
+                                                        }), container$2);
                                                   return /* () */0;
                                                 }));
                                   } else {
                                     return /* () */0;
                                   }
-                                } else if (match$1 !== undefined) {
-                                  var match$3 = value[1];
-                                  return NarsReconciler.invokeCallback(Caml_option.valFromOption(match$1), match$3.messageId, match$3.args);
-                                } else {
-                                  return /* () */0;
                                 }
                               }
                             }));
@@ -152,5 +175,6 @@ exports.stringToArrayBuffer = stringToArrayBuffer;
 exports.send = send;
 exports.sendViewUpdates = sendViewUpdates;
 exports.updateAnimatedValue = updateAnimatedValue;
+exports.sendRPCCall = sendRPCCall;
 exports.startListening = startListening;
 /* Schema Not a pure module */

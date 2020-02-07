@@ -7,8 +7,8 @@ var Js_dict = require("bs-platform/lib/js/js_dict.js");
 var Instance = require("./Instance.bs.js");
 var Pervasives = require("bs-platform/lib/js/pervasives.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
+var RpcInterface = require("./RpcInterface.bs.js");
 var Belt_SetString = require("bs-platform/lib/js/belt_SetString.js");
-var Belt_HashMapInt = require("bs-platform/lib/js/belt_HashMapInt.js");
 var ReactReconciler = require("react-reconciler");
 var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
@@ -34,17 +34,7 @@ function prepareForCommit(param) {
 }
 
 function resetAfterCommit(container) {
-  Belt_HashMapInt.clear(container.callbackRegistry);
-  var counter = {
-    contents: 0
-  };
-  var registerCallback = function (callback) {
-    var id = counter.contents;
-    counter.contents = counter.contents + 1 | 0;
-    Belt_HashMapInt.set(container.callbackRegistry, id, callback);
-    return id;
-  };
-  var children = Instance.encodeArray(container.children, registerCallback, container.updateAnimatedValue);
+  var children = Instance.encodeArray(container.children, container.rpcInterface);
   if (children) {
     return Curry._1(container.flushUpdates, children[0]);
   } else {
@@ -89,7 +79,9 @@ function prepareUpdate(param, param$1, oldProps, newProps, param$2, param$3) {
 }
 
 function createTextInstance(text, param, param$1, param$2) {
-  return /* RawText */Block.__(0, [text]);
+  return /* RawText */Block.__(0, [{
+              contents: text
+            }]);
 }
 
 function shouldSetTextContent(param, _props) {
@@ -190,7 +182,14 @@ function unhideInstance(param, param$1) {
   return /* () */0;
 }
 
-function commitTextUpdate(param, param$1, param$2) {
+function commitTextUpdate(instance, param, newText) {
+  if (typeof instance === "number") {
+    Pervasives.invalid_arg("Instance is not a text instance: " + String(instance));
+  } else if (instance.tag) {
+    Pervasives.invalid_arg("Instance is not a text instance: " + String(instance));
+  } else {
+    instance[0].contents = newText;
+  }
   return /* () */0;
 }
 
@@ -255,35 +254,31 @@ var reconciler = ReactReconciler({
       resetTextContent: resetTextContent
     });
 
-function createContainer(flushUpdates, updateAnimatedValue) {
-  var registry = Belt_HashMapInt.make(50);
-  var opaqueRoot = reconciler.createContainer({
-        flushUpdates: flushUpdates,
-        updateAnimatedValue: updateAnimatedValue,
-        children: /* array */[],
-        callbackRegistry: registry
-      });
+function createContainer(flushUpdates, rpcCall, updateAnimatedValue) {
+  var rpcInterface = RpcInterface.make(rpcCall, updateAnimatedValue);
+  var containerInfo_children = /* array */[];
+  var containerInfo = {
+    flushUpdates: flushUpdates,
+    rpcInterface: rpcInterface,
+    children: containerInfo_children
+  };
+  var opaqueRoot = reconciler.createContainer(containerInfo);
   return {
-          registry: registry,
+          rpcInterface: rpcInterface,
           opaqueRoot: opaqueRoot
         };
 }
 
 function updateContainer(element, container) {
-  return reconciler.updateContainer(element, container.opaqueRoot);
+  return reconciler.updateContainer(Curry._1(element, container.rpcInterface), container.opaqueRoot);
+}
+
+function rpcInterface(container) {
+  return container.rpcInterface;
 }
 
 function unbatchedUpdates(f) {
   return reconciler.unbatchedUpdates(f);
-}
-
-function invokeCallback(container, messageId, args) {
-  var match = Belt_HashMapInt.get(container.registry, messageId);
-  if (match !== undefined) {
-    return Curry._1(match, args);
-  } else {
-    return /* () */0;
-  }
 }
 
 function batchedUpdates(f) {
@@ -301,7 +296,7 @@ var nullElement = null;
 exports.createContainer = createContainer;
 exports.updateContainer = updateContainer;
 exports.unbatchedUpdates = unbatchedUpdates;
-exports.invokeCallback = invokeCallback;
+exports.rpcInterface = rpcInterface;
 exports.batchedUpdates = batchedUpdates;
 exports.flushPassiveEffects = flushPassiveEffects;
 exports.isThisRendererActing = isThisRendererActing;

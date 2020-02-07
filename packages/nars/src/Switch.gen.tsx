@@ -5,13 +5,15 @@
 // tslint:disable-next-line:no-var-requires
 const SwitchBS = require('./Switch.bs');
 
+import {t as Callback_t} from './Callback.gen';
+
 import {t as Style_t} from './Style.gen';
 
 // tslint:disable-next-line:interface-over-type-literal
 export type props = {
   readonly style?: Style_t; 
   readonly value: boolean; 
-  readonly onValueChange: (_1:boolean) => void
+  readonly onValueChange: Callback_t<boolean>
 };
 
 export const name: string = SwitchBS.name;
