@@ -88,6 +88,7 @@ const [RemoteComponent, createServer] = createRemoteComponent(
 );
 
 const runTest = (name: keyof typeof components) => {
+  const TEST = RemoteComponent[name];
   let sendCounter = 0;
   let counter = 0;
   let socket = testSocketWithMessageSpy(
@@ -100,30 +101,14 @@ const runTest = (name: keyof typeof components) => {
     }
   );
   createServer(socket);
-  const rendered = render(
-    <RemoteComponent
-      name={name}
-      props={{
-        waiting: true,
-      }}
-      webSocket={socket}
-    />
-  );
+  const rendered = render(<TEST waiting={true} webSocket={socket} />);
 
   // Initial render
   expect(sendCounter).toEqual(1);
   expect(counter).toEqual(0);
 
   act(() => {
-    rendered.update(
-      <RemoteComponent
-        name={name}
-        props={{
-          waiting: false,
-        }}
-        webSocket={socket}
-      />
-    );
+    rendered.update(<TEST waiting={false} webSocket={socket} />);
   });
 
   // Prop change
@@ -131,15 +116,7 @@ const runTest = (name: keyof typeof components) => {
   expect(counter).toEqual(1);
 
   act(() => {
-    rendered.update(
-      <RemoteComponent
-        name={name}
-        props={{
-          waiting: true,
-        }}
-        webSocket={socket}
-      />
-    );
+    rendered.update(<TEST waiting={true} webSocket={socket} />);
   });
 
   // Local re-render when local props are updated
@@ -147,15 +124,7 @@ const runTest = (name: keyof typeof components) => {
   expect(counter).toEqual(1);
 
   act(() => {
-    rendered.update(
-      <RemoteComponent
-        name={name}
-        props={{
-          waiting: false,
-        }}
-        webSocket={socket}
-      />
-    );
+    rendered.update(<TEST waiting={false} webSocket={socket} />);
   });
   // With a new socket it sends an unmount and render messages
   expect(sendCounter).toEqual(4);

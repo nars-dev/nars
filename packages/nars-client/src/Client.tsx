@@ -19,12 +19,7 @@ import {
 } from "./RemoteComponent";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 import { SocketLike } from "./SocketLike";
-import {
-  unknownComponent,
-  requiredPropMissing,
-  badPropType,
-  localPropMissing,
-} from "./Error";
+import { requiredPropMissing, badPropType, localPropMissing } from "./Error";
 
 // Extract the type visible for the user from the config
 type ExtractLocalPropType<T> = T extends OpaqueLocalProp<
@@ -59,33 +54,20 @@ export type ExtractPropTypes<T extends Props> = {
     : never;
 };
 
-export interface RemoteComponentProps<
-  T extends ComponentConfig,
-  P extends keyof T
-> {
-  name: P;
-  props: ExtractPropTypes<T[P]>;
+interface RemoteComponentProps {
   LoadingComponent?: React.ComponentType;
   ErrorComponent?: React.ComponentType;
 }
 
-export type Client<T extends ComponentConfig> = React.ComponentType<
-  RemoteComponentProps<T, keyof T>
->;
-
-function getInputPropEncoder<T extends ComponentConfig, P extends keyof T>(
-  config: T,
-  component: P,
-  propsIn: ExtractPropTypes<T[P]>
+function getInputPropEncoder<T extends Props>(
+  config: T & Props,
+  component: string,
+  propsIn: ExtractPropTypes<T>
 ): PropEncoder {
-  if (!(component in config)) {
-    throw unknownComponent(component);
-  }
-  const definition: T[P] & Props = config[component];
   return rpcInterface => {
     let encodedProps: PropsObject = {};
-    for (const propKey in definition) {
-      const propDefinition = definition[propKey];
+    for (const propKey in config) {
+      const propDefinition = config[propKey];
       const prop = propsIn[propKey];
       switch (propDefinition.type) {
         case PropType.Input:
@@ -105,18 +87,14 @@ function getInputPropEncoder<T extends ComponentConfig, P extends keyof T>(
   };
 }
 
-function encodeLocalProps<T extends ComponentConfig, P extends keyof T>(
-  config: T,
-  component: P,
-  propsIn: ExtractPropTypes<T[P]>
+function encodeLocalProps<T extends Props>(
+  config: T & Props,
+  component: string,
+  propsIn: ExtractPropTypes<T>
 ): PropsObject {
-  if (!(component in config)) {
-    throw unknownComponent(component);
-  }
-  const definition: T[P] & Props = config[component];
   let encodedProps: PropsObject = {};
-  for (const propKey in definition) {
-    const propDefinition = definition[propKey];
+  for (const propKey in config) {
+    const propDefinition = config[propKey];
     const prop = propsIn[propKey];
     switch (propDefinition.type) {
       case PropType.Local:
@@ -135,40 +113,56 @@ function encodeLocalProps<T extends ComponentConfig, P extends keyof T>(
   return encodedProps;
 }
 
-function createRemoteComponentWithSocketLikeOrUrl<
-  T extends ComponentConfig,
-  P extends keyof T
->(socketLikeOrUrl: SocketLike | string, config: T) {
+export type Components<T extends ComponentConfig> = {
+  [P in keyof T]: React.ComponentType<
+    ExtractPropTypes<T[P]> & RemoteComponentProps
+  >;
+};
+
+function createRemoteComponentWithSocketLikeOrUrl<T extends ComponentConfig>(
+  socketLikeOrUrl: SocketLike | string,
+  config: T
+): Components<T> {
+  const components = {} as Components<T>;
   const useSocketLikeOrUrl = () => {
     return typeof socketLikeOrUrl === "string"
       ? useWebSocket(socketLikeOrUrl, true)
       : () => socketLikeOrUrl;
   };
-  const comp = ({
-    name,
-    props,
-    LoadingComponent,
-    ErrorComponent,
-  }: RemoteComponentProps<T, P>) => {
-    const webSocket = useSocketLikeOrUrl();
-    const localProps = encodeLocalProps(config, name, props);
-    const encoder = getInputPropEncoder(config, name, props);
+  for (const componentName in config) {
+    const Component: React.ComponentType<
+      ExtractPropTypes<T[typeof componentName]> & RemoteComponentProps
+    > = props => {
+      const webSocket = useSocketLikeOrUrl();
+      const localProps = encodeLocalProps(
+        config[componentName],
+        componentName,
+        props
+      );
+      const encoder = getInputPropEncoder(
+        config[componentName],
+        componentName,
+        props
+      );
+      const { ErrorComponent, LoadingComponent } = props;
 
-    return (
-      <RemoteComponent
-        webSocket={webSocket}
-        name={String(name)}
-        inputProps={encoder}
-        localProps={localProps}
-        renderLoading={
-          LoadingComponent ? () => <LoadingComponent /> : undefined
-        }
-        renderError={ErrorComponent ? () => <ErrorComponent /> : undefined}
-      />
-    );
-  };
-  comp.displayName = "RemoteComponent";
-  return comp;
+      return (
+        <RemoteComponent
+          webSocket={webSocket}
+          name={String(componentName)}
+          inputProps={encoder}
+          localProps={localProps}
+          renderLoading={
+            LoadingComponent ? () => <LoadingComponent /> : undefined
+          }
+          renderError={ErrorComponent ? () => <ErrorComponent /> : undefined}
+        />
+      );
+    };
+    Component.displayName = componentName;
+    components[componentName] = Component;
+  }
+  return components;
 }
 
 export function createRemoteComponentWithUrl<T extends ComponentConfig>(
@@ -185,29 +179,46 @@ export function createRemoteComponentWithWebSocket<T extends ComponentConfig>(
   return createRemoteComponentWithSocketLikeOrUrl(webSocket, config);
 }
 
-export function createRemoteComponent<T extends ComponentConfig>(config: T) {
-  const comp = ({
-    name,
-    props,
-    LoadingComponent,
-    ErrorComponent,
-    webSocket,
-  }: RemoteComponentProps<T, keyof T> & { webSocket: SocketLike }) => {
-    const localProps = encodeLocalProps(config, name, props);
-    const encoder = getInputPropEncoder(config, name, props);
-    return (
-      <RemoteComponent
-        webSocket={webSocket}
-        name={String(name)}
-        inputProps={encoder}
-        localProps={localProps}
-        renderLoading={
-          LoadingComponent ? () => <LoadingComponent /> : undefined
-        }
-        renderError={ErrorComponent ? () => <ErrorComponent /> : undefined}
-      />
-    );
-  };
-  comp.displayName = "RemoteComponent";
-  return comp;
+export type ComponentsWithWebSocket<T extends ComponentConfig> = {
+  [P in keyof T]: React.ComponentType<
+    ExtractPropTypes<T[P]> & RemoteComponentProps & { webSocket: SocketLike }
+  >;
+};
+
+export function createRemoteComponent<T extends ComponentConfig>(
+  config: T
+): ComponentsWithWebSocket<T> {
+  const components = {} as ComponentsWithWebSocket<T>;
+  for (const componentName in config) {
+    const Component: ComponentsWithWebSocket<
+      T
+    >[typeof componentName] = props => {
+      const { ErrorComponent, LoadingComponent, webSocket } = props;
+      const localProps = encodeLocalProps(
+        config[componentName],
+        componentName,
+        props
+      );
+      const encoder = getInputPropEncoder(
+        config[componentName],
+        componentName,
+        props
+      );
+      return (
+        <RemoteComponent
+          webSocket={webSocket}
+          name={componentName}
+          inputProps={encoder}
+          localProps={localProps}
+          renderLoading={
+            LoadingComponent ? () => <LoadingComponent /> : undefined
+          }
+          renderError={ErrorComponent ? () => <ErrorComponent /> : undefined}
+        />
+      );
+    };
+    Component.displayName = componentName;
+    components[componentName] = Component;
+  }
+  return components;
 }

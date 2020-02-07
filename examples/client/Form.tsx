@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RemoteComponent = Nars.createRemoteComponentWithUrl(
+const { Form } = Nars.createRemoteComponentWithUrl(
   "ws://localhost:9000",
   config
 );
@@ -20,12 +20,7 @@ const RemoteComponent = Nars.createRemoteComponentWithUrl(
 const Component = ({ animationProgress }) => {
   return (
     <Animated.View style={[{ opacity: animationProgress }, styles.container]}>
-      <RemoteComponent
-        name="Form"
-        props={{
-          isCompany: true,
-        }}
-      />
+      <Form isCompany={true} />
     </Animated.View>
   );
 };

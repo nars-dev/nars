@@ -1,12 +1,12 @@
 jest.mock("react-native", () => ({
-  FlatList: "FlatList",
-  TouchableOpacity: "TouchableOpacity",
+  Text: "Text",
 }));
 jest.mock("react-native-reanimated", () => ({}));
 
 import * as React from "react";
 import { act } from "react-test-renderer";
 import { InputProp } from "nars-common";
+import { Text } from "nars";
 import {
   createRemoteComponent,
   render,
@@ -21,12 +21,12 @@ const config = {
 };
 
 const components = {
-  TestComponent: (props: { aProp: number}) => {
-    return String(props.aProp);
+  TestComponent: (props: { aProp: number }) => {
+    return <Text>{String(props.aProp)}</Text>;
   },
 };
 
-const [RemoteComponent, createServer] = createRemoteComponent(
+const [{ TestComponent }, createServer] = createRemoteComponent(
   config,
   components
 );
@@ -46,30 +46,14 @@ describe("Updates", () => {
         }
       );
       createServer(socket);
-      const rendered = render(
-        <RemoteComponent
-          name="TestComponent"
-          props={{
-            aProp: 1,
-          }}
-          webSocket={socket}
-        />
-      );
+      const rendered = render(<TestComponent aProp={1} webSocket={socket} />);
 
       // Initial render
       expect(sendCounter).toEqual(1);
       expect(counter).toEqual(1);
 
       act(() => {
-        rendered.update(
-          <RemoteComponent
-            name="TestComponent"
-            props={{
-              aProp: 0,
-            }}
-            webSocket={socket}
-          />
-        );
+        rendered.update(<TestComponent aProp={0} webSocket={socket} />);
       });
 
       // Prop change
@@ -77,15 +61,7 @@ describe("Updates", () => {
       expect(counter).toEqual(2);
 
       act(() => {
-        rendered.update(
-          <RemoteComponent
-            name="TestComponent"
-            props={{
-              aProp: 0,
-            }}
-            webSocket={socket}
-          />
-        );
+        rendered.update(<TestComponent aProp={0} webSocket={socket} />);
       });
 
       // Props not changed
@@ -104,15 +80,7 @@ describe("Updates", () => {
       createServer(socket);
 
       act(() => {
-        rendered.update(
-          <RemoteComponent
-            name="TestComponent"
-            props={{
-              aProp: 0,
-            }}
-            webSocket={socket}
-          />
-        );
+        rendered.update(<TestComponent aProp={0} webSocket={socket} />);
       });
       // With a new socket it sends an unmount and render messages
       expect(sendCounter).toEqual(4);

@@ -1,6 +1,5 @@
 export enum UserErrorT {
   BadIncomingRpcCallId,
-  UnknownComponent,
   BadRemoteComponentPropType,
   RequiredPropMissing,
   LocalPropMissing,
@@ -20,13 +19,6 @@ export const badIncomingRpcCallId = (id: number) => {
   return new UserError(
     UserErrorT.BadIncomingRpcCallId,
     `Callback with id '${id}' was not found`
-  );
-};
-
-export const unknownComponent = (component: any) => {
-  return new UserError(
-    UserErrorT.UnknownComponent,
-    `Unknown component <${component} />`
   );
 };
 
