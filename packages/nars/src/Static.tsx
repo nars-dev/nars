@@ -7,8 +7,6 @@ import {
   isSuccess,
   RPCInterface,
   LocalPropType,
-  sanitizeAndEncode,
-  Arguments,
 } from "nars-common";
 import { startListening, server as Server } from "./NarsServer.gen";
 import { Dict_t } from "./shims/Js.shim";
@@ -16,21 +14,24 @@ import { t as JsValue_t } from "./JsValue.gen";
 import {
   ExtractPropType,
   ExtractPropTypes,
-  ComponentDefinitions,
   Decoder,
+  ComponentDefinitions
 } from "./StaticPropTypes";
 import { toJs } from "./RpcInterface.gen";
+import { requiredPropMissing, localPropMissing } from "./Error";
+export { ComponentDefinitions } from "./StaticPropTypes";
 
-function map<
+function decodePropsObject<
   T extends Props,
   Mapper extends <K extends keyof T & string>(
     prop: T[K],
+    value: JsValue_t,
     key: K
   ) => ExtractPropType<T, K>
->(f: Mapper, props: T): ExtractPropTypes<T> {
+>(f: Mapper, definition: T, props: Dict_t<JsValue_t>): ExtractPropTypes<T> {
   const result: Partial<ExtractPropTypes<T>> = {};
-  for (const prop in props) {
-    const mapped = f(props[prop], prop);
+  for (const prop in definition) {
+    const mapped = f(definition[prop], props[prop], prop);
     result[prop] = mapped;
   }
   return result as ExtractPropTypes<T>;
@@ -44,24 +45,25 @@ function getDecoder<T extends ComponentConfig, P extends keyof T>(
 ): Decoder<T, P> {
   const definition = config[component];
   return (propsIn, localPropKeys, rpcInterface) => {
-    return map((decoder: Prop, propKey) => {
+    return decodePropsObject((decoder: Prop, prop, propKey) => {
       switch (decoder.type) {
         case PropType.Input:
-          if (!propsIn[propKey] && decoder.optional) {
+          if (!prop && decoder.optional) {
             return undefined;
           }
-          const parsed = decoder.decode(propsIn[propKey], rpcInterface);
+          const parsed = decoder.decode(prop, rpcInterface);
           if (isSuccess(parsed)) {
             return parsed.value;
           }
-          throw `Required prop: '${propKey}' has not been passed to component <${component} />`;
+          throw requiredPropMissing(propKey, component);
           break;
         case PropType.Local:
           switch (decoder.localPropType) {
             case LocalPropType.Opaque:
               const index = localPropKeys.indexOf(propKey);
               if (index === -1) {
-                throw "Local Prop is not found";
+          throw localPropMissing(propKey, component);
+          //throw ;
               } else {
                 return {
                   key: propKey,
@@ -71,14 +73,11 @@ function getDecoder<T extends ComponentConfig, P extends keyof T>(
             case LocalPropType.Callable:
               return {
                 key: propKey,
-                encode: (
-                  args: Arguments<typeof decoder.serverArgs>,
-                  rpc: RPCInterface
-                ) => sanitizeAndEncode(decoder.serverArgs, args, rpc),
+                arg: decoder.serverArg,
               };
           }
       }
-    }, definition);
+    }, definition, propsIn);
   };
 }
 

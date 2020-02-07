@@ -11,7 +11,7 @@ type props = {
 external props_unsafe_cast: Js.t('a) => props = "%identity";
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~bridge as _, ~children) => {
+    (~key, ~props as Instance.Props(props), ~rpcInterface as _, ~children) => {
   let castProps = props_unsafe_cast(props);
   Schema.ReactElement.{
     key,

@@ -6,11 +6,11 @@ type props = {. "onPress": option(Callback.t(unit))};
 
 external props_unsafe_cast: Js.t('a) => props = "%identity";
 
-let encoder = (~key, ~props as Instance.Props(props), ~bridge, ~children) => {
+let encoder = (~key, ~props as Instance.Props(props), ~rpcInterface, ~children) => {
   let props = props_unsafe_cast(props);
   let onPress =
     ProtoEncoders.encodeCallbackOptional(
-      ~bridge,
+      ~rpcInterface,
       ~callback=
         Js.Option.map(
           (. callback) => Callback.map(~f=_ => (), callback),

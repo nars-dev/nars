@@ -8,8 +8,6 @@ const Curry = require('bs-platform/lib/js/curry.js');
 // tslint:disable-next-line:no-var-requires
 const RpcInterfaceBS = require('./RpcInterface.bs');
 
-import {Dict_t as Js_Dict_t} from '../src/shims/Js.shim';
-
 import {adaptable as Animated_adaptable} from './Animated.gen';
 
 import {animatedValue as Animated_animatedValue} from './Animated.gen';
@@ -18,16 +16,16 @@ import {t as JsValue_t} from './JsValue.gen';
 
 // tslint:disable-next-line:max-classes-per-file 
 // tslint:disable-next-line:class-name
-export abstract class args { protected opaque!: any }; /* simulate opaque types */
+export abstract class arg { protected opaque!: any }; /* simulate opaque types */
 
 // tslint:disable-next-line:interface-over-type-literal
 export type messageId = number;
 
 // tslint:disable-next-line:interface-over-type-literal
 export type t = {
-  readonly rpcCall: (_1:messageId, _2:args) => void; 
-  readonly registerCallback: (_1:((_1:args) => void)) => messageId; 
-  readonly executeRpcCall: (_1:messageId, _2:args) => void; 
+  readonly rpcCall: (_1:messageId, _2:arg) => void; 
+  readonly registerCallback: (_1:((_1:arg) => void)) => messageId; 
+  readonly executeRpcCall: (_1:messageId, _2:arg) => void; 
   readonly updateAnimatedValue: (_1:{
     readonly value: Animated_animatedValue; 
     readonly toValue: Animated_adaptable
@@ -35,7 +33,7 @@ export type t = {
   readonly clear: (_1:void) => void
 };
 
-export const toJs: (_1:t) => { readonly registerCallback: (_1:((_1:Js_Dict_t<JsValue_t>) => void)) => messageId; readonly rpcCall: (_1:messageId, _2:Js_Dict_t<JsValue_t>) => void } = function (Arg1: any) {
+export const toJs: (_1:t) => { readonly registerCallback: (_1:((_1:JsValue_t) => void)) => messageId; readonly rpcCall: (_1:messageId, _2:JsValue_t) => void } = function (Arg1: any) {
   const result = RpcInterfaceBS.toJs({rpcCall:Arg1.rpcCall, registerCallback:Arg1.registerCallback, executeRpcCall:Arg1.executeRpcCall, updateAnimatedValue:function (Argvalue: any, ArgtoValue: any) {
       const result1 = Arg1.updateAnimatedValue({value:Argvalue, toValue:ArgtoValue});
       return result1
@@ -46,4 +44,4 @@ export const toJs: (_1:t) => { readonly registerCallback: (_1:((_1:Js_Dict_t<JsV
     }}
 };
 
-export const fromJsRpcArgs: (_1:Js_Dict_t<JsValue_t>) => args = RpcInterfaceBS.fromJsRpcArgs;
+export const fromJsRpcArgs: (_1:JsValue_t) => arg = RpcInterfaceBS.fromJsRpcArgs;

@@ -14,27 +14,27 @@ function encodeOptional(value, decoder) {
   return Js_option.map(Curry.__1(decoder), value);
 }
 
-function encodeCallback(bridge, callback) {
+function encodeCallback(rpcInterface, callback) {
   if (callback.tag) {
     return /* `Local */[
             203307339,
             {
               localKey: callback[0],
-              args: Curry._1(callback[1], bridge)
+              arg: Curry._1(callback[1], rpcInterface)
             }
           ];
   } else {
     return /* `Remote */[
             958205606,
-            Curry._1(bridge.registerCallback, callback[0])
+            Curry._1(rpcInterface.registerCallback, callback[0])
           ];
   }
 }
 
-function encodeCallbackOptional(bridge, callback) {
+function encodeCallbackOptional(rpcInterface, callback) {
   return Js_option.map((function (value) {
                 var callback = value;
-                return encodeCallback(bridge, callback);
+                return encodeCallback(rpcInterface, callback);
               }), callback);
 }
 

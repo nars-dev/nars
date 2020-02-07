@@ -6,7 +6,7 @@ jest.mock("react-native-reanimated", () => ({}));
 
 import * as React from "react";
 import { TouchableOpacity, Switch, clientSide, ClientSideCallback } from "nars";
-import { ReactTestInstance } from "react-test-renderer";
+import { ReactTestInstance, act } from "react-test-renderer";
 import { InputProp, localCallback } from "nars-common";
 import {
   createRemoteComponent,
@@ -19,21 +19,21 @@ import {
 
 const config = {
   TestComponentSimpleCallback: {
-    onPress: localCallback(InputProp.void, {}),
+    onPress: localCallback(InputProp.void, InputProp.void),
   },
   TestComponentCallbackWithValues: {
-    onPress: localCallback(InputProp.boolean, {
+    onPress: localCallback(InputProp.boolean, InputProp.object({
       a: InputProp.number,
       b: InputProp.number,
-    }),
+    })),
   },
 };
 
 const components = {
   TestComponentSimpleCallback: (props: {
-    onPress: ClientSideCallback<void, {}>;
+    onPress: ClientSideCallback<void, void>;
   }) => {
-    return <TouchableOpacity onPress={clientSide(props.onPress, {})} />;
+    return <TouchableOpacity onPress={clientSide(props.onPress, undefined)} />;
   },
   TestComponentCallbackWithValues: (props: {
     onPress: ClientSideCallback<boolean, { a: number; b: number }>;
@@ -83,7 +83,9 @@ describe("Callback", () => {
         }}
       />
     );
-    (getChildren(rendered)[0] as ReactTestInstance).props.onPress();
+    act(() => {
+      (getChildren(rendered)[0] as ReactTestInstance).props.onPress();
+    });
     expect(called).toBe(true);
     // Prop change
     expect(sendCounter).toEqual(1);
@@ -104,7 +106,9 @@ describe("Callback", () => {
         }}
       />
     );
-    (getChildren(rendered)[0] as ReactTestInstance).props.onValueChange(true);
+    act(() => {
+      (getChildren(rendered)[0] as ReactTestInstance).props.onValueChange(true);
+    });
     expect(boolResult).toEqual(true);
     expect(result).toEqual([1, 2]);
     expect(sendCounter).toEqual(1);

@@ -1,5 +1,4 @@
 jest.mock("react-native", () => ({
-  FlatList: "FlatList",
   TouchableOpacity: "TouchableOpacity",
 }));
 jest.mock("react-native-reanimated", () => ({}));
@@ -19,49 +18,55 @@ import {
 
 const config = {
   TestComponentSimpleCallback: {
-    serverToClient: InputProp.function({}),
+    runsOnClient: InputProp.function(InputProp.void),
   },
   TestComponentCallbackWithValues: {
-    serverToClient: InputProp.function({
-      a: InputProp.number,
-      b: InputProp.number,
-    }),
+    runsOnClient: InputProp.function(
+      InputProp.object({
+        a: InputProp.number,
+        b: InputProp.number,
+      })
+    ),
   },
   TestComponentCallbackWithReturnCallback: {
-    serverToClient: InputProp.function({
-      a: InputProp.number,
-      clientToServer: InputProp.function({
-        b: InputProp.number,
-      }),
-    }),
+    runsOnClient: InputProp.function(
+      InputProp.object({
+        a: InputProp.number,
+        runsOnServer: InputProp.function(
+          InputProp.object({
+            b: InputProp.number,
+          })
+        ),
+      })
+    ),
   },
 };
 
 const components = {
-  TestComponentSimpleCallback: (props: { serverToClient: (_: {}) => void }) => {
+  TestComponentSimpleCallback: (props: { runsOnClient: (_: void) => void }) => {
     return (
       <TouchableOpacity
         onPress={rpc(() => {
-          props.serverToClient({});
+          props.runsOnClient();
         })}
       />
     );
   },
   TestComponentCallbackWithValues: (props: {
-    serverToClient: (_: { a: number; b: number }) => void;
+    runsOnClient: (_: { a: number; b: number }) => void;
   }) => {
     return (
       <TouchableOpacity
         onPress={rpc(() => {
-          props.serverToClient({ a: 1, b: 2 });
+          props.runsOnClient({ a: 1, b: 2 });
         })}
       />
     );
   },
   TestComponentCallbackWithReturnCallback: (props: {
-    serverToClient: (_: {
+    runsOnClient: (_: {
       a: number;
-      clientToServer: (_: { b: number }) => void;
+      runsOnServer: (_: { b: number }) => void;
     }) => void;
   }) => {
     const [state, setState] = React.useState(5);
@@ -69,9 +74,9 @@ const components = {
       <>
         <TouchableOpacity
           onPress={rpc(() => {
-            props.serverToClient({
+            props.runsOnClient({
               a: 5,
-              clientToServer: (x: { b: number }) => {
+              runsOnServer: (x: { b: number }) => {
                 setState(x.b);
               },
             });
@@ -113,13 +118,15 @@ describe("Callback", () => {
         name="TestComponentSimpleCallback"
         webSocket={socket}
         props={{
-          serverToClient: () => {
+          runsOnClient: () => {
             called = true;
           },
         }}
       />
     );
-    (getChildren(rendered)[0] as ReactTestInstance).props.onPress();
+    act(() => {
+      (getChildren(rendered)[0] as ReactTestInstance).props.onPress();
+    });
     expect(called).toBe(true);
     // Prop change
     expect(sendCounter).toEqual(2);
@@ -132,13 +139,15 @@ describe("Callback", () => {
         name="TestComponentCallbackWithValues"
         webSocket={socket}
         props={{
-          serverToClient: ({ a, b }: { a: number; b: number }) => {
+          runsOnClient: ({ a, b }: { a: number; b: number }) => {
             result = [a, b];
           },
         }}
       />
     );
-    (getChildren(rendered)[0] as ReactTestInstance).props.onPress();
+    act(() => {
+      (getChildren(rendered)[0] as ReactTestInstance).props.onPress();
+    });
     expect(result).toEqual([1, 2]);
     // Prop change
     expect(sendCounter).toEqual(2);
@@ -151,15 +160,15 @@ describe("Callback", () => {
         name="TestComponentCallbackWithReturnCallback"
         webSocket={socket}
         props={{
-          serverToClient: ({
+          runsOnClient: ({
             a,
-            clientToServer,
+            runsOnServer,
           }: {
             a: number;
-            clientToServer: (_: { b: number }) => void;
+            runsOnServer: (_: { b: number }) => void;
           }) => {
             result = [a];
-            clientToServer({ b: 100 });
+            runsOnServer({ b: 100 });
           },
         }}
       />

@@ -15,7 +15,7 @@ interface MessageEvent {
 // In reality we must realize that the code below should be tested in principle, too.
 // We are not testing the real behavior. We are testing the behavior in this
 // simulated enviornment which is vastly more predictable than the network conditions.
-export type TestSocketLike = SocketLike & {
+export type TestSocketLike = Client.SocketLike & {
   setServerSocketIn: (_: (data: Server.Socket_data) => any) => void;
   clientSocketIn: () => (ev: MessageEvent) => any;
 };
@@ -121,6 +121,7 @@ export const render = (element: React.ReactElement): ReactTestRenderer => {
   act(() => {
     component = create(element);
   });
+  // @ts-ignore: It's defined in the synchronous act() callback.
   return component;
 };
 

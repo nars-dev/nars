@@ -5,7 +5,6 @@ import {
   OpaqueLocalProp,
   CallableLocalProp as CallableLocalPropConfig,
   RPCInterface,
-  Arguments,
 } from "nars-common";
 import { Dict_t } from "./shims/Js.shim";
 import { t as JsValue_t } from "./JsValue.gen";
@@ -17,8 +16,8 @@ export type ExtractPropType<
   K extends keyof T
 > = T[K] extends OpaqueLocalProp<any, any, any>
   ? LocalProp
-  : T extends CallableLocalPropConfig<infer LocalArg, infer Config>
-  ? ClientSideCallback<LocalArg, Arguments<Config>>
+  : T[K] extends CallableLocalPropConfig<infer LocalArg, infer ServerArg>
+  ? ClientSideCallback<LocalArg, ServerArg>
   : ExtractInputPropType<T[K]>;
 
 export type ExtractPropTypes<T extends Props> = {

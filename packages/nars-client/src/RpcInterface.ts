@@ -1,21 +1,25 @@
 import * as React from "react";
-import {
-  ClientToServer,
-  Call,
-} from "./schema_pb";
-import { RPCInterface, CallbackID, Arguments } from "nars-common";
+import { ClientToServer, RpcCall } from "./schema_pb";
+import { Value } from "./struct_pb";
+import { RPCInterface, CallbackID, ExtractInputPropType } from "nars-common";
 import { SocketLike } from "./SocketLike";
-import { toStruct } from "./StructCoders";
+import { toValue, ofValue } from "./StructCoders";
+import { badIncomingRpcCallId } from "./Error";
 
 export interface RpcInterface extends RPCInterface {
-  executeRpcCall: (
+  executeIncomingRpcCall: (
     id: CallbackID,
-    encodedArgs: { [k: string]: unknown }
+    encodedArgs: Value | undefined
   ) => void;
 }
 
-export const useRpcInterface = (rootId: () => number, ws: () => SocketLike): RpcInterface => {
-  const [map] = React.useState(() => new Map<number, (_: Arguments<any>) => void>());
+export const useRpcInterface = (
+  rootId: () => number,
+  ws: () => SocketLike
+): RpcInterface => {
+  const [map] = React.useState(
+    () => new Map<number, (_: ExtractInputPropType<any>) => void>()
+  );
   let counter = 0;
   return {
     registerCallback: callback => {
@@ -23,18 +27,20 @@ export const useRpcInterface = (rootId: () => number, ws: () => SocketLike): Rpc
       map.set(counter, callback);
       return counter;
     },
-    executeRpcCall: (id, encodedArgs) => {
+    executeIncomingRpcCall: (id, encodedArgs) => {
       const callback = map.get(id);
       if (callback) {
-        callback(encodedArgs);
+        callback(ofValue(encodedArgs));
+      } else {
+        throw badIncomingRpcCallId(id);
       }
     },
     rpcCall: (messageId, args) => {
       const msg = new ClientToServer();
-      const call = new Call();
+      const call = new RpcCall();
       call.setMessageid(messageId);
-      call.setArgs(toStruct(args));
-      msg.setCall(call);
+      call.setArg(toValue(args));
+      msg.setRpccall(call);
       msg.setRootid(rootId());
       ws().send(msg.serializeBinary());
     },

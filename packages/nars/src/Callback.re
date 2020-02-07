@@ -1,7 +1,7 @@
 [@genType.opaque]
 type t('args) =
   | Rpc('args => unit)
-  | ClientSide(string, RpcInterface.t => RpcInterface.args);
+  | ClientSide(string, RpcInterface.t => RpcInterface.arg);
 
 let map = (~f, t) =>
   switch (t) {
@@ -10,7 +10,7 @@ let map = (~f, t) =>
   };
 
 [@genType]
-let rpc = callback => {
+let makeRpc = callback => {
   Rpc(callback);
 };
 
@@ -18,6 +18,6 @@ let rpc = callback => {
 type any_;
 
 [@genType]
-let clientSide = (key, encoder): t(any_) => {
+let makeClientSide = (key, encoder): t(any_) => {
   ClientSide(key, encoder);
 };

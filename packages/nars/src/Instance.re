@@ -8,7 +8,7 @@ type encoder =
   (
     ~key: option(Schema.StringValue.t),
     ~props: props,
-    ~bridge: RpcInterface.t,
+    ~rpcInterface: RpcInterface.t,
     ~children: array(encoded)
   ) =>
   encoded;
@@ -41,7 +41,7 @@ let rec encode = (instance, ~rpcInterface) => {
     switch (children) {
     | Encoded(children) =>
       Encoded(
-        inst.encode(~key=inst.key, ~props=inst.props, ~bridge=rpcInterface, ~children),
+        inst.encode(~key=inst.key, ~props=inst.props, ~rpcInterface, ~children),
       );
     | Suspended => Suspended
     };

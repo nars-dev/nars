@@ -4,7 +4,7 @@ type container;
 let createContainer:
   (
     ~flushUpdates: array(Instance.encoded) => unit,
-    ~rpcCall: (RpcInterface.messageId, RpcInterface.args) => unit,
+    ~rpcCall: (RpcInterface.messageId, RpcInterface.arg) => unit,
     ~updateAnimatedValue: (
                             ~value: Animated.animatedValue,
                             ~toValue: Animated.adaptable

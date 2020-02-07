@@ -4,7 +4,7 @@ import { SocketLike } from "./SocketLike";
 import { RpcInterface, useRpcInterface } from "./RpcInterface";
 import { RetainedInstances, updateAnimatedValue } from "./AnimatedCoders";
 import { ServerToClient, ClientToServer, Unmount, Render } from "./schema_pb";
-import { toStruct, ofStruct } from "./StructCoders";
+import { toStruct } from "./StructCoders";
 import { ofEncodedReactElement } from "./DecodeElement";
 
 class InstanceCounter {
@@ -94,6 +94,17 @@ type ComputedProps = {
   ws: SocketLike;
 };
 
+const poorMansShallowCompare = (t1: PropsObject, t2: PropsObject): boolean => {
+  let changed = false;
+  const keys = [...Object.keys(t1), ...Object.keys(t2)];
+  keys.forEach(key => {
+    if (t1[key] !== t2[key]) {
+      changed = true;
+    }
+  });
+  return changed;
+};
+
 const useRemoteUpdateState = (
   webSocket: Lazy<SocketLike>,
   name: string,
@@ -108,20 +119,10 @@ const useRemoteUpdateState = (
   React.useEffect(() => {
     updateKind = { type: "RemoteRender" };
   }, [name]);
+
   React.useEffect(() => {
     const nextProps = inputProps(rpcInterface);
-    let changed = false;
-    // Poor man's shallow compare
-    const keys = [
-      ...Object.keys(memoizedProps.current),
-      ...Object.keys(nextProps),
-    ];
-    keys.forEach(key => {
-      if (memoizedProps.current[key] !== nextProps[key]) {
-        changed = true;
-      }
-    });
-    if (changed) {
+    if (poorMansShallowCompare(memoizedProps.current, nextProps)) {
       updateKind = { type: "RemoteRender" };
     }
     memoizedProps.current = nextProps;
@@ -260,14 +261,14 @@ export const useNars = (
   React.useEffect(() => {
     const update = remoteUpdateState.updateKind();
     if (update) {
-      const props = remoteUpdateState.computedProps();
+      const {ws, inputProps, localPropsRef } = remoteUpdateState.computedProps();
       switch (update.type) {
         case "RemoteRender":
           sendRender(
-            props.ws,
+            ws,
             name,
-            props.inputProps,
-            props.localPropsRef.current,
+            inputProps,
+            localPropsRef.current,
             instanceId()
           );
           break;
@@ -277,7 +278,7 @@ export const useNars = (
             retainedInstances.clear();
           }
           disconnect.current = connect(
-            props.ws,
+            ws,
             instanceId(),
             message => {
               if (message.hasError()) {
@@ -293,7 +294,7 @@ export const useNars = (
                   type: "Rendered",
                   element: reactElementFromMessage(
                     message,
-                    props.localPropsRef.current,
+                    localPropsRef.current,
                     rpcInterface,
                     retainedInstances
                   ),
@@ -304,19 +305,19 @@ export const useNars = (
                 const value = update.getValue();
                 const toValue = update.getTovalue();
                 updateAnimatedValue(value, toValue, retainedInstances);
-              } else if (message.hasCall()) {
-                const call = message.getCall()!;
+              } else if (message.hasRpccall()) {
+                const call = message.getRpccall()!;
                 const messageId = call.getMessageid();
-                const args = call.getArgs();
-                rpcInterface.executeRpcCall(messageId, ofStruct(args));
+                const args = call.getArg();
+                rpcInterface.executeIncomingRpcCall(messageId, args);
               }
             }
           );
           sendRender(
-            props.ws,
+            ws,
             name,
-            props.inputProps,
-            props.localPropsRef.current,
+            inputProps,
+            localPropsRef.current,
             instanceId()
           );
           break;
@@ -326,7 +327,7 @@ export const useNars = (
               type: "Rendered",
               element: reactElementFromMessage(
                 lastRenderMessage.current,
-                props.localPropsRef.current,
+                localPropsRef.current,
                 rpcInterface,
                 retainedInstances
               ),
@@ -381,12 +382,9 @@ export const useWebSocket = (
   url: string,
   shouldReconnect?: boolean
 ): Lazy<WebSocket> => {
-  const [ref, setRef_] = React.useState<
+  const [ref, setRef] = React.useState<
     React.MutableRefObject<WebSocket | null>
   >({ current: null });
-  const setRef: typeof setRef_ = x => {
-    setRef_(x);
-  };
   const removeErrorListenerRef = React.useRef<(() => void) | undefined>();
   return () => {
     if (ref.current) {

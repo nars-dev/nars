@@ -45,17 +45,17 @@ var CallbackRegistry = {
 function toJs(t) {
   return {
           rpcCall: (function (messageId, args) {
-              return Curry._2(t.rpcCall, messageId, JsValue.dictToStruct(args));
+              return Curry._2(t.rpcCall, messageId, JsValue.toValue(args));
             }),
           registerCallback: (function (callback) {
               return Curry._1(t.registerCallback, (function (args) {
-                            return Curry._1(callback, JsValue.structToDict(args));
+                            return Curry._1(callback, JsValue.valueToT(args));
                           }));
             })
         };
 }
 
-var fromJsRpcArgs = JsValue.dictToStruct;
+var fromJsRpcArgs = JsValue.toValue;
 
 function make$1(rpcCall, updateAnimatedValue) {
   var registry = {
@@ -77,9 +77,9 @@ function make$1(rpcCall, updateAnimatedValue) {
         };
 }
 
-var Struct = /* alias */0;
+var Protobuf = /* alias */0;
 
-exports.Struct = Struct;
+exports.Protobuf = Protobuf;
 exports.CallbackRegistry = CallbackRegistry;
 exports.toJs = toJs;
 exports.fromJsRpcArgs = fromJsRpcArgs;

@@ -49,10 +49,10 @@ export class LocalCallback extends jspb.Message {
   getLocalkey(): string;
   setLocalkey(value: string): void;
 
-  hasArgs(): boolean;
-  clearArgs(): void;
-  getArgs(): struct_pb.Struct | undefined;
-  setArgs(value?: struct_pb.Struct): void;
+  hasArg(): boolean;
+  clearArg(): void;
+  getArg(): struct_pb.Value | undefined;
+  setArg(value?: struct_pb.Value): void;
 
   serializeBinary(): Uint8Array;
   toObject(includeInstance?: boolean): LocalCallback.AsObject;
@@ -67,7 +67,7 @@ export class LocalCallback extends jspb.Message {
 export namespace LocalCallback {
   export type AsObject = {
     localkey: string,
-    args?: struct_pb.Struct.AsObject,
+    arg?: struct_pb.Value.AsObject,
   }
 }
 
@@ -605,29 +605,29 @@ export namespace Render {
   }
 }
 
-export class Call extends jspb.Message {
+export class RpcCall extends jspb.Message {
   getMessageid(): number;
   setMessageid(value: number): void;
 
-  hasArgs(): boolean;
-  clearArgs(): void;
-  getArgs(): struct_pb.Struct | undefined;
-  setArgs(value?: struct_pb.Struct): void;
+  hasArg(): boolean;
+  clearArg(): void;
+  getArg(): struct_pb.Value | undefined;
+  setArg(value?: struct_pb.Value): void;
 
   serializeBinary(): Uint8Array;
-  toObject(includeInstance?: boolean): Call.AsObject;
-  static toObject(includeInstance: boolean, msg: Call): Call.AsObject;
+  toObject(includeInstance?: boolean): RpcCall.AsObject;
+  static toObject(includeInstance: boolean, msg: RpcCall): RpcCall.AsObject;
   static extensions: {[key: number]: jspb.ExtensionFieldInfo<jspb.Message>};
   static extensionsBinary: {[key: number]: jspb.ExtensionFieldBinaryInfo<jspb.Message>};
-  static serializeBinaryToWriter(message: Call, writer: jspb.BinaryWriter): void;
-  static deserializeBinary(bytes: Uint8Array): Call;
-  static deserializeBinaryFromReader(message: Call, reader: jspb.BinaryReader): Call;
+  static serializeBinaryToWriter(message: RpcCall, writer: jspb.BinaryWriter): void;
+  static deserializeBinary(bytes: Uint8Array): RpcCall;
+  static deserializeBinaryFromReader(message: RpcCall, reader: jspb.BinaryReader): RpcCall;
 }
 
-export namespace Call {
+export namespace RpcCall {
   export type AsObject = {
     messageid: number,
-    args?: struct_pb.Struct.AsObject,
+    arg?: struct_pb.Value.AsObject,
   }
 }
 
@@ -645,10 +645,10 @@ export class ClientToServer extends jspb.Message {
   getRender(): Render | undefined;
   setRender(value?: Render): void;
 
-  hasCall(): boolean;
-  clearCall(): void;
-  getCall(): Call | undefined;
-  setCall(value?: Call): void;
+  hasRpccall(): boolean;
+  clearRpccall(): void;
+  getRpccall(): RpcCall | undefined;
+  setRpccall(value?: RpcCall): void;
 
   getValueCase(): ClientToServer.ValueCase;
   serializeBinary(): Uint8Array;
@@ -666,14 +666,14 @@ export namespace ClientToServer {
     rootid: number,
     unmount?: Unmount.AsObject,
     render?: Render.AsObject,
-    call?: Call.AsObject,
+    rpccall?: RpcCall.AsObject,
   }
 
   export enum ValueCase {
     VALUE_NOT_SET = 0,
     UNMOUNT = 2,
     RENDER = 3,
-    CALL = 4,
+    RPCCALL = 4,
   }
 }
 
@@ -729,10 +729,10 @@ export class ServerToClient extends jspb.Message {
   getUpdate(): Update | undefined;
   setUpdate(value?: Update): void;
 
-  hasCall(): boolean;
-  clearCall(): void;
-  getCall(): Call | undefined;
-  setCall(value?: Call): void;
+  hasRpccall(): boolean;
+  clearRpccall(): void;
+  getRpccall(): RpcCall | undefined;
+  setRpccall(value?: RpcCall): void;
 
   hasAnimatedvalueupdate(): boolean;
   clearAnimatedvalueupdate(): void;
@@ -755,7 +755,7 @@ export namespace ServerToClient {
     rootid: number,
     error?: Error.AsObject,
     update?: Update.AsObject,
-    call?: Call.AsObject,
+    rpccall?: RpcCall.AsObject,
     animatedvalueupdate?: nars_animated_pb.ValueUpdate.AsObject,
   }
 
@@ -763,7 +763,7 @@ export namespace ServerToClient {
     VALUE_NOT_SET = 0,
     ERROR = 2,
     UPDATE = 3,
-    CALL = 5,
+    RPCCALL = 5,
     ANIMATEDVALUEUPDATE = 4,
   }
 }

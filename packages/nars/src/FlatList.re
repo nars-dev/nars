@@ -17,7 +17,7 @@ module FL = Schema.FlatList;
 let opt_map = Js.Option.map;
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~bridge, ~children)
+    (~key, ~props as Instance.Props(props), ~rpcInterface, ~children)
     : Schema.ReactElement.t => {
   let props = toProps(props);
   let children =
@@ -37,8 +37,8 @@ let encoder =
           onEndReached:
             ProtoEncoders.encodeOptional(props##onEndReached, onEndReached =>
               ProtoEncoders.encodeCallback(
-                ~bridge,
-                ~callback=Callback.map(~f=_ => (), onEndReached),
+                ~rpcInterface,
+                ~callback=Callback.map(~f=ignore, onEndReached),
               )
             ),
           onEndReachedThreshold:

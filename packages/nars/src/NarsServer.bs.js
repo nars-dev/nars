@@ -55,12 +55,12 @@ function updateAnimatedValue(socket, rootId, containers, value, toValue) {
             ], rootId, containers);
 }
 
-function sendRPCCall(socket, rootId, containers, messageId, args) {
-  return send(socket, /* `Call */[
-              747848894,
+function sendRPCCall(socket, rootId, containers, messageId, arg) {
+  return send(socket, /* `RpcCall */[
+              -954784253,
               {
                 messageId: messageId,
-                args: args
+                arg: arg
               }
             ], rootId, containers);
 }
@@ -104,7 +104,7 @@ function startListening(server, render) {
                                   return /* () */0;
                                 } else {
                                   var variant = value[0];
-                                  if (variant !== 747848894) {
+                                  if (variant !== -699977536) {
                                     if (variant >= 968744822) {
                                       var match$2 = value[1];
                                       var localProps = match$2.localProps;
@@ -115,8 +115,8 @@ function startListening(server, render) {
                                       } else {
                                         var container$1 = NarsReconciler.createContainer((function (param) {
                                                 return sendViewUpdates(socket, rootId, containers, param);
-                                              }), (function (messageId, args) {
-                                                return sendRPCCall(socket, rootId, containers, messageId, args);
+                                              }), (function (messageId, arg) {
+                                                return sendRPCCall(socket, rootId, containers, messageId, arg);
                                               }), (function (param, param$1) {
                                                 return updateAnimatedValue(socket, rootId, containers, param, param$1);
                                               }));
@@ -134,20 +134,20 @@ function startListening(server, render) {
                                             }), container);
                                       return /* () */0;
                                     } else if (match$1 !== undefined) {
-                                      var container$2 = Caml_option.valFromOption(match$1);
-                                      Belt_HashMapInt.remove(containers, rootId);
-                                      return NarsReconciler.unbatchedUpdates((function (param) {
-                                                    NarsReconciler.updateContainer((function (param) {
-                                                            return NarsReconciler.nullElement;
-                                                          }), container$2);
-                                                    return /* () */0;
-                                                  }));
+                                      var match$3 = value[1];
+                                      return Curry._2(NarsReconciler.rpcInterface(Caml_option.valFromOption(match$1)).executeRpcCall, match$3.messageId, Js_option.getWithDefault(/* not_set */-915128522, match$3.arg));
                                     } else {
                                       return /* () */0;
                                     }
                                   } else if (match$1 !== undefined) {
-                                    var match$3 = value[1];
-                                    return Curry._2(NarsReconciler.rpcInterface(Caml_option.valFromOption(match$1)).executeRpcCall, match$3.messageId, Js_option.getWithDefault(/* [] */0, match$3.args));
+                                    var container$2 = Caml_option.valFromOption(match$1);
+                                    Belt_HashMapInt.remove(containers, rootId);
+                                    return NarsReconciler.unbatchedUpdates((function (param) {
+                                                  NarsReconciler.updateContainer((function (param) {
+                                                          return NarsReconciler.nullElement;
+                                                        }), container$2);
+                                                  return /* () */0;
+                                                }));
                                   } else {
                                     return /* () */0;
                                   }

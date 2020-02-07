@@ -7,14 +7,12 @@ let registry: t = HashMap.make(~hintSize=6);
 let add = (~name, ~encoder) =>
   if (name === Instance.waitComponentName) {
     raise(
-      Invalid_argument(
-        {j|'$(name)' is a special component name used for suspended rendering|j},
-      ),
-    );
+      Error.(make(CannotRegisterWaitComponent)
+    ));
   } else if (!HashMap.has(registry, name)) {
     HashMap.set(registry, name, encoder);
   } else {
-    raise(Invalid_argument("Component with this name exists: " ++ name));
+    raise(Error.(make(DuplicateComponentRegistrationAttempt(name))));
   };
 
 let get = (~name) => {

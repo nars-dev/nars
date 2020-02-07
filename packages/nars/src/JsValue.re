@@ -1,8 +1,8 @@
 type t;
 type jsFunction;
 
-module Struct = Struct.Google_mirror.Protobuf;
-module Value = Struct.Value;
+module Protobuf = Struct.Google_mirror.Protobuf;
+module Value = Protobuf.Value;
 
 type classification =
   | Object(Js.Dict.t(t))
@@ -46,11 +46,11 @@ let rec dictToStruct = dict => {
 }
 and toValue = (t): Value.t =>
   switch (classify(t)) {
-  | Null => `Null_value(Struct.NullValue.NULL_VALUE)
+  | Null => `Null_value(Protobuf.NullValue.NULL_VALUE)
   | Boolean(b) => `Bool_value(b)
   | String(s) => `String_value(s)
   | Number(n) => `Number_value(n)
-  | Undefined => `Undefined_value(Struct.UndefinedValue.UNDEFINED_VALUE)
+  | Undefined => `Undefined_value(Protobuf.UndefinedValue.UNDEFINED_VALUE)
   | Object(dict) => `Struct_value(dictToStruct(dict))
   | Array(array) =>
     `List_value(Js.Array.map(toValue, array) |> Array.to_list)

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ofStruct } from "./StructCoders";
+import { ofStruct, ofValue } from "./StructCoders";
 import * as Schema from "./schema_pb";
 import {
   View,
@@ -40,11 +40,11 @@ const decodeCallback = (
     };
   } else if (encoded.hasLocal()) {
     const local = encoded.getLocal()!;
-    const args = ofStruct(local.getArgs());
+    const arg = ofValue(local.getArg());
     const callback = getLocalProp(local.getLocalkey());
     if (typeof callback === "function") {
       return localArgs => {
-        callback(localArgs, args);
+        callback(localArgs, arg);
       };
     }
   }

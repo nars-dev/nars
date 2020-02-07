@@ -4,23 +4,23 @@ let encodeOptional = (value, decoder) => {
   opt_map((. value) => decoder(value), value);
 };
 
-let encodeCallback = (~bridge, ~callback) => {
+let encodeCallback = (~rpcInterface, ~callback) => {
   switch (callback) {
   | Callback.Rpc(callback) =>
     `Remote(
-      bridge.RpcInterface.registerCallback(callback),
+      rpcInterface.RpcInterface.registerCallback(callback),
     )
   | Callback.ClientSide(localKey, encodeArgs) =>
     `Local({
       Schema.LocalCallback.localKey,
-      args: Some(encodeArgs(bridge))
+      arg: Some(encodeArgs(rpcInterface))
     })
   };
 };
 
-let encodeCallbackOptional = (~bridge, ~callback) =>
+let encodeCallbackOptional = (~rpcInterface, ~callback) =>
   encodeOptional(callback, callback =>
-    encodeCallback(~bridge, ~callback)
+    encodeCallback(~rpcInterface, ~callback)
   );
 
 let encodeLocalProp = (~localKey, ~propKey) =>

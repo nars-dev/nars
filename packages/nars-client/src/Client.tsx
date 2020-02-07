@@ -10,7 +10,6 @@ import {
   LocalProp,
   InputProp,
   CallableLocalProp,
-  Arguments,
 } from "nars-common";
 import {
   RemoteComponent,
@@ -20,6 +19,12 @@ import {
 } from "./RemoteComponent";
 import { PropTypes as LocalPropTypes } from "./LocalPropTypes";
 import { SocketLike } from "./SocketLike";
+import {
+  unknownComponent,
+  requiredPropMissing,
+  badPropType,
+  localPropMissing,
+} from "./Error";
 
 // Extract the type visible for the user from the config
 type ExtractLocalPropType<T> = T extends OpaqueLocalProp<
@@ -34,11 +39,11 @@ type ExtractLocalPropType<T> = T extends OpaqueLocalProp<
         : LocalPropTypes[Component][Key]
       : never
     : never
-  : T extends CallableLocalProp<infer LocalArg, infer ServerArgs>
-  ? (localArgs: LocalArg, remoteArgs: Arguments<ServerArgs>) => void
+  : T extends CallableLocalProp<infer LocalArg, infer ServerArg>
+  ? (localArg: LocalArg, remoteArg: ServerArg) => void
   : never;
 
-// This type extracts thelocal props from a props object
+// This type extracts local props from a props object
 export type ExtractLocalPropKeys<T extends Props> = Pick<
   T,
   {
@@ -74,7 +79,7 @@ function getInputPropEncoder<T extends ComponentConfig, P extends keyof T>(
   propsIn: ExtractPropTypes<T[P]>
 ): PropEncoder {
   if (!(component in config)) {
-    throw `Unknown component <${component} />`;
+    throw unknownComponent(component);
   }
   const definition: T[P] & Props = config[component];
   return rpcInterface => {
@@ -85,14 +90,13 @@ function getInputPropEncoder<T extends ComponentConfig, P extends keyof T>(
       switch (propDefinition.type) {
         case PropType.Input:
           if (!propsIn.hasOwnProperty(propKey) && !propDefinition.optional) {
-            throw `Required prop '${propKey}' has not been passed to <${component} />`;
+            throw requiredPropMissing(propKey, component);
           }
           const result = propDefinition.encode(prop, rpcInterface);
           if (isSuccess(result)) {
             encodedProps[propKey] = result.value;
           } else {
-            console.log(prop);
-            throw `Error decoding '${propKey}' passed to <${component} />`;
+            throw badPropType(propKey, prop, component);
           }
           break;
       }
@@ -107,7 +111,7 @@ function encodeLocalProps<T extends ComponentConfig, P extends keyof T>(
   propsIn: ExtractPropTypes<T[P]>
 ): PropsObject {
   if (!(component in config)) {
-    throw `Unknown component <${component} />`;
+    throw unknownComponent(component);
   }
   const definition: T[P] & Props = config[component];
   let encodedProps: PropsObject = {};
@@ -123,7 +127,7 @@ function encodeLocalProps<T extends ComponentConfig, P extends keyof T>(
           propDefinition.isRequired !== "optional" &&
           typeof prop === "undefined"
         ) {
-          throw `Local Prop '${propKey}' has not been passed to <${component} />`;
+          throw localPropMissing(propKey, component);
         }
         break;
     }

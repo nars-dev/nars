@@ -206,8 +206,12 @@ function tToStruct(t) {
   }
 }
 
+var Protobuf = /* alias */0;
+
+exports.Protobuf = Protobuf;
 exports.toValue = toValue;
 exports.dictToStruct = dictToStruct;
 exports.tToStruct = tToStruct;
 exports.structToDict = structToDict;
+exports.valueToT = valueToT;
 /* No side effect */

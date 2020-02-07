@@ -1,8 +1,10 @@
 import { RPCInterface, CallbackID } from "./Rpc";
 import { Result, error, success, isSuccess } from "./Result";
+import { encodingArgError, decodingArgError } from "./Error";
 
 export * from "./Rpc";
 export * from "./Result";
+export { CommonUserError, CommonUserErrorT } from "./Error";
 
 export interface InputProp<T> {
   type: PropType.Input;
@@ -35,14 +37,11 @@ export interface OpaqueLocalProp<
   isRequired: IsRequired;
 }
 
-export interface CallableLocalProp<
-  LocalArg,
-  ServerArgConfig extends ArgumentsConfig
-> {
+export interface CallableLocalProp<LocalArg, ServerArg> {
   type: PropType.Local;
   localPropType: LocalPropType.Callable;
   localArg: InputProp<LocalArg>;
-  serverArgs: ServerArgConfig;
+  serverArg: InputProp<ServerArg>;
 }
 
 export type LocalProp =
@@ -61,55 +60,10 @@ export type ExtractInputPropType<T> = T extends InputProp<infer ParsedType>
   ? ParsedType
   : never;
 
-export type ArgumentsConfig = { [k: string]: InputProp<any> };
-
-export type Arguments<T extends ArgumentsConfig> = {
+export type ObjectInputProp = { [k: string]: InputProp<any> };
+export type ExtractObjectInputPropType<T extends ObjectInputProp> = {
   [K in keyof T]: T[K] extends InputProp<infer X> ? X : never;
 };
-
-export function sanitizeAndEncode<T extends ArgumentsConfig>(
-  config: T,
-  args: Arguments<ArgumentsConfig>,
-  rpc: RPCInterface
-) {
-  let output: { [k: string]: unknown } = {};
-  for (const key in config) {
-    const inputProp = config[key];
-    if (key in args) {
-      const encoded = inputProp.encode(args[key], rpc);
-      if (isSuccess(encoded)) {
-        output[key] = encoded.value;
-      } else {
-        return error;
-      }
-    } else if (!inputProp.optional) {
-      return error;
-    }
-  }
-  return success(output);
-}
-
-export function sanitizeAndDecode<T extends ArgumentsConfig>(
-  config: T,
-  args: { [k: string]: unknown },
-  rpc: RPCInterface
-): Result<Arguments<T>> {
-  let output = {} as Arguments<T>;
-  for (const key in config) {
-    const inputProp = config[key];
-    if (key in args) {
-      let decoded = inputProp.decode(args[key], rpc);
-      if (isSuccess(decoded)) {
-        output[key] = decoded.value;
-      } else {
-        return error;
-      }
-    } else if (!inputProp.optional) {
-      return error;
-    }
-  }
-  return success(output);
-}
 
 interface EncodedCallback {
   id: CallbackID;
@@ -150,28 +104,30 @@ export const InputProp = {
     },
     optional: true,
   }),
-  function: <T extends ArgumentsConfig>(
-    config: T
-  ): InputProp<(_: Arguments<T>) => void> => ({
+  function: <T>(config: InputProp<T>): InputProp<(_: T) => void> => ({
     type: PropType.Input as const,
     decode: (obj: unknown, rpc: RPCInterface) => {
       if (typeof obj === "object" && obj && "id" in obj) {
-        return success(args => {
-          const encoded = sanitizeAndEncode(config, args, rpc);
+        return success(arg => {
+          const encoded = config.encode(arg, rpc);
           if (isSuccess(encoded)) {
             rpc.rpcCall((obj as EncodedCallback).id, encoded.value);
+          } else {
+            throw decodingArgError();
           }
         });
       }
       return error;
     },
-    encode: (callback: (_: Arguments<T>) => void, rpc: RPCInterface) => {
+    encode: (callback: (_: T) => void, rpc: RPCInterface) => {
       if (typeof callback === "function") {
         return success({
           id: rpc.registerCallback(args => {
-            const encoded = sanitizeAndDecode(config, args, rpc);
+            const encoded = config.decode(args, rpc);
             if (isSuccess(encoded)) {
               callback(encoded.value);
+            } else {
+              throw encodingArgError();
             }
           }),
         });
@@ -181,9 +137,52 @@ export const InputProp = {
   }),
   void: {
     type: PropType.Input as const,
+    name: "VOID",
     decode: (_: unknown): Result<void> => success(undefined),
     encode: (_: void) => success(undefined),
   },
+  object: <Config extends ObjectInputProp>(
+    config: Config
+  ): InputProp<ExtractObjectInputPropType<Config>> => ({
+    type: PropType.Input as const,
+    decode: (obj: unknown, rpc: RPCInterface) => {
+      if (typeof obj === "object" && obj !== null) {
+        let output = {} as ExtractObjectInputPropType<Config>;
+        for (const key in config) {
+          const inputProp = config[key];
+          if (key in obj) {
+            let decoded = inputProp.decode(obj[key as keyof typeof obj], rpc);
+            if (isSuccess(decoded)) {
+              output[key] = decoded.value;
+            } else {
+              return error;
+            }
+          } else if (!inputProp.optional) {
+            return error;
+          }
+        }
+        return success(output);
+      }
+      return error;
+    },
+    encode: (object, rpc: RPCInterface) => {
+      let output: { [k: string]: unknown } = {};
+      for (const key in config) {
+        const inputProp = config[key];
+        if (key in object) {
+          const encoded = inputProp.encode(object[key], rpc);
+          if (isSuccess(encoded)) {
+            output[key] = encoded.value;
+          } else {
+            return error;
+          }
+        } else if (!inputProp.optional) {
+          return error;
+        }
+      }
+      return success(output);
+    },
+  }),
 };
 
 export function localProp<
@@ -200,14 +199,14 @@ export function localProp<
   };
 }
 
-export function localCallback<LocalArg, AppliedConfig extends ArgumentsConfig>(
+export function localCallback<LocalArg, ServerArg>(
   localArg: InputProp<LocalArg>,
-  serverArgs: AppliedConfig
-): CallableLocalProp<LocalArg, AppliedConfig> {
+  serverArg: InputProp<ServerArg>
+): CallableLocalProp<LocalArg, ServerArg> {
   return {
     type: PropType.Local,
     localPropType: LocalPropType.Callable,
     localArg,
-    serverArgs,
+    serverArg,
   };
 }

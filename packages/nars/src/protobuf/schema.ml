@@ -68,21 +68,21 @@ end = struct
 end
 and LocalCallback : sig
   val name': unit -> string
-  type t = { localKey: string; args: Imported'modules.Struct.Google_mirror.Protobuf.Struct.t option } 
+  type t = { localKey: string; arg: Imported'modules.Struct.Google_mirror.Protobuf.Value.t option } 
   val to_proto: t -> Runtime'.Writer.t
   val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
 end = struct 
   let name' () = "schema.LocalCallback"
-  type t = { localKey: string; args: Imported'modules.Struct.Google_mirror.Protobuf.Struct.t option }
+  type t = { localKey: string; arg: Imported'modules.Struct.Google_mirror.Protobuf.Value.t option }
   let to_proto =
-    let apply = fun ~f:f' { localKey; args } -> f' [] localKey args in
-    let spec = Runtime'.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: nil ) in
+    let apply = fun ~f:f' { localKey; arg } -> f' [] localKey arg in
+    let spec = Runtime'.Serialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Value.to_proto t))) ^:: nil ) in
     let serialize = Runtime'.Serialize.serialize [] (spec) in
     fun t -> apply ~f:serialize t
   
   let from_proto =
-    let constructor = fun _extensions localKey args -> { localKey; args } in
-    let spec = Runtime'.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: nil ) in
+    let constructor = fun _extensions localKey arg -> { localKey; arg } in
+    let spec = Runtime'.Deserialize.C.( basic (1, string, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Value.from_proto t))) ^:: nil ) in
     let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
     fun writer -> deserialize writer |> Runtime'.Result.open_error
   
@@ -402,44 +402,44 @@ end = struct
     fun writer -> deserialize writer |> Runtime'.Result.open_error
   
 end
-and Call : sig
+and RpcCall : sig
   val name': unit -> string
-  type t = { messageId: int; args: Imported'modules.Struct.Google_mirror.Protobuf.Struct.t option } 
+  type t = { messageId: int; arg: Imported'modules.Struct.Google_mirror.Protobuf.Value.t option } 
   val to_proto: t -> Runtime'.Writer.t
   val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
 end = struct 
-  let name' () = "schema.Call"
-  type t = { messageId: int; args: Imported'modules.Struct.Google_mirror.Protobuf.Struct.t option }
+  let name' () = "schema.RpcCall"
+  type t = { messageId: int; arg: Imported'modules.Struct.Google_mirror.Protobuf.Value.t option }
   let to_proto =
-    let apply = fun ~f:f' { messageId; args } -> f' [] messageId args in
-    let spec = Runtime'.Serialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Struct.to_proto t))) ^:: nil ) in
+    let apply = fun ~f:f' { messageId; arg } -> f' [] messageId arg in
+    let spec = Runtime'.Serialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Value.to_proto t))) ^:: nil ) in
     let serialize = Runtime'.Serialize.serialize [] (spec) in
     fun t -> apply ~f:serialize t
   
   let from_proto =
-    let constructor = fun _extensions messageId args -> { messageId; args } in
-    let spec = Runtime'.Deserialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Struct.from_proto t))) ^:: nil ) in
+    let constructor = fun _extensions messageId arg -> { messageId; arg } in
+    let spec = Runtime'.Deserialize.C.( basic (1, int32_int, proto3) ^:: basic_opt (2, (message (fun t -> Imported'modules.Struct.Google_mirror.Protobuf.Value.from_proto t))) ^:: nil ) in
     let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
     fun writer -> deserialize writer |> Runtime'.Result.open_error
   
 end
 and ClientToServer : sig
   val name': unit -> string
-  type t = { rootId: int; value: [ `not_set | `Unmount of Unmount.t | `Render of Render.t | `Call of Call.t ] } 
+  type t = { rootId: int; value: [ `not_set | `Unmount of Unmount.t | `Render of Render.t | `RpcCall of RpcCall.t ] } 
   val to_proto: t -> Runtime'.Writer.t
   val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
 end = struct 
   let name' () = "schema.ClientToServer"
-  type t = { rootId: int; value: [ `not_set | `Unmount of Unmount.t | `Render of Render.t | `Call of Call.t ] }
+  type t = { rootId: int; value: [ `not_set | `Unmount of Unmount.t | `Render of Render.t | `RpcCall of RpcCall.t ] }
   let to_proto =
     let apply = fun ~f:f' { rootId; value } -> f' [] rootId value in
-    let spec = Runtime'.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Unmount v -> oneof_elem (2, (message (fun t -> Unmount.to_proto t)), v) | `Render v -> oneof_elem (3, (message (fun t -> Render.to_proto t)), v) | `Call v -> oneof_elem (4, (message (fun t -> Call.to_proto t)), v))) ^:: nil ) in
+    let spec = Runtime'.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Unmount v -> oneof_elem (2, (message (fun t -> Unmount.to_proto t)), v) | `Render v -> oneof_elem (3, (message (fun t -> Render.to_proto t)), v) | `RpcCall v -> oneof_elem (4, (message (fun t -> RpcCall.to_proto t)), v))) ^:: nil ) in
     let serialize = Runtime'.Serialize.serialize [] (spec) in
     fun t -> apply ~f:serialize t
   
   let from_proto =
     let constructor = fun _extensions rootId value -> { rootId; value } in
-    let spec = Runtime'.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Unmount.from_proto t)), fun v -> `Unmount v); oneof_elem (3, (message (fun t -> Render.from_proto t)), fun v -> `Render v); oneof_elem (4, (message (fun t -> Call.from_proto t)), fun v -> `Call v) ]) ^:: nil ) in
+    let spec = Runtime'.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Unmount.from_proto t)), fun v -> `Unmount v); oneof_elem (3, (message (fun t -> Render.from_proto t)), fun v -> `Render v); oneof_elem (4, (message (fun t -> RpcCall.from_proto t)), fun v -> `RpcCall v) ]) ^:: nil ) in
     let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
     fun writer -> deserialize writer |> Runtime'.Result.open_error
   
@@ -488,21 +488,21 @@ end = struct
 end
 and ServerToClient : sig
   val name': unit -> string
-  type t = { rootId: int; value: [ `not_set | `Error of Error.t | `Update of Update.t | `Call of Call.t | `AnimatedValueUpdate of Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.t ] } 
+  type t = { rootId: int; value: [ `not_set | `Error of Error.t | `Update of Update.t | `RpcCall of RpcCall.t | `AnimatedValueUpdate of Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.t ] } 
   val to_proto: t -> Runtime'.Writer.t
   val from_proto: Runtime'.Reader.t -> (t, [> Runtime'.Result.error]) result
 end = struct 
   let name' () = "schema.ServerToClient"
-  type t = { rootId: int; value: [ `not_set | `Error of Error.t | `Update of Update.t | `Call of Call.t | `AnimatedValueUpdate of Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.t ] }
+  type t = { rootId: int; value: [ `not_set | `Error of Error.t | `Update of Update.t | `RpcCall of RpcCall.t | `AnimatedValueUpdate of Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.t ] }
   let to_proto =
     let apply = fun ~f:f' { rootId; value } -> f' [] rootId value in
-    let spec = Runtime'.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Error v -> oneof_elem (2, (message (fun t -> Error.to_proto t)), v) | `Update v -> oneof_elem (3, (message (fun t -> Update.to_proto t)), v) | `Call v -> oneof_elem (5, (message (fun t -> Call.to_proto t)), v) | `AnimatedValueUpdate v -> oneof_elem (4, (message (fun t -> Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.to_proto t)), v))) ^:: nil ) in
+    let spec = Runtime'.Serialize.C.( basic (1, int32_int, proto3) ^:: oneof ((function | `not_set -> failwith "This case should never _ever_ happen" | `Error v -> oneof_elem (2, (message (fun t -> Error.to_proto t)), v) | `Update v -> oneof_elem (3, (message (fun t -> Update.to_proto t)), v) | `RpcCall v -> oneof_elem (5, (message (fun t -> RpcCall.to_proto t)), v) | `AnimatedValueUpdate v -> oneof_elem (4, (message (fun t -> Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.to_proto t)), v))) ^:: nil ) in
     let serialize = Runtime'.Serialize.serialize [] (spec) in
     fun t -> apply ~f:serialize t
   
   let from_proto =
     let constructor = fun _extensions rootId value -> { rootId; value } in
-    let spec = Runtime'.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Error.from_proto t)), fun v -> `Error v); oneof_elem (3, (message (fun t -> Update.from_proto t)), fun v -> `Update v); oneof_elem (5, (message (fun t -> Call.from_proto t)), fun v -> `Call v); oneof_elem (4, (message (fun t -> Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.from_proto t)), fun v -> `AnimatedValueUpdate v) ]) ^:: nil ) in
+    let spec = Runtime'.Deserialize.C.( basic (1, int32_int, proto3) ^:: oneof ([ oneof_elem (2, (message (fun t -> Error.from_proto t)), fun v -> `Error v); oneof_elem (3, (message (fun t -> Update.from_proto t)), fun v -> `Update v); oneof_elem (5, (message (fun t -> RpcCall.from_proto t)), fun v -> `RpcCall v); oneof_elem (4, (message (fun t -> Imported'modules.Nars_animated.Nars.Animated.ValueUpdate.from_proto t)), fun v -> `AnimatedValueUpdate v) ]) ^:: nil ) in
     let deserialize = Runtime'.Deserialize.deserialize [] spec constructor in
     fun writer -> deserialize writer |> Runtime'.Result.open_error
   

@@ -14,7 +14,7 @@ type props = {
 external toProps: Js.t('a) => props = "%identity";
 
 let encoder =
-    (~key, ~props as Instance.Props(props), ~bridge, ~children as _) => {
+    (~key, ~props as Instance.Props(props), ~rpcInterface, ~children as _) => {
   let props = toProps(props);
   {
     key,
@@ -25,10 +25,10 @@ let encoder =
         onValueChange:
           Some(
             ProtoEncoders.encodeCallback(
-              ~bridge=bridge,
+              ~rpcInterface=rpcInterface,
               ~callback=
                 Callback.map(
-                  ~f=(struct_) => StructDecoders.(getValueField(getBool, struct_)),
+                  ~f=StructDecoders.getBool,
                   props##onValueChange,
                 ),
             ),

@@ -79,10 +79,10 @@ let updateAnimatedValue = (~socket, ~rootId, ~containers, ~value, ~toValue) => {
   );
 };
 
-let sendRPCCall = (~socket, ~rootId, ~containers, ~messageId, ~args) => {
+let sendRPCCall = (~socket, ~rootId, ~containers, ~messageId, ~arg) => {
   send(
     ~socket,
-    ~message=`Call(Schema.Call.{messageId, args}),
+    ~message=`RpcCall(Schema.RpcCall.{messageId, arg}),
     ~rootId,
     ~containers,
   );
@@ -125,13 +125,13 @@ let startListening = (server: server, render) => {
               let container =
                 NarsReconciler.createContainer(
                   ~rpcCall=
-                    (messageId, args) => {
+                    (messageId, arg) => {
                       sendRPCCall(
                         ~socket,
                         ~rootId,
                         ~containers,
                         ~messageId,
-                        ~args=Some(args),
+                        ~arg=Some(arg),
                       )
                     },
                   ~flushUpdates=
@@ -168,13 +168,13 @@ let startListening = (server: server, render) => {
             )
             |> ignore
           });
-        | (`Call({messageId, args}), Some(container)) =>
+        | (`RpcCall({messageId, arg}), Some(container)) =>
           NarsReconciler.rpcInterface(~container).executeRpcCall(
             messageId,
-            Js.Option.getWithDefault([], args),
+            Js.Option.getWithDefault(`not_set, arg),
           )
         | (`Unmount(_), None)
-        | (`Call(_), None) => ()
+        | (`RpcCall(_), None) => ()
         | (`not_set, _) => ()
         }
       | Error(error) =>

@@ -9,8 +9,8 @@ var ComponentRegistry = require("./ComponentRegistry.bs.js");
 
 var name = "TouchableOpacity";
 
-function encoder(key, param, bridge, children) {
-  var onPress = ProtoEncoders.encodeCallbackOptional(bridge, Js_option.map((function (callback) {
+function encoder(key, param, rpcInterface, children) {
+  var onPress = ProtoEncoders.encodeCallbackOptional(rpcInterface, Js_option.map((function (callback) {
               return Callback.map((function (param) {
                             return /* () */0;
                           }), callback);

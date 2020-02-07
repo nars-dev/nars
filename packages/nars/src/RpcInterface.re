@@ -1,7 +1,7 @@
-module Struct = Struct.Google_mirror.Protobuf.Struct;
+module Protobuf = Struct.Google_mirror.Protobuf;
 
 [@genType.opaque]
-type args = Struct.t;
+type arg = Protobuf.Value.t;
 
 [@genType]
 type messageId = int;
@@ -9,7 +9,7 @@ module CallbackRegistry = {
   module HashMap = Belt.HashMap.Int;
   type t = {
     mutable counter: int,
-    registry: HashMap.t(args => unit),
+    registry: HashMap.t(arg => unit),
   };
 
   let make = () => {counter: 0, registry: HashMap.make(~hintSize=50)};
@@ -36,9 +36,9 @@ module CallbackRegistry = {
 
 [@genType]
 type t = {
-  rpcCall: (messageId, args) => unit,
-  registerCallback: (args => unit) => messageId,
-  executeRpcCall: (messageId, args) => unit,
+  rpcCall: (messageId, arg) => unit,
+  registerCallback: (arg => unit) => messageId,
+  executeRpcCall: (messageId, arg) => unit,
   updateAnimatedValue:
     (~value: Animated.animatedValue, ~toValue: Animated.adaptable) => unit,
   clear: unit => unit
@@ -47,15 +47,15 @@ type t = {
 [@genType]
 let toJs = (t: t) => {
   "rpcCall": (messageId, args) =>
-    t.rpcCall(messageId, JsValue.dictToStruct(args)),
+    t.rpcCall(messageId, JsValue.toValue(args)),
   "registerCallback": callback => {
-    t.registerCallback(args => {callback(JsValue.structToDict(args))});
+    t.registerCallback(args => {callback(JsValue.valueToT(args))});
   },
 };
 
 [@genType]
-let fromJsRpcArgs = (args: Js.Dict.t(JsValue.t)): args => {
-  args |> JsValue.dictToStruct;
+let fromJsRpcArgs = (arg: JsValue.t): arg => {
+  arg |> JsValue.toValue;
 };
 
 let make = (~rpcCall, ~updateAnimatedValue) => {

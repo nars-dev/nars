@@ -2,7 +2,7 @@ export type CallbackID = number;
 
 export interface RPCInterface {
   registerCallback: (
-    callback: (_: { [k: string]: unknown }) => void
+    callback: (_: unknown) => void
   ) => CallbackID;
-  rpcCall: (id: CallbackID, encodedArgs: { [k: string]: unknown }) => void;
+  rpcCall: (id: CallbackID, encodedArg: unknown) => void;
 }

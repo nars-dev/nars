@@ -18,11 +18,11 @@ function map(f, t) {
   }
 }
 
-function rpc(callback) {
+function makeRpc(callback) {
   return /* Rpc */Block.__(0, [callback]);
 }
 
-function clientSide(key, encoder) {
+function makeClientSide(key, encoder) {
   return /* ClientSide */Block.__(1, [
             key,
             encoder
@@ -30,6 +30,6 @@ function clientSide(key, encoder) {
 }
 
 exports.map = map;
-exports.rpc = rpc;
-exports.clientSide = clientSide;
+exports.makeRpc = makeRpc;
+exports.makeClientSide = makeClientSide;
 /* No side effect */
