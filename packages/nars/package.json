@@ -16,7 +16,7 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "postinstall": "bsb -clean-world -make-world",
+    "postinstall": "bsb -version && bsb -clean-world -make-world",
     "build": "bsb -make-world && tsc && mkdir -p ./dist/protobuf && cp ./src/*.bs.js ./dist/ && cp ./src/protobuf/*.bs.js ./dist/protobuf/"
   },
   "dependencies": {
