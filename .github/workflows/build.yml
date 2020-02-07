@@ -26,8 +26,9 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-      - name: Build packages
+      - name: Install deps
         run: |
-          set -e
           yarn
+      - name: Build
+        run: |
           yarn build
