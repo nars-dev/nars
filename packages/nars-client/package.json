@@ -1,6 +1,6 @@
 {
   "name": "nars-client",
-  "version": "1.0.0-alpha.6",
+  "version": "1.0.0-alpha.7",
   "description": "React Native components for Nars",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

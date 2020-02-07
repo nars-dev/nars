@@ -22,10 +22,13 @@ const config = {
     onPress: localCallback(InputProp.void, InputProp.void),
   },
   TestComponentCallbackWithValues: {
-    onPress: localCallback(InputProp.boolean, InputProp.object({
-      a: InputProp.number,
-      b: InputProp.number,
-    })),
+    onPress: localCallback(
+      InputProp.boolean,
+      InputProp.object({
+        a: InputProp.number,
+        b: InputProp.number,
+      })
+    ),
   },
 };
 
@@ -47,10 +50,10 @@ const components = {
   },
 };
 
-const [RemoteComponent, createServer] = createRemoteComponent(
-  config,
-  components
-);
+const [
+  { TestComponentSimpleCallback, TestComponentCallbackWithValues },
+  createServer,
+] = createRemoteComponent(config, components);
 
 describe("Callback", () => {
   let sendCounter = 0;
@@ -73,13 +76,10 @@ describe("Callback", () => {
   test("No parameters", () => {
     let called = false;
     const rendered = render(
-      <RemoteComponent
-        name="TestComponentSimpleCallback"
+      <TestComponentSimpleCallback
         webSocket={socket}
-        props={{
-          onPress: () => {
-            called = true;
-          },
+        onPress={() => {
+          called = true;
         }}
       />
     );
@@ -95,14 +95,11 @@ describe("Callback", () => {
     let result: number[] = [];
     let boolResult: boolean = false;
     const rendered = render(
-      <RemoteComponent
-        name="TestComponentCallbackWithValues"
+      <TestComponentCallbackWithValues
         webSocket={socket}
-        props={{
-          onPress: (bool: boolean, args: { a: number; b: number }) => {
-            boolResult = bool;
-            result = [args.a, args.b];
-          },
+        onPress={(bool: boolean, args: { a: number; b: number }) => {
+          boolResult = bool;
+          result = [args.a, args.b];
         }}
       />
     );

@@ -88,10 +88,14 @@ const components = {
   },
 };
 
-const [RemoteComponent, createServer] = createRemoteComponent(
-  config,
-  components
-);
+const [
+  {
+    TestComponentSimpleCallback,
+    TestComponentCallbackWithReturnCallback,
+    TestComponentCallbackWithValues,
+  },
+  createServer,
+] = createRemoteComponent(config, components);
 
 describe("Callback", () => {
   let sendCounter = 0;
@@ -114,13 +118,10 @@ describe("Callback", () => {
   test("No parameters", () => {
     let called = false;
     const rendered = render(
-      <RemoteComponent
-        name="TestComponentSimpleCallback"
+      <TestComponentSimpleCallback
         webSocket={socket}
-        props={{
-          runsOnClient: () => {
-            called = true;
-          },
+        runsOnClient={() => {
+          called = true;
         }}
       />
     );
@@ -135,13 +136,10 @@ describe("Callback", () => {
   test("With two parameters", () => {
     let result: number[] = [];
     const rendered = render(
-      <RemoteComponent
-        name="TestComponentCallbackWithValues"
+      <TestComponentCallbackWithValues
         webSocket={socket}
-        props={{
-          runsOnClient: ({ a, b }: { a: number; b: number }) => {
-            result = [a, b];
-          },
+        runsOnClient={({ a, b }: { a: number; b: number }) => {
+          result = [a, b];
         }}
       />
     );
@@ -156,20 +154,17 @@ describe("Callback", () => {
   test("With a return callback", () => {
     let result: number[] = [];
     const rendered = render(
-      <RemoteComponent
-        name="TestComponentCallbackWithReturnCallback"
+      <TestComponentCallbackWithReturnCallback
         webSocket={socket}
-        props={{
-          runsOnClient: ({
-            a,
-            runsOnServer,
-          }: {
-            a: number;
-            runsOnServer: (_: { b: number }) => void;
-          }) => {
-            result = [a];
-            runsOnServer({ b: 100 });
-          },
+        runsOnClient={({
+          a,
+          runsOnServer,
+        }: {
+          a: number;
+          runsOnServer: (_: { b: number }) => void;
+        }) => {
+          result = [a];
+          runsOnServer({ b: 100 });
         }}
       />
     );

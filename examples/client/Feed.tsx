@@ -6,7 +6,7 @@ import * as Nars from "nars-client";
 
 import { green } from "./Colors";
 
-const RemoteComponent = Nars.createRemoteComponentWithUrl(
+const { Feed } = Nars.createRemoteComponentWithUrl(
   "ws://localhost:9000",
   config
 );
@@ -14,10 +14,7 @@ const RemoteComponent = Nars.createRemoteComponentWithUrl(
 const Component = ({ animationProgress }) => {
   return (
     <Animated.View style={[{ opacity: animationProgress }, styles.container]}>
-      <RemoteComponent
-        name="Feed"
-        props={{ backgroundColor: "yellow" }}
-      />
+      <Feed backgroundColor={"yellow"} />
     </Animated.View>
   );
 };

@@ -30,39 +30,18 @@ const components = {
   ),
 };
 
-const RemoteComponent = createRemoteComponentWithDefaultSocket(
-  config,
-  components
-);
+const { Test } = createRemoteComponentWithDefaultSocket(config, components);
 
 describe("Props", () => {
   it("handles optional props", () => {
     expect(
       (getChildren(
-        render(
-          <RemoteComponent
-            name="Test"
-            props={{
-              text: "A",
-              number: 10,
-              textOptional: undefined,
-            }}
-          />
-        )
+        render(<Test text="A" number={10} textOptional={undefined} />)
       )[0] as ReactTestInstance).children[0]
     ).toEqual("A");
     expect(
       (getChildren(
-        render(
-          <RemoteComponent
-            name="Test"
-            props={{
-              text: "A",
-              number: 20,
-              textOptional: "B",
-            }}
-          />
-        )
+        render(<Test text="A" number={20} textOptional={"B"} />)
       )[0] as ReactTestInstance).children[0]
     ).toEqual("AB");
   });
@@ -70,14 +49,8 @@ describe("Props", () => {
     console.error = jest.fn();
     expect(() =>
       render(
-        <RemoteComponent
-          name="Test"
-          // @ts-ignore
-          props={{
-            number: 0,
-            textOptional: undefined,
-          }}
-        />
+        // @ts-ignore
+        <Test number={0} textOptional={undefined} />
       )
     ).toThrow("Required prop 'text' has not been passed to <Test />");
   });
