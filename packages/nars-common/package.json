@@ -1,6 +1,6 @@
 {
   "name": "nars-common",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "Package for nars code shared between client and server",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",

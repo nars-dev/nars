@@ -1,6 +1,6 @@
 {
   "name": "nars",
-  "version": "1.0.0-alpha.9",
+  "version": "1.0.0-alpha.10",
   "description": "Server Rendered React Native",
   "main": "dist/index.js",
   "source": "src/index.ts",
@@ -22,7 +22,7 @@
   "dependencies": {
     "analytics-node": "^3.4.0-beta.1",
     "bs-platform": "7.0.1",
-    "nars-common": "1.0.0-alpha.2",
+    "nars-common": "1.0.0-alpha.3",
     "node-machine-id": "^1.1.12",
     "ocaml-protoc-plugin-runtime-bs": "3.0.0-alpha.3",
     "reason-react-reconciler": "~0.24.0000",
