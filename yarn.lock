@@ -7692,13 +7692,6 @@ realpath-native@^1.1.0:
   dependencies:
     util.promisify "^1.0.0"
 
-reason-react-reconciler@~0.24.0000:
-  version "0.24.0"
-  resolved "https://registry.yarnpkg.com/reason-react-reconciler/-/reason-react-reconciler-0.24.0.tgz#ca1ae53408111aff386422f574e213afe58188dc"
-  integrity sha512-H2c9Zb6HPZJCsqpxIeeKYd5xsdrEmcZaU7t+gwCWYN8UyTIiKkZpQUwzVWvntqiGZ6oRQIZQU4Zr/MpjykgSIA==
-  dependencies:
-    react-reconciler "0.24.0"
-
 regenerate-unicode-properties@^8.1.0:
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/regenerate-unicode-properties/-/regenerate-unicode-properties-8.1.0.tgz#ef51e0f0ea4ad424b77bf7cb41f3e015c70a3f0e"
