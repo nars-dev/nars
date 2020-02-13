@@ -6,6 +6,8 @@
   Server rendered React Native.
 </h3>
 
+Library for building real time Server Rendered components for React Native apps.
+
 ### 🐙 Discord
 
 I'm more than happy to answer any questions or help you if you stumble
@@ -21,4 +23,4 @@ The easiest way to get started is to use the [template](https://github.com/nars-
 npx react-native init MyApp --template https://github.com/nars-dev/template.git
 ```
 
-There are examples in the example [repo](https://github.com/nars-dev/examples). You can find more documentation on [the website](https://nars.dev/).
+There are examples in the example [repo](https://github.com/nars-dev/examples). You can find more documentation on [the website](https://nars.dev/blog/).
